@@ -1,0 +1,57 @@
+---
+description: React component and TypeScript patterns
+globs: **/*.tsx,**/*.ts
+alwaysApply: false
+---
+
+# Bileşen ve TypeScript Kuralları
+
+## Bileşen Şablonu
+
+```tsx
+// ✅ Doğru
+interface Props {
+  title: string;
+  onSelect?: (id: string) => void;
+}
+
+export function VenueCard({ title, onSelect }: Props) {
+  return <div>{title}</div>;
+}
+```
+
+## Yasaklar
+
+```tsx
+// ❌ any kullanma
+const data: any = fetch();
+
+// ❌ useEffect ile API çağrısı
+useEffect(() => { fetch('/api/venues') }, []);
+
+// ❌ Gereksiz "use client"
+"use client"; // sadece interaktivite gerektiğinde
+```
+
+## API Servisi Şablonu
+
+```ts
+// src/services/venues.ts
+export async function getVenues(params: VenueSearchParams): Promise<Venue[]> {
+  const res = await fetch(`/api/venues?${new URLSearchParams(params as any)}`);
+  if (!res.ok) throw new Error('Venues fetch failed');
+  return res.json();
+}
+```
+
+## Tip Tanımı
+
+```ts
+// src/types/index.ts
+export interface Venue {
+  id: string;
+  name: string;
+  capacity: number;
+  location: Location;
+}
+```

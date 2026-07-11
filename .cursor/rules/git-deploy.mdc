@@ -1,0 +1,37 @@
+---
+description: Git workflow and deploy conventions
+alwaysApply: true
+---
+
+# Git & Deploy Kuralları
+
+## Branch Yapısı
+
+```
+main        → production (tur-meet.com)
+dev         → aktif geliştirme
+feature/*   → yeni özellikler
+fix/*       → bug düzeltmeleri
+```
+
+## Commit Mesajı Formatı
+
+```
+feat: yeni özellik açıklaması
+fix: hata açıklaması
+chore: yapılandırma / bağımlılık
+docs: dokümantasyon
+style: UI / CSS değişikliği
+refactor: yeniden yapılandırma
+```
+
+## Pull Request Kuralları
+
+- `dev` → `main` PR'ı açılmadan deploy yapılmaz
+- Her PR en az bir review gerektirir
+- CI geçmeden merge yapılmaz
+
+## Deploy
+
+- Deploy hedefi MD dosyası ile netleşecek
+- Otomatik deploy kuralı: `main` branch'e merge = otomatik deploy tetiklenir
