@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TURMEET | Yakında</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --pink: #e20074;
+      --pink-glow: rgba(226, 0, 116, 0.35);
+      --pink-dim: rgba(226, 0, 116, 0.12);
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #080808;
+      color: #fff;
+      overflow: hidden;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, var(--pink-glow) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      max-width: 680px;
+      width: 100%;
+    }
+    .logo-wrap { margin-bottom: 2.5rem; }
+    .logo-img {
+      width: min(360px, 82vw);
+      height: auto;
+      filter: drop-shadow(0 0 32px var(--pink-glow));
+      display: block;
+      margin: 0 auto;
+    }
+    .divider {
+      width: 80px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--pink), transparent);
+      margin: 0 auto 2rem;
+    }
+    .tagline {
+      font-size: clamp(0.72rem, 2.2vw, 0.88rem);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: #666;
+      margin-bottom: 2.5rem;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid rgba(226, 0, 116, 0.28);
+      background: var(--pink-dim);
+      border-radius: 100px;
+      padding: 12px 28px;
+      font-size: 0.875rem;
+      color: #ccc;
+      backdrop-filter: blur(8px);
+      letter-spacing: 0.04em;
+    }
+    .dot {
+      flex-shrink: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--pink);
+      position: relative;
+    }
+    .dot::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 50%;
+      background: var(--pink-glow);
+      animation: ping 1.8s ease-in-out infinite;
+    }
+    @keyframes ping {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50%       { transform: scale(2.2); opacity: 0; }
+    }
+    .footer {
+      margin-top: 3.5rem;
+      font-size: 0.7rem;
+      color: #2a2a2a;
+      letter-spacing: 0.06em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo-wrap">
+      <img
+        class="logo-img"
+        alt="TURMEET — Meet in Turkey. Plan with Ease."
+        src="data:image/png;base64,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"
+      />
+    </div>
+    <div class="divider"></div>
+    <p class="tagline">Meetings &nbsp;&middot;&nbsp; Incentives &nbsp;&middot;&nbsp; Conferences &nbsp;&middot;&nbsp; Exhibitions</p>
+    <div class="badge">
+      <span class="dot"></span>
+      Yapım Aşamasında &nbsp;&middot;&nbsp; Coming Soon
+    </div>
+    <p class="footer">&copy; 2026 tur-meet.com &nbsp;&mdash;&nbsp; All rights reserved</p>
+  </div>
+</body>
+</html>
