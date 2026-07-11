@@ -1,0 +1,65 @@
+---
+description: External MICE API integration conventions
+globs: backend/app/Services/**/*.php,backend/app/Repositories/**/*.php
+alwaysApply: false
+---
+
+# Dış API Entegrasyon Kuralları
+
+## MICE API Servisi
+
+Tüm dış API çağrıları `MiceApiService` üzerinden yapılır.
+
+```php
+// ✅ Doğru — service inject et
+class VenueController extends ApiController
+{
+    public function __construct(private MiceApiService $miceApi) {}
+
+    public function index(): JsonResponse
+    {
+        $venues = $this->miceApi->get('venues', ['city' => 'Istanbul']);
+        return $this->success($venues);
+    }
+}
+
+// ❌ Yanlış — controller içinde Http::get() çağırma
+Http::get('https://external-api.com/venues');
+```
+
+## Config
+
+```php
+// config/services.php — mice_api key'leri
+config('services.mice_api.base_url')
+config('services.mice_api.key')
+config('services.mice_api.timeout')
+```
+
+## Hata Yönetimi
+
+- API hataları `Log::error()` ile loglanır
+- API başarısızlığında `RuntimeException` fırlatılır
+- Global `Handler.php` JSON olarak döner
+
+## Response Formatı
+
+Her API endpoint'i şu formatı döner:
+
+```json
+{
+  "success": true,
+  "data": {},
+  "message": null
+}
+```
+
+Hata durumunda:
+
+```json
+{
+  "success": false,
+  "data": null,
+  "message": "Hata açıklaması"
+}
+```

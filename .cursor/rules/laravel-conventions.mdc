@@ -1,0 +1,85 @@
+---
+description: Laravel backend conventions (mandatory — from PROJECT_CONVENTIONS.md)
+globs: backend/**/*.php
+alwaysApply: false
+---
+
+# Laravel Backend Kuralları
+
+## Zorunlu Kurallar (PROJECT_CONVENTIONS.md)
+
+### Yapı
+- Controller'lar **ince** kalır — iş mantığı yazmaz
+- İş mantığı → `app/Services/`
+- DB sorguları → `app/Repositories/`
+- Validation → `app/Http/Requests/` (FormRequest)
+- Authorization → `app/Policies/` veya Gates
+
+### İsimlendirme
+```
+Controllers → PascalCase + Controller  (VenueController)
+Services    → PascalCase + Service     (VenueService)
+Repositories→ PascalCase + Repository  (VenueRepository)
+Tables      → snake_case plural         (venue_bookings)
+Columns     → snake_case                (created_at)
+```
+
+### API Response Formatı (standart — DEĞİŞTİRİLEMEZ)
+```php
+// ✅ Zorunlu format
+return response()->json([
+    'success' => true,
+    'data'    => $data,
+    'message' => null,
+]);
+
+// ApiController'daki helper metodları kullan:
+return $this->success($data);
+return $this->error('Validation failed.', 422);
+```
+
+### Tip Güvenliği
+```php
+// ✅ Her dosyada declare strict types
+declare(strict_types=1);
+
+// ✅ Return type belirt
+public function getVenues(array $filters): Collection
+```
+
+### Yasaklar
+```php
+// ❌ Controller içinde business logic
+public function store(Request $request) {
+    $venue = Venue::where('capacity', '>=', $request->capacity)->first();
+    // ... iş mantığı
+}
+
+// ✅ Doğrusu
+public function store(StoreVenueRequest $request): JsonResponse {
+    $venue = $this->venueService->create($request->validated());
+    return $this->success($venue, null, 201);
+}
+
+// ❌ Raw SQL (gerekmedikçe)
+DB::statement("SELECT * FROM venues WHERE...");
+
+// ✅ Eloquent
+Venue::query()->where('capacity', '>=', $capacity)->get();
+
+// ❌ Hardcoded credential
+$apiKey = 'sk-12345';
+
+// ✅ .env üzerinden
+$apiKey = config('services.mice_api.key');
+```
+
+### Migrations
+- Tüm şema değişiklikleri migration ile yapılır
+- Manuel DB düzenleme yasak
+
+### Logging
+```php
+Log::error('İşlem başarısız', ['context' => $data]);
+// production'da debug output yok
+```

@@ -1,37 +1,49 @@
 ---
-description: Turmeet project overview, goals and conventions
+description: Turmeet project overview, mandatory stack and architecture
 alwaysApply: true
 ---
 
 # Turmeet — MICE Booking Engine
 
-## Proje Tanımı
+## Proje
 
-tur-meet.com, MICE (Meetings, Incentives, Conferences, Exhibitions) sektörü için geliştirilmekte olan bir rezervasyon ve etkinlik yönetim platformudur.
+tur-meet.com, MICE (Meetings, Incentives, Conferences, Exhibitions) sektörü için API-first rezervasyon platformudur.
 
-**Hedef:** Booking.com benzeri bir arayüz ile mekan, otel, catering, AV ve transfer rezervasyonu.
+## Zorunlu Teknoloji Stack
 
-## Stack
+| Katman | Teknoloji |
+|--------|-----------|
+| Backend | Laravel (PHP 8.1+) |
+| Veritabanı | MySQL (projeye özel, paylaşılmaz) |
+| Cache | Redis |
+| Queue | RabbitMQ |
+| Web Server | Nginx |
+| Deploy | VPS (systemd + PHP-FPM) |
+| Frontend | Next.js (TypeScript) |
 
-- **Framework:** Next.js (App Router)
-- **Dil:** TypeScript
-- **Stil:** Tailwind CSS
-- **API:** Dış sistem entegrasyonu (detaylar MD ile gelecek)
+## YASAK
 
-## Klasör Kuralları
+- Firebase backend
+- Supabase backend
+- Vercel-only deployment
+- SQLite production
+- Shared database
+- Hardcoded credentials
+- Business logic in Blade/views
 
-- `src/app/` → Sayfalar (App Router)
-- `src/components/ui/` → Yeniden kullanılabilir UI bileşenleri
-- `src/components/layout/` → Header, Footer, Sidebar
-- `src/services/` → Tüm API çağrıları buraya
-- `src/types/` → Global TypeScript tipleri
-- `src/hooks/` → Custom hooks
-- `src/config/` → Ortam değişkenleri ve sabitler
+## Mimari
 
-## Genel Kurallar
+- Modular Monolith + API-first
+- Layered: Controller → Service → Repository
+- Controller'lar ince kalır, iş mantığı Service'e gider
+- DB sorguları Repository'de olur
 
-- Her bileşen kendi klasöründe `index.tsx` + `types.ts` ile
-- API çağrıları asla component içine yazılmaz, `services/` katmanı kullanılır
-- `any` tipi kullanılmaz, her zaman açık tip tanımı yapılır
-- Tüm metinler i18n uyumlu yazılır (önce TR, sonra EN)
-- Server Component by default, gerekmedikçe `"use client"` eklenmez
+## Repo Yapısı
+
+```
+turmeet/
+├── frontend/   → Next.js (Next.js App Router, TypeScript)
+├── backend/    → Laravel API
+│   └── deploy/ → Nginx, Supervisor, deploy.sh
+└── .cursor/rules/
+```

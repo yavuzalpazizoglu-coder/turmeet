@@ -1,5 +1,5 @@
 ---
-description: Git workflow and deploy conventions
+description: Git workflow and VPS deploy conventions
 alwaysApply: true
 ---
 
@@ -8,7 +8,7 @@ alwaysApply: true
 ## Branch Yapısı
 
 ```
-main        → production (tur-meet.com)
+main        → production (VPS'e deploy edilir)
 dev         → aktif geliştirme
 feature/*   → yeni özellikler
 fix/*       → bug düzeltmeleri
@@ -17,21 +17,37 @@ fix/*       → bug düzeltmeleri
 ## Commit Mesajı Formatı
 
 ```
-feat: yeni özellik açıklaması
-fix: hata açıklaması
+feat: yeni özellik
+fix: hata düzeltmesi
 chore: yapılandırma / bağımlılık
 docs: dokümantasyon
-style: UI / CSS değişikliği
+style: UI / CSS
 refactor: yeniden yapılandırma
 ```
 
-## Pull Request Kuralları
+## Deploy Akışı (VPS — Git Pull)
 
-- `dev` → `main` PR'ı açılmadan deploy yapılmaz
-- Her PR en az bir review gerektirir
-- CI geçmeden merge yapılmaz
+```bash
+# deploy/deploy.sh çalıştır
+git pull origin main
+composer install --no-dev --optimize-autoloader
+php artisan migrate --force
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+php artisan queue:restart
+supervisorctl restart turmeet-worker:*
+```
 
-## Deploy
+## Kurallar
 
-- Deploy hedefi MD dosyası ile netleşecek
-- Otomatik deploy kuralı: `main` branch'e merge = otomatik deploy tetiklenir
+- `main` branch her zaman deploy edilebilir durumda
+- Production'a doğrudan edit yasak (acil hotfix hariç)
+- `dev` → `main` PR açılmadan deploy yapılmaz
+- `.env` hiçbir zaman commit edilmez (`.env.example` commit edilir)
+
+## Queue & Scheduler
+
+- Queue driver: RabbitMQ
+- Worker: Supervisor (`deploy/supervisor-worker.conf`)
+- Scheduler: `* * * * * php artisan schedule:run`

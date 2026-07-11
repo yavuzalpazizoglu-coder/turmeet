@@ -4,7 +4,7 @@
 
 ## Proje Hakkında
 
-**tur-meet.com**, MICE sektörü için geliştirilmekte olan akıllı bir rezervasyon ve etkinlik yönetimi platformudur. Booking.com'un kurumsal etkinlik ve toplantı organizasyonu için özelleştirilmiş versiyonu olarak konumlandırılmıştır.
+**tur-meet.com**, MICE sektörü için geliştirilmekte olan API-first rezervasyon ve etkinlik yönetim platformudur. Harici bir MICE veri sistemi ile API entegrasyonu üzerine kuruludur.
 
 ---
 
@@ -12,56 +12,97 @@
 
 > **🚧 Yapım Aşamasında / Under Construction**
 
-Tasarım ve teknik gereksinimler hazırlanmaktadır. MD dosyası tamamlandığında geliştirme başlayacaktır.
-
 ---
 
-## Teknoloji Stack (Planlanan)
+## Teknoloji Stack (Zorunlu — PROJECT_CONVENTIONS.md)
 
 | Katman | Teknoloji |
 |--------|-----------|
-| Frontend | Next.js (App Router) |
-| Dil | TypeScript |
-| Styling | Tailwind CSS |
-| Backend | API entegrasyonu (TBD) |
-| Deploy | TBD |
+| Backend | Laravel (PHP 8.1+) |
+| Veritabanı | MySQL (projeye özel DB) |
+| Cache | Redis |
+| Queue | RabbitMQ |
+| Web Server | Nginx |
+| Deploy | VPS (systemd + PHP-FPM) |
+| Frontend | Next.js (TypeScript + Tailwind) |
 
 ---
 
-## Klasör Yapısı
+## Repo Yapısı
 
 ```
-src/
-├── app/              # Next.js App Router sayfaları
-├── components/
-│   ├── ui/           # Temel UI bileşenleri
-│   ├── layout/       # Header, Footer, Navigation
-│   └── shared/       # Paylaşılan bileşenler
-├── lib/              # Yardımcı fonksiyonlar
-├── hooks/            # Custom React hooks
-├── types/            # TypeScript tip tanımları
-├── services/         # API servis katmanı
-└── config/           # Uygulama konfigürasyonu
-public/
-└── assets/           # Logo, görseller
+turmeet/
+├── frontend/             # Next.js — kullanıcı arayüzü
+│   └── src/
+│       ├── app/          # App Router sayfalar
+│       ├── components/   # UI, layout, shared
+│       ├── services/     # API çağrı katmanı
+│       └── types/        # TypeScript tipleri
+├── backend/              # Laravel API
+│   ├── app/
+│   │   ├── Http/
+│   │   │   ├── Controllers/
+│   │   │   └── Requests/
+│   │   ├── Services/     # İş mantığı
+│   │   ├── Repositories/ # DB sorguları
+│   │   ├── Jobs/
+│   │   └── Policies/
+│   ├── database/
+│   │   ├── migrations/
+│   │   └── seeders/
+│   ├── routes/
+│   │   ├── api.php
+│   │   └── web.php
+│   └── deploy/
+│       ├── nginx.conf
+│       ├── supervisor-worker.conf
+│       └── deploy.sh
+└── .cursor/rules/        # AI kuralları
 ```
 
 ---
 
 ## Başlarken
 
+### Backend
+
 ```bash
+cd backend
+cp .env.example .env
+# .env dosyasını düzenle (DB, Redis, RabbitMQ, MICE API)
+composer install
+php artisan key:generate
+php artisan migrate
+php artisan db:seed
+php artisan serve
+```
+
+### Frontend
+
+```bash
+cd frontend
 npm install
 npm run dev
 ```
 
-Uygulama `http://localhost:3000` adresinde çalışır.
+---
+
+## Deploy (VPS)
+
+```bash
+cd backend
+bash deploy/deploy.sh
+```
 
 ---
 
-## Katkı
+## Mimari Kurallar
 
-Bu repo özel bir proje reposudur. Geliştirici ekibi dışında katkı kabul edilmez.
+- Controller'lar **ince** kalır
+- İş mantığı → `Services/`
+- DB sorguları → `Repositories/`
+- Tüm API response'ları `{"success": bool, "data": {}, "message": null}` formatında
+- `.env` commit edilmez, `.env.example` commit edilir
 
 ---
 
