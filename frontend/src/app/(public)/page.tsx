@@ -271,6 +271,24 @@ export default async function HomePage() {
               <span className="font-semibold text-ink">fast</span> (instant comparative offers) and{" "}
               <span className="font-semibold text-ink">impartial</span> (venues compete, you choose).
             </p>
+
+            {/* Türkiye görselleri — hero setinden 3 küçük polaroid kart */}
+            <div className="mt-6 flex items-center justify-center gap-3">
+              {[
+                { src: "/images/hero-slide-3.jpg", alt: "Istanbul — Golden Horn panorama", rotate: "-rotate-3" },
+                { src: "/images/hero-slide-1.jpg", alt: "Cappadocia — hot air balloons", rotate: "rotate-2" },
+                { src: "/images/hero-slide-6.jpg", alt: "Antalya — turquoise coast", rotate: "-rotate-2" },
+              ].map((p) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={p.src}
+                  src={p.src}
+                  alt={p.alt}
+                  loading="lazy"
+                  className={`h-20 w-28 rounded-xl object-cover shadow-lg ring-4 ring-white transition-transform duration-300 hover:rotate-0 hover:scale-110 sm:h-24 sm:w-32 ${p.rotate}`}
+                />
+              ))}
+            </div>
           </Reveal>
 
           {/* Nasıl çalışıyor? — 5 adımlı ortak akış (MD 2.4) */}
