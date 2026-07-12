@@ -140,29 +140,28 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
+
+          {/* Değer önerisi — hero'nun altında, fon rengi yok, hero ile aynı beyaz renkler */}
+          <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-3">
+            {[
+              { icon: <MapPinIcon size={22} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
+              { icon: <CalendarIcon size={22} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
+              { icon: <CheckIcon size={22} />, title: "Zero commission", desc: "Completely free for organizers — no hidden fees, no subscription" },
+            ].map((f) => (
+              <div key={f.title} className="hero-text-shadow flex items-start gap-3 text-left">
+                <span className="mt-0.5 shrink-0 text-white">{f.icon}</span>
+                <div>
+                  <h3 className="text-[15px] font-bold text-white">{f.title}</h3>
+                  <p className="mt-0.5 text-[13px] leading-snug text-white/80">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── SAYFA 2: DEĞER ÖNERİSİ + POPÜLER MEKANLAR ── */}
+      {/* ── SAYFA 2: POPÜLER MEKANLAR ── */}
       <section className="flex min-h-[100dvh] snap-start flex-col justify-center bg-white py-10">
-        <div className="mx-auto mb-8 grid w-full max-w-5xl gap-6 border-b border-gray-100 px-4 pb-8 sm:grid-cols-3 sm:px-6">
-          {[
-            { icon: <MapPinIcon size={24} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
-            { icon: <CalendarIcon size={24} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
-            { icon: <CheckIcon size={24} />, title: "Zero commission", desc: "Completely free for organizers — no hidden fees, no subscription" },
-          ].map((f) => (
-            <div key={f.title} className="flex items-start gap-3 text-left">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand">
-                {f.icon}
-              </div>
-              <div>
-                <h3 className="text-[15px] font-bold text-ink">{f.title}</h3>
-                <p className="mt-0.5 text-[13px] leading-snug text-muted">{f.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
           <div className="mb-6 flex items-end justify-between">
             <div>
