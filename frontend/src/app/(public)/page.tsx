@@ -401,7 +401,7 @@ export default async function HomePage() {
        * 2.2 (iş modeli prensipleri = güven), 1.4-1.5 (değerler & vaatler).
        * Komisyon oranı bilinçli olarak gösterilmez (MD 3.2 /pricing kuralı).
        */}
-      <section className="flex min-h-[100dvh] snap-start flex-col justify-center py-12">
+      <section className="flex min-h-[100dvh] snap-start flex-col justify-center bg-brand-light py-12">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
           {/* Neden Turmeet var? */}
           <div className="mx-auto max-w-3xl text-center">
@@ -485,10 +485,10 @@ export default async function HomePage() {
        * 3.2 /for-hotels (avantajlar + 3 adım), 2.5/6.7 (sponsorluk).
        * Komisyon oranı gösterilmez (MD 1046 kuralı) — "lowest commission".
        */}
-      <section className="flex min-h-[100dvh] snap-start items-center bg-ink py-12">
+      <section className="flex min-h-[100dvh] snap-start items-center bg-gradient-to-br from-brand to-brand-dark py-12">
         <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
           <div className="mx-auto max-w-3xl text-center">
-            <BuildingIcon size={34} className="mx-auto text-brand" />
+            <BuildingIcon size={34} className="mx-auto text-white" />
             <h2 className="mt-3 text-2xl font-bold text-white">List your venue on Turmeet</h2>
             <p className="mt-2 text-sm leading-relaxed text-white/70">
               Why should a hotel or congress center work with us? Guaranteed international group bookings at the
@@ -530,8 +530,8 @@ export default async function HomePage() {
                 desc: "Sponsored placement above organic results, showcase tags and premium ranking backed by your MICE inspection score.",
               },
             ].map((f) => (
-              <div key={f.title} className="flex items-start gap-3 rounded-card border border-white/10 bg-white/5 p-4">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+              <div key={f.title} className="flex items-start gap-3 rounded-card border border-white/15 bg-white/10 p-4">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-brand">
                   {f.icon}
                 </span>
                 <div>
@@ -563,7 +563,7 @@ export default async function HomePage() {
           </div>
 
           <div className="mt-8 flex items-center justify-center gap-4">
-            <LinkButton href="/register/hotel" variant="primary" size="lg">
+            <LinkButton href="/register/hotel" variant="secondary" size="lg">
               List Your Venue
             </LinkButton>
             <Link href="/login" className="text-sm font-semibold text-white/80 hover:text-white hover:underline">
