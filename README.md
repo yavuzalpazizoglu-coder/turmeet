@@ -1,16 +1,21 @@
-# tur-meet.com
+# turmeet.com
 
 > MICE Booking Engine — Meetings · Incentives · Conferences · Exhibitions
 
 ## Proje Hakkında
 
-**tur-meet.com**, MICE sektörü için geliştirilmekte olan API-first rezervasyon ve etkinlik yönetim platformudur. Harici bir MICE veri sistemi ile API entegrasyonu üzerine kuruludur.
+**turmeet.com**, MICE sektörü için geliştirilmekte olan API-first rezervasyon ve etkinlik yönetim platformudur. Harici bir MICE veri sistemi ile API entegrasyonu üzerine kuruludur.
 
 ---
 
 ## Durum
 
-> **🚧 Yapım Aşamasında / Under Construction**
+> **Frontend hazır (mock veri ile tam çalışır durumda) — Backend entegrasyonu bekleniyor.**
+>
+> - 4 portal canlı: Public site, `/app` (müşteri), `/partner` (otel), `/admin` (D Event)
+> - Demo giriş: `/login` sayfasından rol seçerek panellere girilebilir
+> - Backend ekibi için başlangıç noktası: **[docs/BACKEND_INTEGRATION.md](docs/BACKEND_INTEGRATION.md)**
+> - UI dili: İngilizce (sistem dili) · Geliştirici dokümanları: Türkçe
 
 ---
 
@@ -32,12 +37,20 @@
 
 ```
 turmeet/
-├── frontend/             # Next.js — kullanıcı arayüzü
+├── docs/
+│   └── BACKEND_INTEGRATION.md  # Laravel ekibi için entegrasyon kılavuzu
+├── frontend/             # Next.js — kullanıcı arayüzü (mock veri ile çalışır)
 │   └── src/
 │       ├── app/          # App Router sayfalar
-│       ├── components/   # UI, layout, shared
-│       ├── services/     # API çağrı katmanı
-│       └── types/        # TypeScript tipleri
+│       │   ├── (public)/ # Anasayfa, arama, detay, login/register
+│       │   ├── app/      # Müşteri paneli (7 sayfa)
+│       │   ├── partner/  # Otel paneli (8 sayfa)
+│       │   └── admin/    # D Event admin paneli (9 sayfa)
+│       ├── components/   # UI kütüphanesi, layout, venue kartları
+│       ├── services/     # API çağrı katmanı (mock ↔ gerçek API geçişi)
+│       ├── mocks/        # Mock veri seti
+│       ├── lib/          # api-client.ts (backend geçiş noktası)
+│       └── types/        # TypeScript tipleri (Laravel tablolarıyla eşleşir)
 ├── backend/              # Laravel API
 │   ├── app/
 │   │   ├── Http/
@@ -82,8 +95,12 @@ php artisan serve
 ```bash
 cd frontend
 npm install
-npm run dev
+npm run dev    # http://localhost:3000
 ```
+
+Backend olmadan da tüm sayfalar mock veriyle çalışır.
+Gerçek API'ye geçiş: `frontend/.env.local` içinde `NEXT_PUBLIC_USE_MOCKS=false`
+ve `NEXT_PUBLIC_API_URL` ayarlanır — detay: [docs/BACKEND_INTEGRATION.md](docs/BACKEND_INTEGRATION.md)
 
 ---
 
@@ -106,4 +123,4 @@ bash deploy/deploy.sh
 
 ---
 
-© 2026 tur-meet.com — All rights reserved
+© 2026 turmeet.com — All rights reserved

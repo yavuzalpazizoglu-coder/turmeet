@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
-const geist = Geist({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: "tur-meet.com | MICE Booking Platform",
+  title: "Turmeet — Turkey's Meeting & Event Search Engine",
   description:
-    "The intelligent booking engine for Meetings, Incentives, Conferences & Exhibitions.",
+    "Search 329+ venues across Turkey, compare live group offers and plan with zero commission for organizers.",
   openGraph: {
-    title: "tur-meet.com",
-    description: "MICE Booking Platform — Coming Soon",
-    url: "https://tur-meet.com",
-    siteName: "tur-meet",
-    locale: "tr_TR",
+    title: "Turmeet",
+    description: "Meet in Turkey. Plan with Ease.",
+    url: "https://turmeet.com",
+    siteName: "Turmeet",
+    locale: "en_US",
     type: "website",
   },
 };
@@ -22,8 +22,10 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="tr">
-      <body className={`${geist.className} antialiased`}>{children}</body>
+    <html lang="en">
+      <body className={`${inter.variable} font-sans antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }
