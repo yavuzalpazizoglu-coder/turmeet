@@ -15,6 +15,11 @@ import {
   BuildingIcon,
   CheckIcon,
   ArrowRightIcon,
+  GridIcon,
+  FileTextIcon,
+  ClockIcon,
+  EuroIcon,
+  TagIcon,
 } from "@/components/ui/icons";
 import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
@@ -332,30 +337,87 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── SAYFA 4: HOW IT WORKS ── */}
-      <section className="flex min-h-[100dvh] snap-start flex-col justify-center py-10">
-        <div className="mx-auto w-full max-w-5xl px-4 text-center sm:px-6">
-        <h2 className="text-2xl font-bold text-ink">How it works</h2>
-        <div className="mt-8 grid gap-8 sm:grid-cols-3">
-          {[
-            { n: "1", title: "Search", desc: "Enter city, dates and group size — filter across 329+ venues" },
-            { n: "2", title: "Compare", desc: "Receive live quotes from multiple venues and compare side by side" },
-            { n: "3", title: "Organize", desc: "Sign digitally and manage your event — all on one platform" },
-          ].map((s) => (
-            <div key={s.n}>
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand text-lg font-bold text-white">
-                {s.n}
-              </div>
-              <h3 className="mt-3 font-bold text-ink">{s.title}</h3>
-              <p className="mt-1 text-sm text-muted">{s.desc}</p>
+      {/*
+       * ── SAYFA 4: HOW IT WORKS — MD kaynaklı zengin içerik ──
+       * Kaynak: TURMEET_MASTER_Kurulum.md 1.1 (misyon/neden), 2.4 (ortak akış),
+       * 2.2 (iş modeli prensipleri = güven), 1.4-1.5 (değerler & vaatler).
+       * Komisyon oranı bilinçli olarak gösterilmez (MD 3.2 /pricing kuralı).
+       */}
+      <section className="flex min-h-[100dvh] snap-start flex-col justify-center py-12">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+          {/* Neden Turmeet var? */}
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-xs font-bold uppercase tracking-widest text-brand">Why Turmeet exists</p>
+            <h2 className="mt-2 text-2xl font-bold text-ink">
+              Getting group quotes from hotels used to take weeks of emails
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-muted">
+              Turmeet is Turkey&apos;s first meeting &amp; event search engine. We digitalize the quote process for
+              congresses, corporate meetings, incentives and retreats — making it{" "}
+              <span className="font-semibold text-ink">transparent</span> (live prices, no hidden costs),{" "}
+              <span className="font-semibold text-ink">fast</span> (instant comparative offers) and{" "}
+              <span className="font-semibold text-ink">impartial</span> (venues compete, you choose).
+            </p>
+          </div>
+
+          {/* Nasıl çalışıyor? — 5 adımlı ortak akış (MD 2.4) */}
+          <div className="mt-10">
+            <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">How it works</p>
+            <div className="mt-5 grid gap-6 sm:grid-cols-5">
+              {[
+                { n: "1", icon: <SearchIcon size={18} />, title: "Search", desc: "City, dates, group size — filter 329+ venues by MICE criteria" },
+                { n: "2", icon: <GridIcon size={18} />, title: "Compare", desc: "Review rooms, halls and reference prices side by side" },
+                { n: "3", icon: <FileTextIcon size={18} />, title: "Request quotes", desc: "Send one request to multiple venues at once" },
+                { n: "4", icon: <ClockIcon size={18} />, title: "Get live offers", desc: "Hotels reply with live prices — negotiate on platform" },
+                { n: "5", icon: <CheckIcon size={18} />, title: "Contract digitally", desc: "E-sign the contract and manage your event online" },
+              ].map((s, i) => (
+                <div key={s.n} className="relative text-center">
+                  {i < 4 && <div className="absolute left-[60%] top-6 hidden h-px w-[80%] bg-gray-200 sm:block" />}
+                  <div className="relative mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand text-white">
+                    {s.icon}
+                  </div>
+                  <h3 className="mt-3 text-[15px] font-bold text-ink">
+                    {s.n}. {s.title}
+                  </h3>
+                  <p className="mt-1 text-xs leading-snug text-muted">{s.desc}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <div className="mt-10">
-          <LinkButton href="/register" size="lg">
-            Get started — it&apos;s free
-          </LinkButton>
-        </div>
+          </div>
+
+          {/* Güvenilirlik & avantajlar — iş modeli prensipleri (MD 2.2) */}
+          <div className="mt-10">
+            <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">Trust &amp; advantages</p>
+            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { icon: <EuroIcon size={20} />, title: "Free for organizers", desc: "Commission is paid by the venue after the event — never by you. The quoted price is the final price." },
+                { icon: <TagIcon size={20} />, title: "Venues set their own prices", desc: "Turmeet never marks up or interferes with pricing. Hotels quote live — fair competition, real rates." },
+                { icon: <FileTextIcon size={20} />, title: "You pay the venue directly", desc: "Turmeet never holds your money and is not a party to your contract. We provide the digital infrastructure." },
+                { icon: <CheckIcon size={20} />, title: "Verified venues", desc: "Every hotel passes the D Event MICE inspection — capacity, transit access and service quality are checked on site." },
+                { icon: <UsersIcon size={20} />, title: "Coordinator support", desc: "Large groups get a dedicated coordinator. 150+ room congresses are fully managed by our expert team." },
+                { icon: <BuildingIcon size={20} />, title: "Backed by D Event", desc: "Operated by D Event Turizm — Est. 2012, Istanbul. TURSAB licensed travel agency (No. 7514), zero fault tolerance." },
+              ].map((f) => (
+                <div key={f.title} className="flex items-start gap-3 rounded-card border border-gray-100 bg-white p-4 shadow-card">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand">
+                    {f.icon}
+                  </span>
+                  <div>
+                    <h3 className="text-[15px] font-bold text-ink">{f.title}</h3>
+                    <p className="mt-0.5 text-xs leading-snug text-muted">{f.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <LinkButton href="/register" size="lg">
+              Get started — it&apos;s free
+            </LinkButton>
+            <Link href="/how-it-works" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
+              Learn more <ArrowRightIcon size={15} />
+            </Link>
+          </div>
         </div>
       </section>
 
