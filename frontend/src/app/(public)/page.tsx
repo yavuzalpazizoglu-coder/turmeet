@@ -43,8 +43,8 @@ export default async function HomePage() {
           <h1 className="hero-text-shadow text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
             Plan Your Meeting in Turkey
           </h1>
-          {/* Slogan — %50 küçük, saf beyaz + bold ile daha okunur */}
-          <p className="hero-text-shadow mt-3 text-[8px] font-bold uppercase tracking-[0.15em] text-white sm:text-[9px]">
+          {/* Slogan — 3x büyütüldü (24/27px), saf beyaz + bold */}
+          <p className="hero-text-shadow mt-3 text-[24px] font-bold uppercase tracking-[0.15em] text-white sm:text-[27px]">
             Compare. Choose. Organize.
           </p>
 
@@ -115,8 +115,8 @@ export default async function HomePage() {
             </div>
           </form>
 
-          {/* Popüler şehirler — %50 küçük, saf beyaz + bold ile daha okunur */}
-          <p className="hero-text-shadow mt-5 text-[11px] font-semibold text-white">
+          {/* Popüler şehirler — gövde metinleriyle eşit boyut (14px) */}
+          <p className="hero-text-shadow mt-5 text-sm font-semibold text-white">
             Popular:{" "}
             {["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"].map((c, i) => (
               <Link key={c} href={`/venues?city=${c}`} className="font-bold text-white hover:underline">
@@ -141,18 +141,18 @@ export default async function HomePage() {
             ))}
           </div>
 
-          {/* Değer önerisi — hero'nun altında, fon rengi yok, hero ile aynı beyaz renkler */}
+          {/* Değer önerisi — hero'nun altında, fon rengi yok, %25 büyütülmüş */}
           <div className="mx-auto mt-12 grid max-w-5xl gap-6 sm:grid-cols-3">
             {[
-              { icon: <MapPinIcon size={22} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
-              { icon: <CalendarIcon size={22} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
-              { icon: <CheckIcon size={22} />, title: "Zero commission", desc: "Completely free for organizers — no hidden fees, no subscription" },
+              { icon: <MapPinIcon size={28} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
+              { icon: <CalendarIcon size={28} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
+              { icon: <CheckIcon size={28} />, title: "Zero commission", desc: "Completely free for organizers — no hidden fees, no subscription" },
             ].map((f) => (
               <div key={f.title} className="hero-text-shadow flex items-start gap-3 text-left">
                 <span className="mt-0.5 shrink-0 text-white">{f.icon}</span>
                 <div>
-                  <h3 className="text-[15px] font-bold text-white">{f.title}</h3>
-                  <p className="mt-0.5 text-[13px] leading-snug text-white/80">{f.desc}</p>
+                  <h3 className="text-[19px] font-bold text-white">{f.title}</h3>
+                  <p className="mt-0.5 text-[16px] leading-snug text-white/80">{f.desc}</p>
                 </div>
               </div>
             ))}
