@@ -31,14 +31,14 @@ export function PublicHeader({ variant = "solid" }: { variant?: "solid" | "trans
           : "sticky top-0 z-40 border-b border-gray-200 bg-white"
       }
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center">
           <Image
             src={transparent ? "/logo-white.png" : "/logo-magenta.png"}
             alt="TURMEET"
-            width={150}
-            height={40}
-            className="h-9 w-auto object-contain"
+            width={220}
+            height={58}
+            className="h-12 w-auto object-contain sm:h-14"
             priority
           />
         </Link>

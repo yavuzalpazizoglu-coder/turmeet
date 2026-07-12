@@ -31,9 +31,9 @@ export default async function HomePage() {
       <section className="relative flex min-h-[640px] items-center justify-center overflow-hidden bg-ink">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="https://picsum.photos/seed/istanbul-meeting/1920/1080"
-          alt="Meeting room in Istanbul"
-          className="absolute inset-0 h-full w-full object-cover opacity-50"
+          src="/images/hero-istanbul.jpg"
+          alt="Istanbul — Galata Tower"
+          className="absolute inset-0 h-full w-full object-cover opacity-60"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
 

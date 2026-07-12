@@ -33,7 +33,7 @@ export default function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-surface px-4 py-12">
       <div className="w-full max-w-md">
         <Link href="/" className="mb-8 flex justify-center">
-          <Image src="/logo-magenta.png" alt="TURMEET" width={180} height={48} className="h-11 w-auto object-contain" />
+          <Image src="/logo-magenta.png" alt="TURMEET" width={260} height={68} className="h-16 w-auto object-contain" />
         </Link>
 
         <Card className="p-8">

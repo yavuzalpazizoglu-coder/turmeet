@@ -6,8 +6,50 @@
  */
 import type { Venue, Destination } from "@/types";
 
-const img = (seed: string, w = 800, h = 600) =>
-  `https://picsum.photos/seed/${seed}/${w}/${h}`;
+/*
+ * Görseller yerel: frontend/public/images/ (Türkiye şehirleri + otel/salon).
+ * Gerçek otel fotoğrafları backend aşamasında CDN'den gelecek.
+ * img(seed) → /images/*.jpg eşlemesi aşağıda; yeni mekan eklerken
+ * LOCAL_IMAGES'a bir satır eklemek yeterli.
+ */
+const LOCAL_IMAGES: Record<string, string> = {
+  // Mekan kapak görselleri
+  swissotel: "hotel-1",
+  hiltonbomonti: "hotel-2",
+  conrad: "hotel-3",
+  pinebeach: "hotel-4",
+  kayapalazzo: "hotel-5",
+  jwankara: "hotel-6",
+  buyukefes: "hotel-7",
+  museumhotel: "dest-cappadocia",
+  titanic: "hotel-8",
+  hiltonbursa: "meeting-4",
+  ciragan: "istanbul-2",
+  sheratonadana: "meeting-3",
+  // Galeriler
+  swiss1: "meeting-1", swiss2: "room-1", swiss3: "hotel-2", swiss4: "meeting-2", swiss5: "room-2",
+  hilton1: "meeting-2", hilton2: "room-2", hilton3: "meeting-4", hilton4: "room-3",
+  conrad1: "room-1", conrad2: "meeting-1", conrad3: "room-4",
+  pine1: "room-2", pine2: "meeting-3", pine3: "hotel-5",
+  kaya1: "room-3", kaya2: "meeting-2",
+  jw1: "meeting-1", jw2: "room-4", jw3: "meeting-3",
+  efes1: "room-1", efes2: "meeting-2",
+  museum1: "room-4", museum2: "hotel-8",
+  titanic1: "room-2", titanic2: "meeting-1",
+  bursa1: "room-3", bursa2: "meeting-2",
+  ciragan1: "dest-istanbul", ciragan2: "room-1", ciragan3: "meeting-4",
+  adana1: "room-4", adana2: "meeting-1",
+  // Destinasyonlar
+  "istanbul-dest": "dest-istanbul",
+  "antalya-dest": "dest-antalya",
+  "ankara-dest": "dest-ankara",
+  "izmir-dest": "dest-izmir",
+  "cappadocia-dest": "dest-cappadocia",
+  "bursa-dest": "dest-bursa",
+};
+
+const img = (seed: string, ..._size: number[]) =>
+  `/images/${LOCAL_IMAGES[seed] ?? "hotel-1"}.jpg`;
 
 const standardRooms = (prefix: string) => [
   {

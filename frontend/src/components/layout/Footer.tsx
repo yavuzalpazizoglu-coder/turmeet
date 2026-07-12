@@ -40,7 +40,7 @@ export function Footer() {
         {/* Bölüm 1 — Navigasyon */}
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
           <div>
-            <Image src="/logo-white.png" alt="TURMEET" width={140} height={38} className="h-8 w-auto object-contain" />
+            <Image src="/logo-white.png" alt="TURMEET" width={190} height={50} className="h-11 w-auto object-contain" />
             <p className="mt-3 text-sm text-white/60">
               Turkey&apos;s Meeting &amp; Event Search Engine.
               <br />

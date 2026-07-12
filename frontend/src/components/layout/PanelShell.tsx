@@ -32,9 +32,9 @@ export function PanelShell({
 
   const sidebar = (
     <div className="flex h-full flex-col">
-      <div className="flex h-16 items-center border-b border-white/10 px-5">
+      <div className="flex h-20 items-center border-b border-white/10 px-5">
         <Link href="/">
-          <Image src="/logo-white.png" alt="TURMEET" width={120} height={32} className="h-7 w-auto object-contain" />
+          <Image src="/logo-white.png" alt="TURMEET" width={175} height={46} className="h-10 w-auto object-contain" />
         </Link>
       </div>
       <p className="px-5 pt-4 text-[11px] font-semibold uppercase tracking-widest text-white/40">{title}</p>
