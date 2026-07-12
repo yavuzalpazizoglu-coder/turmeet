@@ -18,12 +18,23 @@ export interface PanelNavItem {
   icon: ReactNode;
 }
 
+/** Üst barda gösterilen oturum bilgisi (mock auth — backend'de GET /api/v1/me) */
+export interface PanelUser {
+  name: string;
+  company: string;
+  /** Hesap statüsü — ör. "Business+ Member", "Tip 2 — Semi-managed" */
+  status: string;
+  /** İkincil durum rozeti — ör. "Verified" */
+  badge?: string;
+}
+
 export function PanelShell({
   title,
   nav,
   children,
   roleLabel,
   lang,
+  user,
 }: {
   title: string;
   nav: PanelNavItem[];
@@ -31,6 +42,8 @@ export function PanelShell({
   roleLabel: string;
   /** Verilirse üst barda EN/TR anahtarı gösterilir (partner + admin) */
   lang?: PanelLang;
+  /** Verilirse üst barda giriş yapan kullanıcının adı, şirketi ve statüsü gösterilir */
+  user?: PanelUser;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -96,9 +109,33 @@ export function PanelShell({
               <BellIcon size={20} />
               <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-brand" />
             </button>
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-sm font-semibold text-white">
-              {roleLabel.charAt(0).toUpperCase()}
-            </div>
+
+            {user ? (
+              /* Giriş bilgileri: ad + şirket + hesap statüsü (mock auth) */
+              <div className="flex items-center gap-3 border-l border-gray-200 pl-4">
+                <div className="hidden text-right sm:block">
+                  <p className="text-sm font-semibold leading-tight text-ink">{user.name}</p>
+                  <p className="text-[11px] leading-tight text-muted">{user.company}</p>
+                </div>
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-semibold text-white">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="hidden flex-col items-start gap-0.5 md:flex">
+                  <span className="rounded-full bg-brand-light px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand">
+                    {user.status}
+                  </span>
+                  {user.badge && (
+                    <span className="rounded-full bg-green-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-green-700">
+                      {user.badge}
+                    </span>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <div className="flex h-9 w-9 items-center justify-center rounded-full bg-brand text-sm font-semibold text-white">
+                {roleLabel.charAt(0).toUpperCase()}
+              </div>
+            )}
           </div>
         </header>
 

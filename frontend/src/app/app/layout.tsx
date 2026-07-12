@@ -26,7 +26,19 @@ const NAV = [
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
-    <PanelShell title="Customer Panel" nav={NAV} roleLabel="Anna Weber — Nordwind Capital">
+    <PanelShell
+      title="Customer Panel"
+      nav={NAV}
+      roleLabel="Anna Weber — Nordwind Capital"
+      /* Mock oturum bilgisi — backend'de GET /api/v1/me'den gelecek.
+         Statü: sadakat seviyesi (MD v26) + doğrulama rozeti. */
+      user={{
+        name: "Anna Weber",
+        company: "Nordwind Capital GmbH",
+        status: "Business+ Member",
+        badge: "Verified B2B",
+      }}
+    >
       {children}
     </PanelShell>
   );

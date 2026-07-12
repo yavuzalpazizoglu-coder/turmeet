@@ -1,22 +1,18 @@
 /*
- * DETAYLI MEKAN ARAMA FİLTRESİ — Müşteri paneli (platformun en detaylı araması).
+ * DETAYLI MEKAN ARAMA — kompakt yatay filtre çubuğu (müşteri paneli).
  *
- * Kriter kaynağı: D Event "MICE Inspection & Değerlendirme Formu"
- * (ICCA / IAPCO / TUROB Standartları, Sürüm 2.0 — Temmuz 2026).
- * Bölüm eşlemesi:
- *   B.1 Bütçe segmenti · B.2 Grup büyüklüğü · B.3 Etkinlik tipi
- *   C.1 Havalimanı mesafesi · C.2 Metro/toplu taşıma · C.4 Merkeze yakınlık
- *   D.1 Toplam oda · D.4 Engelli erişim
- *   E.1 Ana salon kapasitesi · E.2 Break-out salon sayısı
- *   F.3 Hibrit & online yayın · I.1 Sürdürülebilirlik sertifikası
- *   Puan skalası → min. D Event inspection puanı (85 Premium / 70 Çok iyi / 55 Uygun)
+ * Tasarım kararı: filtreler sol sütun yerine üstte tek çubukta durur,
+ * sonuç listesi tam genişlik kullanır — müşteri kaydırmadan arar.
+ * İlk satır en önemli kriterler; "More filters" ile MICE Inspection
+ * Formu'nun ileri kriterleri açılır (C/D/E/F/I bölümleri + puan).
  *
  * Filtre mantığı services/getVenues içinde; aynı param isimleri backend'e gider.
  */
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Select, Input, Field } from "@/components/ui";
+import { SearchIcon, ChevronDownIcon } from "@/components/ui/icons";
 import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 
 const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nevşehir"];
@@ -43,13 +39,28 @@ const TEXT_KEYS = [
   "minScore",
 ];
 const CHECKBOX_KEYS = ["metro", "sustainable", "hybrid", "accessible"];
+const ADVANCED_KEYS = [
+  "stars",
+  "type",
+  "capacity",
+  "maxAirport",
+  "maxCenter",
+  "minRooms",
+  "minMeetingRooms",
+  "minScore",
+  "sustainable",
+  "hybrid",
+  "accessible",
+];
 
-function SectionTitle({ children }: { children: React.ReactNode }) {
-  return <p className="mb-3 text-xs font-bold uppercase tracking-wide text-muted">{children}</p>;
-}
+const selectCls =
+  "h-10 cursor-pointer rounded-lg border border-gray-200 bg-white px-2.5 text-sm text-ink outline-none focus:border-brand";
+const checkCls = "flex h-10 cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 text-sm text-ink";
 
 export function DetailedVenueFilters({ current }: { current: Record<string, string | undefined> }) {
   const router = useRouter();
+  // İleri filtrelerden biri doluysa çubuk açık başlar
+  const [more, setMore] = useState(ADVANCED_KEYS.some((k) => current[k]));
 
   function apply(formData: FormData) {
     const params = new URLSearchParams();
@@ -64,191 +75,163 @@ export function DetailedVenueFilters({ current }: { current: Record<string, stri
   }
 
   return (
-    <aside className="h-fit rounded-card border border-gray-200 bg-white p-5 lg:sticky lg:top-20">
-      <div className="mb-4 flex items-center justify-between">
-        <p className="text-sm font-bold uppercase tracking-wide text-ink">Detailed search</p>
+    <form action={apply} className="rounded-card border border-gray-200 bg-white p-3 shadow-card">
+      {/* Satır 1 — en önemli kriterler + arama */}
+      <div className="flex flex-wrap items-center gap-2">
+        <div className="flex h-10 min-w-[180px] flex-1 items-center gap-2 rounded-lg border border-gray-200 px-3">
+          <SearchIcon size={15} className="shrink-0 text-muted" />
+          <input
+            name="q"
+            defaultValue={current.q}
+            placeholder="Venue name or keyword..."
+            className="w-full text-sm outline-none placeholder:text-muted"
+          />
+        </div>
+        <select name="city" defaultValue={current.city ?? ""} className={selectCls} aria-label="City">
+          <option value="">All cities</option>
+          {CITIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <select name="eventType" defaultValue={current.eventType ?? ""} className={selectCls} aria-label="Event type">
+          <option value="">All event types</option>
+          {EVENT_TYPES.map((e) => (
+            <option key={e.value} value={e.value}>
+              {e.label}
+            </option>
+          ))}
+        </select>
+        <select name="groupSize" defaultValue={current.groupSize ?? ""} className={selectCls} aria-label="Group size">
+          <option value="">Any group size</option>
+          <option value="small">0–50 pax</option>
+          <option value="medium">50–250 pax</option>
+          <option value="large">250–500 pax</option>
+          <option value="mega">500+ pax</option>
+        </select>
+        <select name="budget" defaultValue={current.budget ?? ""} className={selectCls} aria-label="Budget">
+          <option value="">Any budget</option>
+          {BUDGET_SEGMENTS.map((b) => (
+            <option key={b.value} value={b.value}>
+              {b.label}
+            </option>
+          ))}
+        </select>
+        <label className={checkCls}>
+          <input type="checkbox" name="metro" value="1" defaultChecked={current.metro === "1"} className="h-4 w-4 accent-brand" />
+          Metro
+        </label>
+        <button
+          type="submit"
+          className="flex h-10 items-center gap-1.5 rounded-lg bg-brand px-5 text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
+        >
+          <SearchIcon size={15} /> Search
+        </button>
         <button
           type="button"
-          onClick={() => router.push("/app/search")}
-          className="text-xs font-semibold text-brand hover:underline"
+          onClick={() => setMore((m) => !m)}
+          aria-expanded={more}
+          className="flex h-10 items-center gap-1 rounded-lg border border-gray-200 px-3 text-sm font-medium text-muted transition-colors hover:border-brand hover:text-brand"
         >
-          Reset
+          More filters
+          <ChevronDownIcon size={14} className={`transition-transform ${more ? "rotate-180" : ""}`} />
         </button>
       </div>
 
-      <form action={apply} className="space-y-5">
-        {/* ── Temel ── */}
-        <div className="space-y-4">
-          <Field label="Keyword">
-            <Input name="q" defaultValue={current.q} placeholder="Venue name or city..." />
-          </Field>
-          <Field label="City">
-            <Select name="city" defaultValue={current.city ?? ""}>
-              <option value="">All cities</option>
-              {CITIES.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </Select>
-          </Field>
-          <div className="grid grid-cols-2 gap-3">
-            <Field label="Stars">
-              <Select name="stars" defaultValue={current.stars ?? ""}>
-                <option value="">Any</option>
-                <option value="5">5 stars</option>
-                <option value="4">4 stars</option>
-                <option value="3">3 stars</option>
-              </Select>
-            </Field>
-            <Field label="Venue type">
-              <Select name="type" defaultValue={current.type ?? ""}>
-                <option value="">All types</option>
-                {TYPES.map((t) => (
-                  <option key={t.value} value={t.value}>
-                    {t.label}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-          </div>
+      {/* Satır 2 — MICE Inspection ileri kriterleri (açılır) */}
+      {more && (
+        <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-2">
+          <select name="stars" defaultValue={current.stars ?? ""} className={selectCls} aria-label="Stars">
+            <option value="">Any stars</option>
+            <option value="5">5 stars</option>
+            <option value="4">4 stars</option>
+            <option value="3">3 stars</option>
+          </select>
+          <select name="type" defaultValue={current.type ?? ""} className={selectCls} aria-label="Venue type">
+            <option value="">All types</option>
+            {TYPES.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label}
+              </option>
+            ))}
+          </select>
+          <input
+            name="capacity"
+            type="number"
+            min={1}
+            defaultValue={current.capacity}
+            placeholder="Min. attendees"
+            className="h-10 w-32 rounded-lg border border-gray-200 px-2.5 text-sm outline-none placeholder:text-muted focus:border-brand"
+          />
+          <select name="maxAirport" defaultValue={current.maxAirport ?? ""} className={selectCls} aria-label="Airport distance">
+            <option value="">Airport: any</option>
+            <option value="10">Airport ≤ 10 km</option>
+            <option value="30">Airport ≤ 30 km</option>
+            <option value="45">Airport ≤ 45 km</option>
+          </select>
+          <select name="maxCenter" defaultValue={current.maxCenter ?? ""} className={selectCls} aria-label="Center distance">
+            <option value="">Center: any</option>
+            <option value="5">Center ≤ 5 km</option>
+            <option value="20">Center ≤ 20 km</option>
+          </select>
+          <select name="minRooms" defaultValue={current.minRooms ?? ""} className={selectCls} aria-label="Total rooms">
+            <option value="">Rooms: any</option>
+            <option value="50">50+ rooms</option>
+            <option value="150">150+ rooms</option>
+            <option value="300">300+ rooms</option>
+            <option value="500">500+ rooms</option>
+          </select>
+          <select
+            name="minMeetingRooms"
+            defaultValue={current.minMeetingRooms ?? ""}
+            className={selectCls}
+            aria-label="Meeting rooms"
+          >
+            <option value="">Halls: any</option>
+            <option value="2">2+ halls</option>
+            <option value="4">4+ halls</option>
+            <option value="7">7+ halls</option>
+          </select>
+          <select name="minScore" defaultValue={current.minScore ?? ""} className={selectCls} aria-label="MICE score">
+            <option value="">MICE score: any</option>
+            <option value="85">85+ Premium</option>
+            <option value="70">70+ Very good</option>
+            <option value="55">55+ Suitable</option>
+          </select>
+          <label className={checkCls}>
+            <input
+              type="checkbox"
+              name="sustainable"
+              value="1"
+              defaultChecked={current.sustainable === "1"}
+              className="h-4 w-4 accent-brand"
+            />
+            Eco-certified
+          </label>
+          <label className={checkCls}>
+            <input type="checkbox" name="hybrid" value="1" defaultChecked={current.hybrid === "1"} className="h-4 w-4 accent-brand" />
+            Hybrid studio
+          </label>
+          <label className={checkCls}>
+            <input
+              type="checkbox"
+              name="accessible"
+              value="1"
+              defaultChecked={current.accessible === "1"}
+              className="h-4 w-4 accent-brand"
+            />
+            Accessible
+          </label>
+          <button
+            type="button"
+            onClick={() => router.push("/app/search")}
+            className="ml-auto h-10 px-2 text-xs font-semibold text-brand hover:underline"
+          >
+            Reset all
+          </button>
         </div>
-
-        {/* ── B. Etkinlik & bütçe uyumu ── */}
-        <div className="border-t border-gray-100 pt-4">
-          <SectionTitle>Event &amp; budget fit</SectionTitle>
-          <div className="space-y-4">
-            <Field label="Event type (ICCA / IAPCO)">
-              <Select name="eventType" defaultValue={current.eventType ?? ""}>
-                <option value="">All event types</option>
-                {EVENT_TYPES.map((e) => (
-                  <option key={e.value} value={e.value}>
-                    {e.label}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field label="Group size">
-              <Select name="groupSize" defaultValue={current.groupSize ?? ""}>
-                <option value="">Any group size</option>
-                <option value="small">Small group (0–50)</option>
-                <option value="medium">Medium group (50–250)</option>
-                <option value="large">Large group (250–500)</option>
-                <option value="mega">Mega group (500+)</option>
-              </Select>
-            </Field>
-            <Field label="Budget segment">
-              <Select name="budget" defaultValue={current.budget ?? ""}>
-                <option value="">Any budget</option>
-                {BUDGET_SEGMENTS.map((b) => (
-                  <option key={b.value} value={b.value}>
-                    {b.label}
-                  </option>
-                ))}
-              </Select>
-            </Field>
-            <Field label="Min. attendees (theatre)">
-              <Input name="capacity" type="number" min={1} defaultValue={current.capacity} placeholder="e.g. 200" />
-            </Field>
-          </div>
-        </div>
-
-        {/* ── C. Konum & ulaşım ── */}
-        <div className="border-t border-gray-100 pt-4">
-          <SectionTitle>Location &amp; transit</SectionTitle>
-          <div className="space-y-4">
-            <Field label="Airport distance">
-              <Select name="maxAirport" defaultValue={current.maxAirport ?? ""}>
-                <option value="">Any distance</option>
-                <option value="10">Within 10 km (close)</option>
-                <option value="30">Within 30 km</option>
-                <option value="45">Within 45 km</option>
-              </Select>
-            </Field>
-            <Field label="City / congress center distance">
-              <Select name="maxCenter" defaultValue={current.maxCenter ?? ""}>
-                <option value="">Any distance</option>
-                <option value="5">Within 5 km (central)</option>
-                <option value="20">Within 20 km</option>
-              </Select>
-            </Field>
-            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink">
-              <input type="checkbox" name="metro" defaultChecked={current.metro === "1"} className="h-4 w-4 accent-brand" />
-              Near metro / tram
-            </label>
-          </div>
-        </div>
-
-        {/* ── D + E. Konaklama & toplantı altyapısı ── */}
-        <div className="border-t border-gray-100 pt-4">
-          <SectionTitle>Accommodation &amp; meeting capacity</SectionTitle>
-          <div className="space-y-4">
-            <Field label="Total rooms">
-              <Select name="minRooms" defaultValue={current.minRooms ?? ""}>
-                <option value="">Any size</option>
-                <option value="50">50+ rooms</option>
-                <option value="150">150+ rooms</option>
-                <option value="300">300+ rooms</option>
-                <option value="500">500+ rooms</option>
-              </Select>
-            </Field>
-            <Field label="Break-out / meeting rooms">
-              <Select name="minMeetingRooms" defaultValue={current.minMeetingRooms ?? ""}>
-                <option value="">Any number</option>
-                <option value="2">2+ rooms</option>
-                <option value="4">4+ rooms</option>
-                <option value="7">7+ rooms</option>
-              </Select>
-            </Field>
-            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink">
-              <input
-                type="checkbox"
-                name="accessible"
-                defaultChecked={current.accessible === "1"}
-                className="h-4 w-4 accent-brand"
-              />
-              Accessible rooms (ADA / ICCA)
-            </label>
-          </div>
-        </div>
-
-        {/* ── F + I. Teknik & sürdürülebilirlik ── */}
-        <div className="border-t border-gray-100 pt-4">
-          <SectionTitle>Technical &amp; sustainability</SectionTitle>
-          <div className="space-y-3">
-            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink">
-              <input type="checkbox" name="hybrid" defaultChecked={current.hybrid === "1"} className="h-4 w-4 accent-brand" />
-              Hybrid / online broadcast studio
-            </label>
-            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink">
-              <input
-                type="checkbox"
-                name="sustainable"
-                defaultChecked={current.sustainable === "1"}
-                className="h-4 w-4 accent-brand"
-              />
-              Sustainability certified (GreenKey, ISO 14001, LEED...)
-            </label>
-          </div>
-        </div>
-
-        {/* ── D Event inspection puanı ── */}
-        <div className="border-t border-gray-100 pt-4">
-          <SectionTitle>D Event MICE score</SectionTitle>
-          <Field label="Minimum inspection score">
-            <Select name="minScore" defaultValue={current.minScore ?? ""}>
-              <option value="">Any score</option>
-              <option value="85">85+ — Premium</option>
-              <option value="70">70+ — Very good</option>
-              <option value="55">55+ — Suitable</option>
-            </Select>
-          </Field>
-        </div>
-
-        <Button type="submit" className="w-full">
-          Apply filters
-        </Button>
-      </form>
-    </aside>
+      )}
+    </form>
   );
 }
