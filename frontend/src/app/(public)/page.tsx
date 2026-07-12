@@ -37,7 +37,7 @@ export default async function HomePage() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
 
-        <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pt-20 text-center">
+        <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-12 pt-28 text-center">
           <h1 className="text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
             Plan Your Meeting in Turkey
           </h1>
@@ -85,6 +85,21 @@ export default async function HomePage() {
               </Link>
             ))}
           </p>
+
+          {/* İstatistikler — ilk ekranda görünür */}
+          <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
+            {[
+              { value: PLATFORM_STATS.venues, label: "Verified Venues" },
+              { value: PLATFORM_STATS.rooms, label: "Rooms" },
+              { value: PLATFORM_STATS.cities, label: "Cities" },
+              { value: PLATFORM_STATS.meetingHalls, label: "Meeting Halls" },
+            ].map((s) => (
+              <div key={s.label}>
+                <p className="text-3xl font-extrabold text-white sm:text-4xl">{s.value}</p>
+                <p className="mt-1 text-xs font-medium uppercase tracking-widest text-white/75">{s.label}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -100,23 +115,6 @@ export default async function HomePage() {
               <div className="mx-auto flex h-16 w-16 items-center justify-center text-brand">{f.icon}</div>
               <h3 className="mt-2 text-lg font-bold text-ink">{f.title}</h3>
               <p className="mt-1 text-sm text-muted">{f.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── İSTATİSTİKLER ── */}
-      <section className="bg-brand">
-        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-6 px-4 py-12 text-center sm:grid-cols-4 sm:px-6">
-          {[
-            { value: PLATFORM_STATS.venues, label: "Verified Venues" },
-            { value: PLATFORM_STATS.rooms, label: "Rooms" },
-            { value: PLATFORM_STATS.cities, label: "Cities" },
-            { value: PLATFORM_STATS.meetingHalls, label: "Meeting Halls" },
-          ].map((s) => (
-            <div key={s.label}>
-              <p className="text-3xl font-extrabold text-white sm:text-4xl">{s.value}</p>
-              <p className="mt-1 text-xs font-medium uppercase tracking-widest text-white/70">{s.label}</p>
             </div>
           ))}
         </div>
