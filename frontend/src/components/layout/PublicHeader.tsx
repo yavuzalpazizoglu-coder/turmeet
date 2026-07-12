@@ -32,14 +32,14 @@ export function PublicHeader({ variant = "solid" }: { variant?: "solid" | "trans
           : "sticky top-0 z-40 border-b border-gray-200 bg-white"
       }
     >
-      <div className="flex h-24 w-full items-center justify-between px-4 sm:px-6">
+      <div className="flex h-28 w-full items-center justify-between pl-2 pr-4 sm:pl-3 sm:pr-6">
         <Link href="/" className="flex shrink-0 items-center">
           <Image
             src={transparent ? "/brand-white.png" : "/brand-magenta.png"}
             alt="TURMEET — Meet in Turkey. Plan with Ease."
             width={1670}
             height={412}
-            className="h-14 w-auto object-contain sm:h-[72px]"
+            className="h-[70px] w-auto object-contain sm:h-[90px]"
             priority
           />
         </Link>

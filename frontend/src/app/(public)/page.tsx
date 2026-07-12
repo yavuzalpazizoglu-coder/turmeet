@@ -76,7 +76,7 @@ export default async function HomePage() {
             </div>
           </form>
 
-          <p className="mt-5 text-sm text-white/70">
+          <p className="mt-5 text-[21px] text-white/70">
             Popular:{" "}
             {["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"].map((c, i) => (
               <Link key={c} href={`/venues?city=${c}`} className="font-medium text-white hover:underline">
