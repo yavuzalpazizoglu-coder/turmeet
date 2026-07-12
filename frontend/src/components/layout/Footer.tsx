@@ -37,8 +37,8 @@ export function Footer() {
   return (
     <footer className="bg-ink text-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
-        {/* Bölüm 1 — Navigasyon */}
-        <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+        {/* Bölüm 1 — Navigasyon + D Event Ofis iletişim bilgileri */}
+        <div className="grid grid-cols-2 gap-8 md:grid-cols-5">
           <div>
             <Image src="/brand-white.png" alt="TURMEET" width={1670} height={412} className="h-10 w-auto object-contain" />
             <p className="mt-3 text-sm text-white/60">
@@ -61,6 +61,26 @@ export function Footer() {
               </ul>
             </div>
           ))}
+
+          {/* D Event Ofis — iletişim bilgileri (DDG §5 / Impressum uyumu) */}
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-wide text-white/80">D Event Office</p>
+            <address className="mt-3 space-y-2 text-sm not-italic text-white/60">
+              <p className="font-medium text-white/75">D Event Tourism Organization Services Inc.</p>
+              <p>
+                Icerenkoy Mah. Cayir Cad. No:5
+                <br />
+                Bay Plaza Floor:12
+                <br />
+                34752 Atasehir / Istanbul — TURKEY
+              </p>
+              <p>
+                <a href="tel:+902165731836" className="transition-colors hover:text-white">
+                  +90 216 573 18 36
+                </a>
+              </p>
+            </address>
+          </div>
         </div>
 
         {/* Bölüm 2 — Güven bandı (DDG §5 / Impressum uyumu) */}
