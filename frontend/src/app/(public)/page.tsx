@@ -26,11 +26,16 @@ export default async function HomePage() {
   const popular = venues.filter((v) => v.isPopular).slice(0, 4);
 
   return (
-    <>
+    /*
+     * Tam sayfa görünüm: her bölüm ekranı kaplar (100dvh) ve scroll-snap
+     * ile tek tek görüntülenir. Kapsayıcı kendi scroll'unu yönetir;
+     * son sayfadan sonra kaydırmaya devam edilince footer görünür.
+     */
+    <div className="relative h-[100dvh] snap-y snap-mandatory overflow-y-auto">
       <PublicHeader variant="transparent" />
 
-      {/* ── HERO ── */}
-      <section className="relative flex min-h-[640px] items-center justify-center overflow-hidden bg-ink">
+      {/* ── SAYFA 1: HERO ── */}
+      <section className="relative flex min-h-[100dvh] snap-start items-center justify-center overflow-hidden bg-ink">
         <HeroSlideshow />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
 
@@ -136,9 +141,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 3'LÜ DEĞER ÖNERİSİ (mockup 1) — kompakt ── */}
-      <section className="border-b border-gray-100 bg-white">
-        <div className="mx-auto grid max-w-5xl gap-6 px-4 py-7 sm:grid-cols-3 sm:px-6">
+      {/* ── SAYFA 2: DEĞER ÖNERİSİ + POPÜLER MEKANLAR ── */}
+      <section className="flex min-h-[100dvh] snap-start flex-col justify-center bg-white py-10">
+        <div className="mx-auto mb-8 grid w-full max-w-5xl gap-6 border-b border-gray-100 px-4 pb-8 sm:grid-cols-3 sm:px-6">
           {[
             { icon: <MapPinIcon size={24} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
             { icon: <CalendarIcon size={24} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
@@ -155,29 +160,28 @@ export default async function HomePage() {
             </div>
           ))}
         </div>
-      </section>
 
-      {/* ── POPÜLER MEKANLAR ── */}
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
-        <div className="mb-6 flex items-end justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-ink">Popular venues</h2>
-            <p className="mt-1 text-sm text-muted">Top-rated meeting hotels across Turkey</p>
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
+          <div className="mb-6 flex items-end justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-ink">Popular venues</h2>
+              <p className="mt-1 text-sm text-muted">Top-rated meeting hotels across Turkey</p>
+            </div>
+            <Link href="/venues" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
+              View all <ArrowRightIcon size={15} />
+            </Link>
           </div>
-          <Link href="/venues" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
-            View all <ArrowRightIcon size={15} />
-          </Link>
-        </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {popular.map((v) => (
-            <VenueCard key={v.id} venue={v} />
-          ))}
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {popular.map((v) => (
+              <VenueCard key={v.id} venue={v} />
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── DESTİNASYONLAR ── */}
-      <section className="bg-surface">
-        <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6">
+      {/* ── SAYFA 3: DESTİNASYONLAR ── */}
+      <section className="flex min-h-[100dvh] snap-start items-center bg-surface py-10">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
           <h2 className="text-2xl font-bold text-ink">Destinations across Turkey</h2>
           <p className="mt-1 text-sm text-muted">From congress cities to boutique retreats</p>
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
@@ -207,8 +211,9 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── HOW IT WORKS ── */}
-      <section className="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6">
+      {/* ── SAYFA 4: HOW IT WORKS ── */}
+      <section className="flex min-h-[100dvh] snap-start flex-col justify-center py-10">
+        <div className="mx-auto w-full max-w-5xl px-4 text-center sm:px-6">
         <h2 className="text-2xl font-bold text-ink">How it works</h2>
         <div className="mt-8 grid gap-8 sm:grid-cols-3">
           {[
@@ -230,10 +235,11 @@ export default async function HomePage() {
             Get started — it&apos;s free
           </LinkButton>
         </div>
+        </div>
       </section>
 
-      {/* ── OTEL CTA ── */}
-      <section className="bg-ink">
+      {/* ── SAYFA 5: OTEL CTA ── */}
+      <section className="flex min-h-[100dvh] snap-start items-center bg-ink">
         <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-4 py-14 text-center sm:px-6">
           <BuildingIcon size={36} className="text-brand" />
           <h2 className="text-2xl font-bold text-white">List your venue on Turmeet</h2>
@@ -245,6 +251,6 @@ export default async function HomePage() {
           </LinkButton>
         </div>
       </section>
-    </>
+    </div>
   );
 }
