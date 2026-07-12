@@ -6,7 +6,6 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
-import { VenueCard } from "@/components/venue/VenueCard";
 import { LinkButton } from "@/components/ui";
 import {
   SearchIcon,
@@ -23,7 +22,43 @@ import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 
 export default async function HomePage() {
   const [venues, destinations] = await Promise.all([getVenues(), getDestinations()]);
-  const popular = venues.filter((v) => v.isPopular).slice(0, 4);
+
+  /*
+   * Vitrin kolonları — 3 ana başlık altında 3'er otel:
+   *  1-2) Şehre göre (Istanbul, Antalya) — en yüksek puanlılar
+   *  3)   Fiyata göre — Türkiye genelinde en uygun referans fiyatlar
+   */
+  const byCity = (city: string) =>
+    venues
+      .filter((v) => v.city === city)
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, 3);
+  const bestValue = [...venues]
+    .filter((v) => v.referencePrice !== null)
+    .sort((a, b) => (a.referencePrice ?? 0) - (b.referencePrice ?? 0))
+    .slice(0, 3);
+  const destInfo = (name: string) => destinations.find((d) => d.name === name);
+
+  const showcase = [
+    {
+      title: "Istanbul",
+      subtitle: `${destInfo("Istanbul")?.venueCount ?? 0} venues · ${destInfo("Istanbul")?.tagline ?? ""}`,
+      href: "/venues?city=Istanbul",
+      items: byCity("Istanbul"),
+    },
+    {
+      title: "Antalya",
+      subtitle: `${destInfo("Antalya")?.venueCount ?? 0} venues · ${destInfo("Antalya")?.tagline ?? ""}`,
+      href: "/venues?city=Antalya",
+      items: byCity("Antalya"),
+    },
+    {
+      title: "Best Price Picks",
+      subtitle: "Lowest reference prices across Turkey",
+      href: "/venues",
+      items: bestValue,
+    },
+  ];
 
   return (
     /*
@@ -160,21 +195,65 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── SAYFA 2: POPÜLER MEKANLAR ── */}
+      {/* ── SAYFA 2: ÖNE ÇIKAN OTELLER — 3 ana başlık × 3 otel ── */}
       <section className="flex min-h-[100dvh] snap-start flex-col justify-center bg-white py-10">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          <div className="mb-6 flex items-end justify-between">
+          <div className="mb-8 flex items-end justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-ink">Popular venues</h2>
-              <p className="mt-1 text-sm text-muted">Top-rated meeting hotels across Turkey</p>
+              <h2 className="text-2xl font-bold text-ink">Featured hotels</h2>
+              <p className="mt-1 text-sm text-muted">Hand-picked meeting hotels by destination and price</p>
             </div>
             <Link href="/venues" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
               View all <ArrowRightIcon size={15} />
             </Link>
           </div>
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {popular.map((v) => (
-              <VenueCard key={v.id} venue={v} />
+
+          <div className="grid gap-8 lg:grid-cols-3">
+            {showcase.map((col) => (
+              <div key={col.title}>
+                {/* Kolon başlığı + destinasyon bilgisi */}
+                <div className="mb-4 border-b-2 border-brand/20 pb-3">
+                  <Link href={col.href} className="inline-flex items-center gap-1.5 text-lg font-bold text-ink hover:text-brand">
+                    <MapPinIcon size={17} className="text-brand" /> {col.title}
+                  </Link>
+                  <p className="mt-0.5 text-sm text-muted">{col.subtitle}</p>
+                </div>
+
+                <div className="space-y-4">
+                  {col.items.map((v) => (
+                    <Link
+                      key={v.id}
+                      href={`/venues/${v.slug}`}
+                      className="group flex gap-3 rounded-card border border-gray-100 bg-white p-3 shadow-card transition-shadow hover:shadow-lg"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={v.imageUrl}
+                        alt={v.name}
+                        className="h-24 w-28 shrink-0 rounded-lg object-cover"
+                        loading="lazy"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
+                        <p className="mt-0.5 text-xs text-muted">
+                          {v.city}, {v.district} · {"★".repeat(v.stars)}
+                        </p>
+                        <p className="mt-1 text-xs text-muted">
+                          <span className="font-semibold text-ink">{v.rating}</span> ({v.reviewCount} reviews) ·{" "}
+                          {v.maxTheatreCapacity.toLocaleString("en-US")} guests
+                        </p>
+                        {v.referencePrice !== null ? (
+                          <p className="mt-1 text-sm font-bold text-brand">
+                            € {v.referencePrice} <span className="text-xs font-normal text-muted">/ night — reference</span>
+                          </p>
+                        ) : (
+                          <p className="mt-1 text-xs font-medium text-muted">Price on request</p>
+                        )}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
         </div>
