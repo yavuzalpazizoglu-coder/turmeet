@@ -37,9 +37,8 @@ export default async function HomePage() {
           <h1 className="hero-text-shadow text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
             Plan Your Meeting in Turkey
           </h1>
-          {/* Slogan — kaynak: Turmeet_LinkedIn_Metinleri.md resmi tagline */}
           <p className="hero-text-shadow mt-3 text-sm font-medium uppercase tracking-[0.15em] text-white/85 sm:text-base">
-            One Click to Meeting Venues Across Turkey — Zero Commission for Organizers
+            Compare. Choose. Organize.
           </p>
 
           {/* Pill arama çubuğu */}
