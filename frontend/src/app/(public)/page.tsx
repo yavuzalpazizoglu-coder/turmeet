@@ -32,48 +32,8 @@ import { tagDef } from "@/lib/venue-tags";
 export default async function HomePage() {
   const [venues, destinations] = await Promise.all([getVenues(), getDestinations()]);
 
-  /*
-   * Vitrin kolonları — 3 ana başlık altında 3'er otel:
-   *  1-2) Şehre göre (Istanbul, Antalya) — en yüksek puanlılar
-   *  3)   Fiyata göre — Türkiye genelinde en uygun referans fiyatlar
-   */
-  const byCity = (city: string) =>
-    venues
-      .filter((v) => v.city === city)
-      .sort((a, b) => b.rating - a.rating)
-      .slice(0, 3);
-  const bestValue = [...venues]
-    .filter((v) => v.referencePrice !== null)
-    .sort((a, b) => (a.referencePrice ?? 0) - (b.referencePrice ?? 0))
-    .slice(0, 3);
-  const destInfo = (name: string) => destinations.find((d) => d.name === name);
-
-  const showcase = [
-    {
-      title: "Istanbul",
-      category: "Congress City",
-      subtitle: `${destInfo("Istanbul")?.venueCount ?? 0} venues · ${destInfo("Istanbul")?.tagline ?? ""}`,
-      href: "/venues?city=Istanbul",
-      headerClass: "bg-gradient-to-r from-brand to-brand-dark",
-      items: byCity("Istanbul"),
-    },
-    {
-      title: "Antalya",
-      category: "Resort & Incentive",
-      subtitle: `${destInfo("Antalya")?.venueCount ?? 0} venues · ${destInfo("Antalya")?.tagline ?? ""}`,
-      href: "/venues?city=Antalya",
-      headerClass: "bg-gradient-to-r from-sky-600 to-sky-800",
-      items: byCity("Antalya"),
-    },
-    {
-      title: "Best Price Picks",
-      category: "Value",
-      subtitle: "Lowest reference prices across Turkey",
-      href: "/venues",
-      headerClass: "bg-gradient-to-r from-teal-600 to-teal-800",
-      items: bestValue,
-    },
-  ];
+  /* Vitrin — en az 15 otel, sade tek tip kart (sıralama: sponsor > MICE puanı > rating) */
+  const featured = venues.slice(0, 15);
 
   return (
     /*
@@ -216,7 +176,7 @@ export default async function HomePage() {
           <div className="mb-8 flex items-end justify-between">
             <div>
               <h2 className="text-2xl font-bold text-ink">Featured hotels</h2>
-              <p className="mt-1 text-sm text-muted">Hand-picked meeting hotels by destination and price</p>
+              <p className="mt-1 text-sm text-muted">Top meeting hotels across Turkey — ranked by MICE inspection score</p>
             </div>
             <Link href="/venues" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
               View all <ArrowRightIcon size={15} />
@@ -224,98 +184,45 @@ export default async function HomePage() {
           </div>
 
           {/*
-           * Kutu düzeni: her kategori tek kutu — gradyan kategori başlığı,
-           * ilk otel büyük görselli "hero" kart, kalan ikisi kompakt satır.
-           * Etiket chip'leri Staff panelinden atanır (showcaseTags).
+           * Sade vitrin: 15 otel, tek tip kompakt kart — görsel + tek etiket
+           * + isim + şehir/yıldız + fiyat. Etiketler Staff panelinden atanır.
            */}
-          <div className="grid gap-6 lg:grid-cols-3">
-            {showcase.map((col) => {
-              const [hero, ...rest] = col.items;
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
+            {featured.map((v) => {
+              const tag = v.showcaseTags[0];
+              const d = tag ? tagDef(tag) : null;
               return (
-                <div key={col.title} className="flex flex-col overflow-hidden rounded-card border border-gray-100 bg-white shadow-card">
-                  {/* Kategori başlık bandı */}
-                  <Link href={col.href} className={`flex items-center justify-between gap-2 px-4 py-3 text-white ${col.headerClass}`}>
-                    <div className="min-w-0">
-                      <p className="inline-flex items-center gap-1.5 text-lg font-bold leading-tight">
-                        <MapPinIcon size={16} /> {col.title}
-                      </p>
-                      <p className="truncate text-xs text-white/80">{col.subtitle}</p>
-                    </div>
-                    <span className="shrink-0 rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide backdrop-blur">
-                      {col.category}
-                    </span>
-                  </Link>
-
-                  {/* Hero otel — büyük görsel + overlay */}
-                  {hero && (
-                    <Link href={`/venues/${hero.slug}`} className="group relative block h-44 overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={hero.imageUrl}
-                        alt={hero.name}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                      <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
-                        {hero.showcaseTags.slice(0, 2).map((tag) => {
-                          const d = tagDef(tag);
-                          return (
-                            <span key={tag} className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${d.chipClass}`}>
-                              {d.labelEn}
-                            </span>
-                          );
-                        })}
-                      </div>
-                      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 text-white">
-                        <div className="min-w-0">
-                          <p className="truncate text-[15px] font-bold">{hero.name}</p>
-                          <p className="text-xs text-white/85">
-                            {hero.district} · {"★".repeat(hero.stars)} · {hero.rating} ({hero.reviewCount})
-                          </p>
-                        </div>
-                        {hero.referencePrice !== null && (
-                          <p className="shrink-0 text-sm font-bold">
-                            € {hero.referencePrice}
-                            <span className="text-[10px] font-normal text-white/80"> /night</span>
-                          </p>
-                        )}
-                      </div>
-                    </Link>
-                  )}
-
-                  {/* Kompakt satırlar */}
-                  <div className="flex flex-1 flex-col divide-y divide-gray-100">
-                    {rest.map((v) => (
-                      <Link key={v.id} href={`/venues/${v.slug}`} className="group flex flex-1 items-center gap-3 px-3 py-2.5 transition-colors hover:bg-surface/70">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={v.imageUrl} alt={v.name} className="h-14 w-20 shrink-0 rounded-lg object-cover" loading="lazy" />
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
-                          <p className="mt-0.5 text-xs text-muted">
-                            {v.district} · {"★".repeat(v.stars)} · {v.rating} ({v.reviewCount})
-                          </p>
-                          <div className="mt-1 flex flex-wrap gap-1">
-                            {v.showcaseTags.slice(0, 2).map((tag) => {
-                              const d = tagDef(tag);
-                              return (
-                                <span key={tag} className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${d.chipClass}`}>
-                                  {d.labelEn}
-                                </span>
-                              );
-                            })}
-                          </div>
-                        </div>
-                        {v.referencePrice !== null && (
-                          <p className="shrink-0 text-sm font-bold text-brand">
-                            € {v.referencePrice}
-                            <span className="text-[10px] font-normal text-muted"> /night</span>
-                          </p>
-                        )}
-                      </Link>
-                    ))}
+                <Link
+                  key={v.id}
+                  href={`/venues/${v.slug}`}
+                  className="group overflow-hidden rounded-card border border-gray-100 bg-white shadow-card transition-shadow hover:shadow-lg"
+                >
+                  <div className="relative h-28 overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={v.imageUrl}
+                      alt={v.name}
+                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                    {d && (
+                      <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${d.chipClass}`}>
+                        {d.labelEn}
+                      </span>
+                    )}
                   </div>
-                </div>
+                  <div className="p-3">
+                    <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
+                    <p className="mt-0.5 text-xs text-muted">
+                      {v.city} · {"★".repeat(v.stars)}
+                    </p>
+                    {v.referencePrice !== null && (
+                      <p className="mt-1 text-sm font-bold text-brand">
+                        € {v.referencePrice} <span className="text-[10px] font-normal text-muted">/night</span>
+                      </p>
+                    )}
+                  </div>
+                </Link>
               );
             })}
           </div>
