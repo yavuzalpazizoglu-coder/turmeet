@@ -35,10 +35,10 @@ export function PublicHeader({ variant = "solid" }: { variant?: "solid" | "trans
         <Link href="/" className="flex items-center">
           <Image
             src={transparent ? "/logo-white.png" : "/logo-magenta.png"}
-            alt="TURMEET"
-            width={220}
-            height={58}
-            className="h-12 w-auto object-contain sm:h-14"
+            alt="TURMEET — Meet in Turkey. Plan with Ease."
+            width={1670}
+            height={412}
+            className="h-9 w-auto object-contain sm:h-11"
             priority
           />
         </Link>
