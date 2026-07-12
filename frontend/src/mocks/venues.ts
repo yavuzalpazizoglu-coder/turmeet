@@ -4,7 +4,7 @@
  * GET /api/v1/hotels endpoint'inden gelecek (bkz. docs/BACKEND_INTEGRATION.md).
  * NOT: UI dili İngilizce olduğu için içerik metinleri İngilizce tutulur.
  */
-import type { Venue, Destination, VenueMiceProfile } from "@/types";
+import type { Venue, Destination, VenueMiceProfile, VenueShowcaseTag } from "@/types";
 
 /*
  * Görseller yerel: frontend/public/images/ (Türkiye şehirleri + otel/salon).
@@ -227,7 +227,26 @@ const MICE_PROFILES: Record<string, VenueMiceProfile> = {
   },
 };
 
-const BASE_VENUES: Omit<Venue, keyof VenueMiceProfile>[] = [
+/*
+ * Vitrin etiketleri — Staff panelinden işaretlenir (mock: id bazlı eşleme).
+ * Backend: hotels.showcase_tags — PATCH /api/v1/admin/venues/{id}/tags
+ */
+const SHOWCASE_TAGS: Record<string, VenueShowcaseTag[]> = {
+  v1: ["featured", "customer_favorite"],
+  v2: ["featured", "trending"],
+  v3: ["fast_response"],
+  v4: ["customer_favorite", "trending"],
+  v5: ["trending"],
+  v6: ["featured", "fast_response"],
+  v7: ["customer_favorite"],
+  v8: ["trending"],
+  v9: ["best_value", "customer_favorite"],
+  v10: ["best_value"],
+  v11: ["featured", "customer_favorite"],
+  v12: ["best_value", "fast_response"],
+};
+
+const BASE_VENUES: Omit<Venue, keyof VenueMiceProfile | "showcaseTags">[] = [
   {
     id: "v1",
     slug: "swissotel-the-bosphorus",
@@ -626,10 +645,11 @@ const BASE_VENUES: Omit<Venue, keyof VenueMiceProfile>[] = [
   },
 ];
 
-/** Temel mekan verisi + MICE inspection profili birleşimi */
+/** Temel mekan verisi + MICE inspection profili + vitrin etiketleri birleşimi */
 export const MOCK_VENUES: Venue[] = BASE_VENUES.map((v) => ({
   ...v,
   ...MICE_PROFILES[v.id],
+  showcaseTags: SHOWCASE_TAGS[v.id] ?? [],
 }));
 
 export const MOCK_DESTINATIONS: Destination[] = [

@@ -6,6 +6,7 @@ import { PageHeader, Table, Badge, Button, StarRow } from "@/components/ui";
 import { getAdminVenues } from "@/services";
 import { getPanelLang } from "@/lib/panel-i18n-server";
 import { makeT } from "@/lib/panel-i18n";
+import { ShowcaseTagEditor } from "./tag-editor";
 
 export const metadata = { title: "Venues — Turmeet Admin" };
 
@@ -31,6 +32,7 @@ export default async function AdminVenuesPage() {
           t("Max capacity", "Maks. kapasite"),
           t("Response", "Yanıt"),
           t("Listing", "Liste türü"),
+          t("Showcase tags", "Vitrin etiketleri"),
           "",
         ]}
       >
@@ -53,6 +55,10 @@ export default async function AdminVenuesPage() {
               ) : (
                 <Badge tone="neutral">{t("Standard (10%)", "Standart (%10)")}</Badge>
               )}
+            </td>
+            <td className="px-4 py-3">
+              {/* Vitrin etiketleri — tıklanarak işaretlenir (anasayfa kartlarında görünür) */}
+              <ShowcaseTagEditor initial={v.showcaseTags} />
             </td>
             <td className="px-4 py-3">
               <Button size="sm" variant="ghost">

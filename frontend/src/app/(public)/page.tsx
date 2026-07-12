@@ -24,6 +24,7 @@ import {
 import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
 import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
+import { tagDef } from "@/lib/venue-tags";
 
 export default async function HomePage() {
   const [venues, destinations] = await Promise.all([getVenues(), getDestinations()]);
@@ -47,20 +48,26 @@ export default async function HomePage() {
   const showcase = [
     {
       title: "Istanbul",
+      category: "Congress City",
       subtitle: `${destInfo("Istanbul")?.venueCount ?? 0} venues · ${destInfo("Istanbul")?.tagline ?? ""}`,
       href: "/venues?city=Istanbul",
+      headerClass: "bg-gradient-to-r from-brand to-brand-dark",
       items: byCity("Istanbul"),
     },
     {
       title: "Antalya",
+      category: "Resort & Incentive",
       subtitle: `${destInfo("Antalya")?.venueCount ?? 0} venues · ${destInfo("Antalya")?.tagline ?? ""}`,
       href: "/venues?city=Antalya",
+      headerClass: "bg-gradient-to-r from-sky-600 to-sky-800",
       items: byCity("Antalya"),
     },
     {
       title: "Best Price Picks",
+      category: "Value",
       subtitle: "Lowest reference prices across Turkey",
       href: "/venues",
+      headerClass: "bg-gradient-to-r from-teal-600 to-teal-800",
       items: bestValue,
     },
   ];
@@ -213,53 +220,101 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-3">
-            {showcase.map((col) => (
-              <div key={col.title}>
-                {/* Kolon başlığı + destinasyon bilgisi */}
-                <div className="mb-4 border-b-2 border-brand/20 pb-3">
-                  <Link href={col.href} className="inline-flex items-center gap-1.5 text-lg font-bold text-ink hover:text-brand">
-                    <MapPinIcon size={17} className="text-brand" /> {col.title}
+          {/*
+           * Kutu düzeni: her kategori tek kutu — gradyan kategori başlığı,
+           * ilk otel büyük görselli "hero" kart, kalan ikisi kompakt satır.
+           * Etiket chip'leri Staff panelinden atanır (showcaseTags).
+           */}
+          <div className="grid gap-6 lg:grid-cols-3">
+            {showcase.map((col) => {
+              const [hero, ...rest] = col.items;
+              return (
+                <div key={col.title} className="flex flex-col overflow-hidden rounded-card border border-gray-100 bg-white shadow-card">
+                  {/* Kategori başlık bandı */}
+                  <Link href={col.href} className={`flex items-center justify-between gap-2 px-4 py-3 text-white ${col.headerClass}`}>
+                    <div className="min-w-0">
+                      <p className="inline-flex items-center gap-1.5 text-lg font-bold leading-tight">
+                        <MapPinIcon size={16} /> {col.title}
+                      </p>
+                      <p className="truncate text-xs text-white/80">{col.subtitle}</p>
+                    </div>
+                    <span className="shrink-0 rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide backdrop-blur">
+                      {col.category}
+                    </span>
                   </Link>
-                  <p className="mt-0.5 text-sm text-muted">{col.subtitle}</p>
-                </div>
 
-                <div className="space-y-4">
-                  {col.items.map((v) => (
-                    <Link
-                      key={v.id}
-                      href={`/venues/${v.slug}`}
-                      className="group flex gap-3 rounded-card border border-gray-100 bg-white p-3 shadow-card transition-shadow hover:shadow-lg"
-                    >
+                  {/* Hero otel — büyük görsel + overlay */}
+                  {hero && (
+                    <Link href={`/venues/${hero.slug}`} className="group relative block h-44 overflow-hidden">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
-                        src={v.imageUrl}
-                        alt={v.name}
-                        className="h-24 w-28 shrink-0 rounded-lg object-cover"
+                        src={hero.imageUrl}
+                        alt={hero.name}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                         loading="lazy"
                       />
-                      <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
-                        <p className="mt-0.5 text-xs text-muted">
-                          {v.city}, {v.district} · {"★".repeat(v.stars)}
-                        </p>
-                        <p className="mt-1 text-xs text-muted">
-                          <span className="font-semibold text-ink">{v.rating}</span> ({v.reviewCount} reviews) ·{" "}
-                          {v.maxTheatreCapacity.toLocaleString("en-US")} guests
-                        </p>
-                        {v.referencePrice !== null ? (
-                          <p className="mt-1 text-sm font-bold text-brand">
-                            € {v.referencePrice} <span className="text-xs font-normal text-muted">/ night — reference</span>
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                      <div className="absolute left-3 top-3 flex flex-wrap gap-1.5">
+                        {hero.showcaseTags.slice(0, 2).map((tag) => {
+                          const d = tagDef(tag);
+                          return (
+                            <span key={tag} className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${d.chipClass}`}>
+                              {d.labelEn}
+                            </span>
+                          );
+                        })}
+                      </div>
+                      <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 text-white">
+                        <div className="min-w-0">
+                          <p className="truncate text-[15px] font-bold">{hero.name}</p>
+                          <p className="text-xs text-white/85">
+                            {hero.district} · {"★".repeat(hero.stars)} · {hero.rating} ({hero.reviewCount})
                           </p>
-                        ) : (
-                          <p className="mt-1 text-xs font-medium text-muted">Price on request</p>
+                        </div>
+                        {hero.referencePrice !== null && (
+                          <p className="shrink-0 text-sm font-bold">
+                            € {hero.referencePrice}
+                            <span className="text-[10px] font-normal text-white/80"> /night</span>
+                          </p>
                         )}
                       </div>
                     </Link>
-                  ))}
+                  )}
+
+                  {/* Kompakt satırlar */}
+                  <div className="flex flex-1 flex-col divide-y divide-gray-100">
+                    {rest.map((v) => (
+                      <Link key={v.id} href={`/venues/${v.slug}`} className="group flex flex-1 items-center gap-3 px-3 py-2.5 transition-colors hover:bg-surface/70">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={v.imageUrl} alt={v.name} className="h-14 w-20 shrink-0 rounded-lg object-cover" loading="lazy" />
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
+                          <p className="mt-0.5 text-xs text-muted">
+                            {v.district} · {"★".repeat(v.stars)} · {v.rating} ({v.reviewCount})
+                          </p>
+                          <div className="mt-1 flex flex-wrap gap-1">
+                            {v.showcaseTags.slice(0, 2).map((tag) => {
+                              const d = tagDef(tag);
+                              return (
+                                <span key={tag} className={`rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${d.chipClass}`}>
+                                  {d.labelEn}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                        {v.referencePrice !== null && (
+                          <p className="shrink-0 text-sm font-bold text-brand">
+                            € {v.referencePrice}
+                            <span className="text-[10px] font-normal text-muted"> /night</span>
+                          </p>
+                        )}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

@@ -89,6 +89,16 @@ export interface RoomType {
   amenities: string[];
 }
 
+/** Vitrin etiketleri — anasayfa/arama kartlarında görünen kısa taglar.
+ *  Staff (admin) panelinden mekan başına işaretlenir.
+ *  Backend: hotels.showcase_tags (json array) — PATCH /api/v1/admin/venues/{id}/tags */
+export type VenueShowcaseTag =
+  | "featured" // Öne çıkan
+  | "customer_favorite" // Müşteri dostu
+  | "trending" // Son dönemde tercih edilen
+  | "fast_response" // Hızlı yanıt veren
+  | "best_value"; // Fiyat / performans
+
 export interface Venue extends VenueMiceProfile {
   id: string;
   slug: string;
@@ -116,6 +126,8 @@ export interface Venue extends VenueMiceProfile {
   responseTimeHours: number;
   isSponsored: boolean;
   isPopular: boolean;
+  /** Staff panelinden atanan vitrin etiketleri (bkz. VenueShowcaseTag) */
+  showcaseTags: VenueShowcaseTag[];
   specialOffer: string | null;
   description: string;
   imageUrl: string;
