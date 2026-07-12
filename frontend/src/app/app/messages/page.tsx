@@ -15,9 +15,12 @@ export default function MessagesPage() {
   const [activeId, setActiveId] = useState<string | null>(null);
 
   useEffect(() => {
+    // WhatsApp widget'ı ?thread=th-support ile yönlendirir — varsa onu aç
+    const requested = new URLSearchParams(window.location.search).get("thread");
     getThreads().then((t) => {
       setThreads(t);
-      setActiveId(t[0]?.id ?? null);
+      const match = requested && t.find((th) => th.id === requested);
+      setActiveId(match ? match.id : (t[0]?.id ?? null));
     });
   }, []);
 
@@ -42,6 +45,7 @@ export default function MessagesPage() {
                 <div className="flex items-center gap-2">
                   <p className="truncate text-sm font-semibold text-ink">{t.title}</p>
                   {t.type === "coordinator" && <Badge tone="accent">Coordinator</Badge>}
+                  {t.type === "support" && <Badge tone="success">WhatsApp</Badge>}
                 </div>
                 <p className="mt-0.5 truncate text-xs text-muted">{t.lastMessage}</p>
               </div>

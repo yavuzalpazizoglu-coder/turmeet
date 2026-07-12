@@ -11,6 +11,45 @@ import type {
 
 export const MOCK_THREADS: MessageThread[] = [
   {
+    // WhatsApp widget'ından gelen destek konuşması — widget "Open Messages"
+    // linki ?thread=th-support ile bu thread'i açar.
+    id: "th-support",
+    type: "support",
+    title: "Turmeet Support (WhatsApp)",
+    lastMessage: "Yes — Turmeet is 100% free for event organizers. No hidden costs.",
+    lastMessageAt: "2026-07-12T09:05:00Z",
+    unreadCount: 1,
+    messages: [
+      {
+        id: "ms1",
+        threadId: "th-support",
+        senderRole: "system",
+        senderName: "Turmeet Support",
+        body: "Hi! 👋 Welcome to Turmeet — Turkey's MICE venue search engine. How can we help?",
+        attachments: [],
+        sentAt: "2026-07-12T09:00:00Z",
+      },
+      {
+        id: "ms2",
+        threadId: "th-support",
+        senderRole: "customer",
+        senderName: "You",
+        body: "Is Turmeet free for organizers?",
+        attachments: [],
+        sentAt: "2026-07-12T09:04:00Z",
+      },
+      {
+        id: "ms3",
+        threadId: "th-support",
+        senderRole: "system",
+        senderName: "Turmeet Support",
+        body: "Yes — Turmeet is 100% free for event organizers. No subscription fees, no service charges, no hidden costs. Commission is paid by the venue, never by you.",
+        attachments: [],
+        sentAt: "2026-07-12T09:05:00Z",
+      },
+    ],
+  },
+  {
     id: "th1",
     type: "venue",
     title: "Swissôtel The Bosphorus Istanbul",
