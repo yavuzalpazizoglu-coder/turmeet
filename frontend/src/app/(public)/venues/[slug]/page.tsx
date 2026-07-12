@@ -8,6 +8,7 @@ import Link from "next/link";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import { Badge, Stars, StarRow, Table, LinkButton, Card } from "@/components/ui";
 import { MapPinIcon, PlaneIcon, BuildingIcon, CheckIcon, ClockIcon } from "@/components/ui/icons";
+import { HotelLogo } from "@/components/venue/HotelLogo";
 import { getVenueBySlug } from "@/services";
 
 export default async function VenueDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -51,6 +52,7 @@ export default async function VenueDetailPage({ params }: { params: Promise<{ sl
           <div className="min-w-0">
             {/* Başlık */}
             <div className="flex flex-wrap items-center gap-3">
+              <HotelLogo domain={venue.domain} name={venue.name} size={52} />
               <h1 className="text-2xl font-bold text-ink sm:text-3xl">{venue.name}</h1>
               <StarRow stars={venue.stars} />
               {venue.isSponsored && <Badge tone="accent">Sponsored</Badge>}
@@ -58,7 +60,7 @@ export default async function VenueDetailPage({ params }: { params: Promise<{ sl
             <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-muted">
               <Stars rating={venue.rating} count={venue.reviewCount} />
               <span className="inline-flex items-center gap-1">
-                <MapPinIcon size={14} /> {venue.district}, {venue.city}
+                <MapPinIcon size={14} /> {venue.address}
               </span>
               <span className="inline-flex items-center gap-1">
                 <PlaneIcon size={14} /> Airport {venue.airportDistanceKm} km

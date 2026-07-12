@@ -173,6 +173,21 @@ Bu dosyalar backend bağlandıktan sonra silinebilir (ya da test fixture'ı olar
 - İkonlar: `src/components/ui/icons.tsx` (inline SVG, harici bağımlılık yok)
 - Font: Inter (next/font ile)
 
+## 8.1 Otel Logo Altyapısı
+
+Otel logoları alan adından otomatik çekilir — `src/lib/logo.ts`:
+
+| Öncelik | Servis | Gereksinim |
+|---|---|---|
+| 1 | logo.dev | Ücretsiz publishable key → `.env.local`: `NEXT_PUBLIC_LOGODEV_TOKEN=pk_...` (yüksek kalite için önerilir) |
+| 2 | Google Favicon | Yok — token girilmediyse varsayılan olarak çalışır |
+
+Not: Clearbit Logo API 2025'te kapatıldığı için kullanılmıyor.
+
+`<HotelLogo domain="hilton.com" name="..." />` bileşeni bu zinciri otomatik yönetir
+(servis 404 dönerse sıradakine geçer, hiçbiri bulamazsa marka baş harfi gösterir).
+Backend'de `hotels.domain` kolonu tutulmalı; API response'ta `domain` alanı dönmelidir.
+
 ## 9. Çalıştırma
 
 ```bash

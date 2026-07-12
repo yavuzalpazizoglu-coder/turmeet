@@ -5,6 +5,7 @@
 import Link from "next/link";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import { LinkButton, StarRow, Stars } from "@/components/ui";
+import { HotelLogo } from "@/components/venue/HotelLogo";
 import { getVenuesByIds, getVenues } from "@/services";
 
 export const metadata = { title: "Compare Venues — Turmeet" };
@@ -47,9 +48,12 @@ export default async function ComparePage({
                   <th key={v.id} className="border-b border-gray-200 p-3 text-left align-bottom">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={v.imageUrl} alt={v.name} className="h-32 w-full rounded-card object-cover" />
-                    <Link href={`/venues/${v.slug}`} className="mt-2 block font-semibold text-ink hover:text-brand">
-                      {v.name}
-                    </Link>
+                    <div className="mt-2 flex items-center gap-2">
+                      <HotelLogo domain={v.domain} name={v.name} size={30} />
+                      <Link href={`/venues/${v.slug}`} className="font-semibold text-ink hover:text-brand">
+                        {v.name}
+                      </Link>
+                    </div>
                   </th>
                 ))}
               </tr>

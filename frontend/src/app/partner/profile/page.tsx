@@ -4,6 +4,7 @@
  * ekibine gider (envanter kalitesi D Event kontrolünde tutulur).
  */
 import { PageHeader, Card, Table, Badge, Button } from "@/components/ui";
+import { HotelLogo } from "@/components/venue/HotelLogo";
 import { getPartnerProfile } from "@/services";
 
 export const metadata = { title: "Venue Profile — Turmeet Partner" };
@@ -25,12 +26,13 @@ export default async function PartnerProfilePage() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={venue.imageUrl} alt={venue.name} className="h-56 w-full object-cover" />
             <div className="p-6">
-              <div className="flex flex-wrap items-center gap-2">
+              <div className="flex flex-wrap items-center gap-3">
+                <HotelLogo domain={venue.domain} name={venue.name} size={44} />
                 <h2 className="text-xl font-bold text-ink">{venue.name}</h2>
                 {venue.isSponsored && <Badge tone="accent">Sponsored listing</Badge>}
               </div>
               <p className="mt-1 text-sm text-muted">
-                {venue.district}, {venue.city} · {venue.stars} stars
+                {venue.address} · {venue.stars} stars
               </p>
               <p className="mt-4 text-sm leading-relaxed text-ink/80">{venue.description}</p>
             </div>

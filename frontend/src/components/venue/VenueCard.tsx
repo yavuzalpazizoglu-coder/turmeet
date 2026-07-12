@@ -10,6 +10,7 @@ import { useState } from "react";
 import type { Venue } from "@/types";
 import { Badge, Stars } from "@/components/ui";
 import { HeartIcon, UsersIcon, GridIcon } from "@/components/ui/icons";
+import { HotelLogo } from "./HotelLogo";
 
 export function VenueCard({ venue }: { venue: Venue }) {
   const [fav, setFav] = useState(false);
@@ -43,7 +44,10 @@ export function VenueCard({ venue }: { venue: Venue }) {
       </div>
 
       <Link href={`/venues/${venue.slug}`} className="block p-4">
-        <h3 className="line-clamp-1 font-semibold text-ink">{venue.name}</h3>
+        <div className="flex items-center gap-2.5">
+          <HotelLogo domain={venue.domain} name={venue.name} size={34} />
+          <h3 className="line-clamp-1 font-semibold text-ink">{venue.name}</h3>
+        </div>
         <div className="mt-1 flex items-center gap-2 text-sm text-muted">
           <Stars rating={venue.rating} count={venue.reviewCount} />
           <span>·</span>
