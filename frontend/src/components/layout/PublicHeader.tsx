@@ -13,6 +13,7 @@ import { LinkButton } from "@/components/ui";
 import { MenuIcon, XIcon, ChevronDownIcon } from "@/components/ui/icons";
 
 const NAV = [
+  { href: "/", label: "Home" },
   { href: "/destinations", label: "Destinations" },
   { href: "/venues", label: "Venues" },
   { href: "/how-it-works", label: "How It Works" },
