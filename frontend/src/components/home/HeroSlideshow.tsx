@@ -40,7 +40,7 @@ export default function HeroSlideshow() {
           src={s.src}
           alt={s.alt}
           loading={i === 0 ? "eager" : "lazy"}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[2000ms] ease-in-out ${
+          className={`absolute inset-0 h-full w-full object-cover brightness-[0.8] transition-opacity duration-[2000ms] ease-in-out ${
             i === index ? "opacity-70" : "opacity-0"
           }`}
         />
