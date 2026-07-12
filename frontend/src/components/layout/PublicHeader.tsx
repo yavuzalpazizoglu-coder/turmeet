@@ -44,13 +44,13 @@ export function PublicHeader({ variant = "solid" }: { variant?: "solid" | "trans
           />
         </Link>
 
-        {/* Desktop nav */}
+        {/* Desktop nav — ana başlıklar 2x boyut */}
         <nav className="hidden items-center gap-6 md:flex">
           {NAV.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`text-sm font-medium transition-colors ${transparent ? "text-white/90 hover:text-white" : "text-ink hover:text-brand"}`}
+              className={`text-[28px] font-medium leading-none transition-colors ${transparent ? "text-white/90 hover:text-white" : "text-ink hover:text-brand"}`}
             >
               {item.label}
             </Link>
