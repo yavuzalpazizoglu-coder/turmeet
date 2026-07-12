@@ -34,7 +34,7 @@ export function PanelShell({
     <div className="flex h-full flex-col">
       <div className="flex h-20 items-center border-b border-white/10 px-5">
         <Link href="/">
-          <Image src="/logo-white.png" alt="TURMEET" width={1670} height={412} className="h-8 w-auto object-contain" />
+          <Image src="/brand-white.png" alt="TURMEET" width={1670} height={412} className="h-8 w-auto object-contain" />
         </Link>
       </div>
       <p className="px-5 pt-4 text-[11px] font-semibold uppercase tracking-widest text-white/40">{title}</p>

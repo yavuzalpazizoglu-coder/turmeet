@@ -15,7 +15,7 @@ export default function HotelRegisterPage() {
     <div className="flex min-h-screen items-center justify-center bg-surface px-4 py-12">
       <div className="w-full max-w-lg">
         <Link href="/" className="mb-8 flex justify-center">
-          <Image src="/logo-magenta.png" alt="TURMEET" width={1670} height={412} className="h-14 w-auto object-contain" />
+          <Image src="/brand-magenta.png" alt="TURMEET" width={1670} height={412} className="h-14 w-auto object-contain" />
         </Link>
 
         <Card className="p-8 text-center">
