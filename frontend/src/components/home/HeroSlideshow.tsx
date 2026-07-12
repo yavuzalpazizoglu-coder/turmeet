@@ -1,21 +1,22 @@
 /*
  * HERO SLAYT GÖSTERİSİ — anasayfa arka planı.
- * Unsplash "turkey" aramasından seçilmiş, üzerindeki beyaz yazıların
- * okunabileceği fotoğraflar. Her kare 60 saniye kalır, yumuşak
+ * Fotoğraflar müşterinin verdiği "Foto turmeet" setinden gelir
+ * (başka görsel kullanılmaz). Her kare 2 dakika kalır, yumuşak
  * crossfade ile bir sonrakine döner.
  */
 "use client";
 
 import { useEffect, useState } from "react";
 
-const SLIDE_DURATION_MS = 60_000; // her fotoğraf 1 dakika kalır
+const SLIDE_DURATION_MS = 120_000; // her fotoğraf 2 dakika kalır
 
 const SLIDES = [
-  { src: "/images/hero-istanbul.jpg", alt: "Istanbul — Blue Mosque at sunset" },
-  { src: "/images/hero-cappadocia.jpg", alt: "Cappadocia — hot air balloons at sunrise" },
-  { src: "/images/hero-galata.jpg", alt: "Istanbul — Galata Tower with seagulls" },
-  { src: "/images/hero-sultanahmet.jpg", alt: "Istanbul — Sultanahmet at pink dusk" },
-  { src: "/images/hero-bosphorus.jpg", alt: "Istanbul — Golden Horn skyline from the Bosphorus" },
+  { src: "/images/hero-slide-1.jpg", alt: "Cappadocia — hot air balloons over the valley" },
+  { src: "/images/hero-slide-2.jpg", alt: "Istanbul — colorful Bosphorus waterfront houses" },
+  { src: "/images/hero-slide-3.jpg", alt: "Istanbul — Golden Horn and Galata Bridge panorama" },
+  { src: "/images/hero-slide-4.jpg", alt: "Istanbul — Galata Tower" },
+  { src: "/images/hero-slide-5.jpg", alt: "Istanbul — Bosphorus Bridge at night" },
+  { src: "/images/hero-slide-6.jpg", alt: "Antalya — Kaputaş Beach turquoise coast" },
 ];
 
 export default function HeroSlideshow() {
