@@ -15,7 +15,7 @@ import { Button, Input, Field, Card } from "@/components/ui";
 const ROLES = [
   { value: "customer", label: "Event Organizer (Customer)", target: "/app" },
   { value: "partner", label: "Hotel / Venue (Partner)", target: "/partner" },
-  { value: "admin", label: "D Event Staff (Admin)", target: "/admin" },
+  { value: "admin", label: "Staff (Admin)", target: "/admin" },
 ];
 
 export default function LoginPage() {
