@@ -4,7 +4,7 @@
  * GET /api/v1/hotels endpoint'inden gelecek (bkz. docs/BACKEND_INTEGRATION.md).
  * NOT: UI dili İngilizce olduğu için içerik metinleri İngilizce tutulur.
  */
-import type { Venue, Destination } from "@/types";
+import type { Venue, Destination, VenueMiceProfile } from "@/types";
 
 /*
  * Görseller yerel: frontend/public/images/ (Türkiye şehirleri + otel/salon).
@@ -99,7 +99,135 @@ const standardRoomTypes = (prefix: string) => [
   { id: `${prefix}-t3`, name: "Suite", count: 40, sizeSqm: 65, amenities: ["WiFi", "Minibar", "Living room", "Bosphorus view"] },
 ];
 
-export const MOCK_VENUES: Venue[] = [
+/*
+ * MICE Inspection profilleri — D Event inspection formundan (B/C/D/F/I
+ * bölümleri) platforma taşınan kriterler. Backend'de hotels tablosuna
+ * kolon olarak eklenecek; şimdilik id bazlı eşleme ile merge edilir.
+ */
+const MICE_PROFILES: Record<string, VenueMiceProfile> = {
+  v1: {
+    budgetSegment: "upper",
+    supportedEventTypes: ["congress", "symposium", "corporate_meeting", "gala", "incentive", "hybrid"],
+    transitAccess: "metro",
+    nearestMetro: "Kabataş T1 / F1 (10 min walk)",
+    inspectionScore: 88,
+    sustainabilityCertified: true,
+    hybridStudio: true,
+    accessibleRooms: true,
+  },
+  v2: {
+    budgetSegment: "mid",
+    supportedEventTypes: ["congress", "symposium", "exhibition", "corporate_meeting", "one_day", "hybrid"],
+    transitAccess: "metro",
+    nearestMetro: "Osmanbey M2 (12 min walk)",
+    inspectionScore: 91,
+    sustainabilityCertified: true,
+    hybridStudio: true,
+    accessibleRooms: true,
+  },
+  v3: {
+    budgetSegment: "upper",
+    supportedEventTypes: ["corporate_meeting", "symposium", "gala", "incentive", "one_day"],
+    transitAccess: "bus",
+    nearestMetro: null,
+    inspectionScore: 84,
+    sustainabilityCertified: true,
+    hybridStudio: false,
+    accessibleRooms: true,
+  },
+  v4: {
+    budgetSegment: "mid",
+    supportedEventTypes: ["congress", "incentive", "exhibition", "gala", "workshop"],
+    transitAccess: "transfer_only",
+    nearestMetro: null,
+    inspectionScore: 79,
+    sustainabilityCertified: true,
+    hybridStudio: false,
+    accessibleRooms: true,
+  },
+  v5: {
+    budgetSegment: "upper",
+    supportedEventTypes: ["congress", "incentive", "gala", "corporate_meeting"],
+    transitAccess: "transfer_only",
+    nearestMetro: null,
+    inspectionScore: 76,
+    sustainabilityCertified: false,
+    hybridStudio: false,
+    accessibleRooms: true,
+  },
+  v6: {
+    budgetSegment: "upper",
+    supportedEventTypes: ["congress", "symposium", "corporate_meeting", "gala", "one_day", "hybrid"],
+    transitAccess: "metro",
+    nearestMetro: "Söğütözü M2 (8 min walk)",
+    inspectionScore: 86,
+    sustainabilityCertified: true,
+    hybridStudio: true,
+    accessibleRooms: true,
+  },
+  v7: {
+    budgetSegment: "mid",
+    supportedEventTypes: ["congress", "symposium", "corporate_meeting", "gala", "one_day"],
+    transitAccess: "metro",
+    nearestMetro: "Konak M1 / Tram (5 min walk)",
+    inspectionScore: 82,
+    sustainabilityCertified: true,
+    hybridStudio: false,
+    accessibleRooms: true,
+  },
+  v8: {
+    budgetSegment: "luxury",
+    supportedEventTypes: ["incentive", "corporate_meeting", "gala", "workshop"],
+    transitAccess: "taxi_only",
+    nearestMetro: null,
+    inspectionScore: 74,
+    sustainabilityCertified: false,
+    hybridStudio: false,
+    accessibleRooms: false,
+  },
+  v9: {
+    budgetSegment: "mid",
+    supportedEventTypes: ["congress", "incentive", "exhibition", "gala", "workshop"],
+    transitAccess: "transfer_only",
+    nearestMetro: null,
+    inspectionScore: 77,
+    sustainabilityCertified: true,
+    hybridStudio: false,
+    accessibleRooms: true,
+  },
+  v10: {
+    budgetSegment: "mid",
+    supportedEventTypes: ["congress", "symposium", "corporate_meeting", "exhibition", "one_day"],
+    transitAccess: "metro",
+    nearestMetro: "Acemler Metro (6 min walk)",
+    inspectionScore: 81,
+    sustainabilityCertified: true,
+    hybridStudio: true,
+    accessibleRooms: true,
+  },
+  v11: {
+    budgetSegment: "luxury",
+    supportedEventTypes: ["gala", "incentive", "corporate_meeting", "symposium"],
+    transitAccess: "bus",
+    nearestMetro: null,
+    inspectionScore: 89,
+    sustainabilityCertified: true,
+    hybridStudio: false,
+    accessibleRooms: true,
+  },
+  v12: {
+    budgetSegment: "economy",
+    supportedEventTypes: ["corporate_meeting", "one_day", "workshop", "symposium"],
+    transitAccess: "metro",
+    nearestMetro: "Adana Metro — İstiklal (7 min walk)",
+    inspectionScore: 68,
+    sustainabilityCertified: false,
+    hybridStudio: false,
+    accessibleRooms: true,
+  },
+};
+
+const BASE_VENUES: Omit<Venue, keyof VenueMiceProfile>[] = [
   {
     id: "v1",
     slug: "swissotel-the-bosphorus",
@@ -497,6 +625,12 @@ export const MOCK_VENUES: Venue[] = [
     features: ["River view", "Spa", "Parking"],
   },
 ];
+
+/** Temel mekan verisi + MICE inspection profili birleşimi */
+export const MOCK_VENUES: Venue[] = BASE_VENUES.map((v) => ({
+  ...v,
+  ...MICE_PROFILES[v.id],
+}));
 
 export const MOCK_DESTINATIONS: Destination[] = [
   { slug: "istanbul", name: "Istanbul", venueCount: 112, totalRooms: 25158, category: "congress", tagline: "The heart of congress tourism — ICCA world #18", imageUrl: img("istanbul-dest", 600, 400) },

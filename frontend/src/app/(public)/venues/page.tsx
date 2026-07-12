@@ -15,7 +15,17 @@ export const metadata = { title: "Search Venues — Turmeet" };
 export default async function VenuesPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; city?: string; stars?: string; capacity?: string; type?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    city?: string;
+    stars?: string;
+    capacity?: string;
+    type?: string;
+    eventType?: string;
+    budget?: string;
+    metro?: string;
+    sustainable?: string;
+  }>;
 }) {
   const params = await searchParams;
   const venues = await getVenues({
@@ -24,6 +34,10 @@ export default async function VenuesPage({
     stars: params.stars ? Number(params.stars) : undefined,
     minCapacity: params.capacity ? Number(params.capacity) : undefined,
     type: params.type,
+    eventType: params.eventType,
+    budget: params.budget,
+    metro: params.metro,
+    sustainable: params.sustainable,
   });
 
   // Sonuçlar tek şehre daraldıysa haritayı göster
@@ -52,7 +66,8 @@ export default async function VenuesPage({
                 No venues match your filters. Try widening your search.
               </p>
             ) : (
-              <div className={`grid gap-5 sm:grid-cols-2 ${singleCity ? "" : "xl:grid-cols-3"}`}>
+              /* Oteller tek kolon halinde alt alta sıralanır */
+              <div className="mx-auto grid max-w-2xl gap-5">
                 {venues.map((v) => (
                   <VenueCard key={v.id} venue={v} />
                 ))}

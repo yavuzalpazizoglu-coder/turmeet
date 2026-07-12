@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/icons";
 import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
+import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 
 export default async function HomePage() {
   const [venues, destinations] = await Promise.all([getVenues(), getDestinations()]);
@@ -41,31 +42,67 @@ export default async function HomePage() {
             Compare. Choose. Organize.
           </p>
 
-          {/* Pill arama çubuğu */}
-          <form
-            action="/venues"
-            className="mx-auto mt-8 flex max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl sm:flex-row sm:items-center sm:rounded-full"
-          >
-            <div className="flex flex-1 items-center gap-2 border-b border-gray-200 px-5 py-3.5 sm:border-b-0 sm:border-r">
-              <MapPinIcon size={18} className="shrink-0 text-muted" />
-              <input
-                name="q"
-                placeholder="Search for venues or cities"
-                className="w-full text-[15px] outline-none placeholder:text-muted"
-              />
+          {/* Arama kutusu — ICCA/IAPCO toplantı kriterleri ile (MICE Inspection formu) */}
+          <form action="/venues" className="mx-auto mt-8 max-w-3xl overflow-hidden rounded-2xl bg-white shadow-xl">
+            {/* Satır 1: nerede · ne zaman · kaç kişi */}
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <div className="flex flex-1 items-center gap-2 border-b border-gray-200 px-5 py-3.5 sm:border-r">
+                <MapPinIcon size={18} className="shrink-0 text-muted" />
+                <input
+                  name="q"
+                  placeholder="Search for venues or cities"
+                  className="w-full text-[15px] outline-none placeholder:text-muted"
+                />
+              </div>
+              <div className="flex flex-1 items-center gap-2 border-b border-gray-200 px-5 py-3.5 sm:border-r">
+                <CalendarIcon size={18} className="shrink-0 text-muted" />
+                <input name="dates" placeholder="Add dates" className="w-full text-[15px] outline-none placeholder:text-muted" />
+              </div>
+              <div className="flex flex-1 items-center gap-2 border-b border-gray-200 px-5 py-3.5">
+                <UsersIcon size={18} className="shrink-0 text-muted" />
+                <input
+                  name="capacity"
+                  type="number"
+                  min={1}
+                  placeholder="Attendees (e.g. 50)"
+                  className="w-full text-[15px] outline-none placeholder:text-muted"
+                />
+              </div>
             </div>
-            <div className="flex flex-1 items-center gap-2 border-b border-gray-200 px-5 py-3.5 sm:border-b-0 sm:border-r">
-              <CalendarIcon size={18} className="shrink-0 text-muted" />
-              <input name="dates" placeholder="Add dates" className="w-full text-[15px] outline-none placeholder:text-muted" />
-            </div>
-            <div className="flex flex-1 items-center gap-2 px-5 py-3.5">
-              <UsersIcon size={18} className="shrink-0 text-muted" />
-              <input name="guests" placeholder="Attendees" className="w-full text-[15px] outline-none placeholder:text-muted" />
-            </div>
-            <div className="p-2">
+
+            {/* Satır 2: toplantı tipi (ICCA/IAPCO) · bütçe · metro · ara */}
+            <div className="flex flex-col gap-2 p-2 sm:flex-row sm:items-center">
+              <select
+                name="eventType"
+                defaultValue=""
+                className="h-11 flex-1 rounded-xl border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-brand"
+              >
+                <option value="">Meeting type (ICCA / IAPCO)</option>
+                {EVENT_TYPES.map((e) => (
+                  <option key={e.value} value={e.value}>
+                    {e.label}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="budget"
+                defaultValue=""
+                className="h-11 flex-1 rounded-xl border border-gray-200 bg-white px-3 text-sm text-ink outline-none focus:border-brand"
+              >
+                <option value="">Any budget</option>
+                {BUDGET_SEGMENTS.map((b) => (
+                  <option key={b.value} value={b.value}>
+                    {b.label} hotel
+                  </option>
+                ))}
+              </select>
+              <label className="flex h-11 shrink-0 cursor-pointer items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-ink">
+                <input type="checkbox" name="metro" value="1" className="h-4 w-4 accent-brand" />
+                Near metro
+              </label>
               <button
                 type="submit"
-                className="flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-brand px-8 text-[15px] font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark sm:w-auto sm:rounded-full"
+                className="flex h-11 items-center justify-center gap-2 rounded-xl bg-brand px-8 text-[15px] font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark"
               >
                 <SearchIcon size={17} /> Search
               </button>

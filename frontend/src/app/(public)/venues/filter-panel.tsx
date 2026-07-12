@@ -6,6 +6,7 @@
 
 import { useRouter } from "next/navigation";
 import { Button, Select, Input, Field } from "@/components/ui";
+import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 
 const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nevşehir"];
 const TYPES: { value: string; label: string }[] = [
@@ -20,9 +21,13 @@ export function VenueFilterPanel({ current }: { current: Record<string, string |
 
   function apply(formData: FormData) {
     const params = new URLSearchParams();
-    for (const key of ["q", "city", "stars", "capacity", "type"]) {
+    for (const key of ["q", "city", "stars", "capacity", "type", "eventType", "budget"]) {
       const val = formData.get(key);
       if (val) params.set(key, String(val));
+    }
+    // Checkbox'lar: işaretliyse "1" olarak gönderilir (MICE Inspection C.2 / I.1)
+    for (const key of ["metro", "sustainable"]) {
+      if (formData.get(key)) params.set(key, "1");
     }
     router.push(`/venues?${params.toString()}`);
   }
@@ -71,6 +76,52 @@ export function VenueFilterPanel({ current }: { current: Record<string, string |
             ))}
           </Select>
         </Field>
+
+        {/* MICE Inspection kriterleri (ICCA / IAPCO) */}
+        <div className="border-t border-gray-100 pt-4">
+          <p className="mb-3 text-xs font-bold uppercase tracking-wide text-muted">MICE criteria</p>
+          <div className="space-y-4">
+            <Field label="Event type">
+              <Select name="eventType" defaultValue={current.eventType ?? ""}>
+                <option value="">All event types</option>
+                {EVENT_TYPES.map((e) => (
+                  <option key={e.value} value={e.value}>
+                    {e.label}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <Field label="Budget segment">
+              <Select name="budget" defaultValue={current.budget ?? ""}>
+                <option value="">Any budget</option>
+                {BUDGET_SEGMENTS.map((b) => (
+                  <option key={b.value} value={b.value}>
+                    {b.label}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink">
+              <input
+                type="checkbox"
+                name="metro"
+                defaultChecked={current.metro === "1"}
+                className="h-4 w-4 accent-brand"
+              />
+              Near metro / tram
+            </label>
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink">
+              <input
+                type="checkbox"
+                name="sustainable"
+                defaultChecked={current.sustainable === "1"}
+                className="h-4 w-4 accent-brand"
+              />
+              Sustainability certified
+            </label>
+          </div>
+        </div>
+
         <Button type="submit" className="w-full">
           Apply filters
         </Button>

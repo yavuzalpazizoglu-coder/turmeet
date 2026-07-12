@@ -63,6 +63,23 @@ export function VenueCard({ venue }: { venue: Venue }) {
             <GridIcon size={14} /> {venue.meetingRoomCount} meeting rooms
           </span>
         </div>
+        {/* MICE Inspection göstergeleri: metro erişimi + D Event puanı */}
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+          {venue.transitAccess === "metro" && venue.nearestMetro && (
+            <span className="inline-flex items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 font-medium text-blue-700">
+              <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blue-700 text-[8px] font-bold text-white">
+                M
+              </span>
+              {venue.nearestMetro}
+            </span>
+          )}
+          <span className="inline-flex items-center gap-1 rounded bg-brand-light px-1.5 py-0.5 font-medium text-brand">
+            MICE score {venue.inspectionScore}/100
+          </span>
+          {venue.sustainabilityCertified && (
+            <span className="rounded bg-green-50 px-1.5 py-0.5 font-medium text-green-700">Eco-certified</span>
+          )}
+        </div>
         {venue.referencePrice !== null ? (
           <p className="mt-3 text-[15px]">
             <span className="font-bold text-ink">€ {venue.referencePrice}</span>

@@ -23,6 +23,50 @@ export type VenueType =
 
 export type BoardType = "BB" | "HB" | "FB" | "AI" | "room_only" | "none";
 
+// ── MICE Inspection kriterleri ─────────────────────────────────
+// Kaynak: D Event "MICE Inspection & Değerlendirme Formu"
+// (ICCA / IAPCO / TUROB Standartları, Sürüm 2.0 — Temmuz 2026)
+
+/** B.1 Bütçe Segmenti */
+export type BudgetSegment = "economy" | "mid" | "upper" | "luxury";
+
+/** B.3 Etkinlik Tipi Uyumu — ICCA/IAPCO etkinlik sınıflandırması
+ *  (QuoteRequest'teki EventType'tan ayrıdır; oradaki tip talep formunun
+ *  serbest sınıflandırmasıdır, bu liste inspection/filtreleme standardıdır.) */
+export type MiceEventType =
+  | "congress" // Kongre / Konferans
+  | "symposium" // Sempozyum / Seminer
+  | "corporate_meeting" // Şirket dönem toplantısı
+  | "one_day" // Tek günlük toplantı
+  | "incentive" // Incentive / Ödül programı
+  | "gala" // Gala / Yemek organizasyonu
+  | "exhibition" // Sergi / Fuar
+  | "workshop" // Eğitim / Workshop
+  | "hybrid"; // Hibrit / Online etkinlik
+
+/** C.2 Toplu Taşıma & Transfer Erişimi */
+export type TransitAccess = "metro" | "bus" | "taxi_only" | "transfer_only";
+
+/** Inspection formundan platforma taşınan mekan kriterleri */
+export interface VenueMiceProfile {
+  /** B.1 — otelin uygun olduğu bütçe segmenti */
+  budgetSegment: BudgetSegment;
+  /** B.3 — otelin uygun olduğu etkinlik tipleri */
+  supportedEventTypes: MiceEventType[];
+  /** C.2 — en iyi toplu taşıma erişimi */
+  transitAccess: TransitAccess;
+  /** C.2 — en yakın metro/tramvay durağı (varsa) */
+  nearestMetro: string | null;
+  /** D Event MICE Inspection toplam puanı (0-100) */
+  inspectionScore: number;
+  /** I.1 — çevre/sürdürülebilirlik sertifikası (GreenKey, ISO 14001, LEED...) */
+  sustainabilityCertified: boolean;
+  /** F.3 — hibrit & online yayın altyapısı */
+  hybridStudio: boolean;
+  /** D.4 — engelli erişilebilir oda & altyapı (ADA/ICCA) */
+  accessibleRooms: boolean;
+}
+
 export interface MeetingRoom {
   id: string;
   name: string;
@@ -45,7 +89,7 @@ export interface RoomType {
   amenities: string[];
 }
 
-export interface Venue {
+export interface Venue extends VenueMiceProfile {
   id: string;
   slug: string;
   name: string;

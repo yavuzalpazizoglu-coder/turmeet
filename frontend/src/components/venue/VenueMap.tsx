@@ -2,12 +2,15 @@
  * ŞEHİR HARİTASI — tek şehir aramasında SERP'in sağında gösterilir.
  * Altyapı: Leaflet + CARTO Voyager tile'ları (ücretsiz, API key gerekmez).
  * Pinler: marka pembesi fiyat etiketleri; tıklanınca otel önizleme kartı açılır.
+ * Ek katmanlar (lib/city-map-data.ts): merkezi noktalar, metro istasyonları,
+ * yoğun bölgeler (yarı saydam daire).
  */
 "use client";
 
 import { useEffect, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import type { Venue } from "@/types";
+import { CITY_MAP_LAYERS } from "@/lib/city-map-data";
 
 export function VenueMap({ venues, city }: { venues: Venue[]; city: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -56,6 +59,40 @@ export function VenueMap({ venues, city }: { venues: Venue[]; city: string }) {
         return marker;
       });
 
+      // ── Şehir katmanları: yoğun bölgeler, merkezler, metro ──
+      const layers = CITY_MAP_LAYERS[city];
+      if (layers) {
+        // Yoğun bölgeler — yarı saydam turuncu daireler
+        for (const h of layers.hotspots) {
+          L.circle([h.lat, h.lng], {
+            radius: h.radiusM,
+            color: "#ef6c00",
+            weight: 1,
+            opacity: 0.5,
+            fillColor: "#ef6c00",
+            fillOpacity: 0.12,
+          })
+            .addTo(map)
+            .bindTooltip(h.name, { direction: "top" });
+        }
+        // Merkezi noktalar — mor yıldız rozet
+        for (const c of layers.centers) {
+          L.marker([c.lat, c.lng], {
+            icon: L.divIcon({ className: "", html: `<div class="tm-center">★</div>`, iconSize: [0, 0] }),
+          })
+            .addTo(map)
+            .bindTooltip(c.name, { direction: "top" });
+        }
+        // Metro / tramvay istasyonları — mavi "M" rozeti
+        for (const m of layers.metro) {
+          L.marker([m.lat, m.lng], {
+            icon: L.divIcon({ className: "", html: `<div class="tm-metro">M</div>`, iconSize: [0, 0] }),
+          })
+            .addTo(map)
+            .bindTooltip(m.name, { direction: "top" });
+        }
+      }
+
       const group = L.featureGroup(markers);
       map.fitBounds(group.getBounds().pad(0.25), { maxZoom: 14 });
     })();
@@ -65,7 +102,7 @@ export function VenueMap({ venues, city }: { venues: Venue[]; city: string }) {
       mapRef.current?.remove();
       mapRef.current = null;
     };
-  }, [venues]);
+  }, [venues, city]);
 
   return (
     <div className="overflow-hidden rounded-card border border-gray-200 bg-white">
@@ -73,7 +110,25 @@ export function VenueMap({ venues, city }: { venues: Venue[]; city: string }) {
         <p className="text-sm font-bold text-ink">{city} — venue map</p>
         <p className="text-xs text-muted">{venues.length} venues</p>
       </div>
-      <div ref={containerRef} className="h-[calc(100vh-220px)] min-h-[420px] w-full" />
+      <div ref={containerRef} className="h-[calc(100vh-260px)] min-h-[420px] w-full" />
+
+      {/* Katman lejantı */}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-gray-200 px-4 py-2 text-[11px] text-muted">
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded-full bg-brand ring-2 ring-white" /> Venue
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#1d4ed8] text-[8px] font-bold text-white">M</span>{" "}
+          Metro / tram
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-accent text-[8px] text-white">★</span> City
+          center
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="inline-block h-3 w-3 rounded-full border border-warning bg-warning/20" /> Busy area
+        </span>
+      </div>
 
       {/* Pin ve popup stilleri (Leaflet DOM'una global sızması gerekiyor) */}
       <style jsx global>{`
@@ -93,6 +148,30 @@ export function VenueMap({ venues, city }: { venues: Venue[]; city: string }) {
         .tm-pin:hover {
           transform: translate(-50%, -100%) scale(1.12);
           background: #a91f5c;
+        }
+        .tm-metro {
+          transform: translate(-50%, -50%);
+          width: 18px;
+          height: 18px;
+          border-radius: 50%;
+          background: #1d4ed8;
+          color: #fff;
+          font: 700 10px/18px var(--font-inter), sans-serif;
+          text-align: center;
+          border: 2px solid #fff;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+        }
+        .tm-center {
+          transform: translate(-50%, -50%);
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          background: #8e24aa;
+          color: #fff;
+          font: 700 11px/20px var(--font-inter), sans-serif;
+          text-align: center;
+          border: 2px solid #fff;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
         }
         .leaflet-popup-content-wrapper {
           border-radius: 12px;

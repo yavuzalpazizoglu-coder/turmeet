@@ -38,9 +38,17 @@ export interface VenueFilters {
   minCapacity?: number;
   type?: string;
   q?: string;
+  /** ICCA/IAPCO etkinlik tipi (MICE Inspection B.3) */
+  eventType?: string;
+  /** Bütçe segmenti (MICE Inspection B.1) */
+  budget?: string;
+  /** "1" → yalnızca metro/tramvay erişimli oteller (MICE Inspection C.2) */
+  metro?: string;
+  /** "1" → sürdürülebilirlik sertifikalı oteller (MICE Inspection I.1) */
+  sustainable?: string;
 }
 
-/** GET /api/v1/hotels?city=&star=&capacity= */
+/** GET /api/v1/hotels?city=&star=&capacity=&eventType=&budget=&metro= */
 export async function getVenues(filters: VenueFilters = {}): Promise<Venue[]> {
   if (!USE_MOCKS) return apiGet<Venue[]>(`/hotels?${new URLSearchParams(filters as Record<string, string>)}`);
   let list = [...MOCK_VENUES];
@@ -48,12 +56,21 @@ export async function getVenues(filters: VenueFilters = {}): Promise<Venue[]> {
   if (filters.stars) list = list.filter((v) => v.stars === filters.stars);
   if (filters.minCapacity) list = list.filter((v) => v.maxTheatreCapacity >= filters.minCapacity!);
   if (filters.type) list = list.filter((v) => v.type === filters.type);
+  if (filters.eventType) list = list.filter((v) => v.supportedEventTypes.includes(filters.eventType as Venue["supportedEventTypes"][number]));
+  if (filters.budget) list = list.filter((v) => v.budgetSegment === filters.budget);
+  if (filters.metro === "1") list = list.filter((v) => v.transitAccess === "metro");
+  if (filters.sustainable === "1") list = list.filter((v) => v.sustainabilityCertified);
   if (filters.q) {
     const q = filters.q.toLowerCase();
     list = list.filter((v) => v.name.toLowerCase().includes(q) || v.city.toLowerCase().includes(q));
   }
-  // Sponsorlu olanlar üstte (master doküman "Recommended" algoritması)
-  list.sort((a, b) => Number(b.isSponsored) - Number(a.isSponsored) || b.rating - a.rating);
+  // Sponsorlu olanlar üstte, ardından D Event inspection puanı + rating
+  list.sort(
+    (a, b) =>
+      Number(b.isSponsored) - Number(a.isSponsored) ||
+      b.inspectionScore - a.inspectionScore ||
+      b.rating - a.rating,
+  );
   return mockDelay(list);
 }
 
