@@ -256,12 +256,14 @@ export default async function HomePage() {
                     : i >= 4
                       ? "lg:col-span-2"
                       : "";
-              const categoryLabel: Record<string, string> = {
-                congress: "Congress City",
-                incentive: "Incentive & Resort",
-                cultural: "Cultural Retreat",
-                wellness: "Thermal & Wellness",
+              /* Kategori rozetleri — buzlu cam zemin + kategoriye özel renk noktası */
+              const category: Record<string, { label: string; dot: string }> = {
+                congress: { label: "Congress City", dot: "bg-brand" },
+                incentive: { label: "Incentive & Resort", dot: "bg-orange-400" },
+                cultural: { label: "Cultural Retreat", dot: "bg-amber-300" },
+                wellness: { label: "Thermal & Wellness", dot: "bg-teal-300" },
               };
+              const cat = category[d.category] ?? { label: d.category, dot: "bg-white" };
               return (
                 <Link
                   key={d.slug}
@@ -277,9 +279,10 @@ export default async function HomePage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/10" />
 
-                  {/* Kategori rozeti */}
-                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-ink backdrop-blur">
-                    {categoryLabel[d.category] ?? d.category}
+                  {/* Kategori rozeti — koyu buzlu cam + renk noktası + ince beyaz çerçeve */}
+                  <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-md border border-white/25 bg-black/35 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white shadow-sm backdrop-blur-md">
+                    <span className={`h-1.5 w-1.5 rounded-full ${cat.dot}`} />
+                    {cat.label}
                   </span>
 
                   <div className="absolute inset-x-0 bottom-0 p-5 text-white">
