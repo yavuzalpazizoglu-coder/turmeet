@@ -39,7 +39,7 @@ export function PublicHeader({ variant = "solid" }: { variant?: "solid" | "trans
             alt="TURMEET — Meet in Turkey. Plan with Ease."
             width={1670}
             height={412}
-            className="h-[70px] w-auto object-contain sm:h-[90px]"
+            className="h-[35px] w-auto object-contain sm:h-[45px]"
             priority
           />
         </Link>
