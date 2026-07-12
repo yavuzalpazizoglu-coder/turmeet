@@ -44,3 +44,29 @@ body {
     0 1px 2px rgba(0, 0, 0, 0.55),
     0 2px 10px rgba(0, 0, 0, 0.35);
 }
+
+/*
+ * Anasayfa 4-5. sayfa hareket efektleri:
+ *  - animate-gradient-pan: arka plan gradyanının yavaşça gezinmesi
+ *  - animate-float-slow / slower: dekoratif ışık lekelerinin süzülmesi
+ */
+@keyframes tm-gradient-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-pan {
+  background-size: 200% 200%;
+  animation: tm-gradient-pan 14s ease infinite;
+}
+
+@keyframes tm-float {
+  0%, 100% { transform: translateY(0) translateX(0); }
+  50% { transform: translateY(-18px) translateX(10px); }
+}
+.animate-float-slow {
+  animation: tm-float 7s ease-in-out infinite;
+}
+.animate-float-slower {
+  animation: tm-float 11s ease-in-out infinite;
+}

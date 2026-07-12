@@ -28,6 +28,7 @@ import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
 import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 import { tagDef } from "@/lib/venue-tags";
+import { Reveal } from "@/components/ui/Reveal";
 
 export default async function HomePage() {
   const [venues, destinations] = await Promise.all([getVenues(), getDestinations()]);
@@ -311,10 +312,14 @@ export default async function HomePage() {
        * 2.2 (iş modeli prensipleri = güven), 1.4-1.5 (değerler & vaatler).
        * Komisyon oranı bilinçli olarak gösterilmez (MD 3.2 /pricing kuralı).
        */}
-      <section className="flex min-h-[100dvh] snap-start flex-col justify-center bg-brand-light py-12">
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+      <section className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-brand-light py-12">
+        {/* Dekoratif yüzen ışık lekeleri */}
+        <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
+        <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
+
+        <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
           {/* Neden Turmeet var? */}
-          <div className="mx-auto max-w-3xl text-center">
+          <Reveal className="mx-auto max-w-3xl text-center">
             <p className="text-xs font-bold uppercase tracking-widest text-brand">Why Turmeet exists</p>
             <h2 className="mt-2 text-2xl font-bold text-ink">
               Getting group quotes from hotels used to take weeks of emails
@@ -326,11 +331,13 @@ export default async function HomePage() {
               <span className="font-semibold text-ink">fast</span> (instant comparative offers) and{" "}
               <span className="font-semibold text-ink">impartial</span> (venues compete, you choose).
             </p>
-          </div>
+          </Reveal>
 
           {/* Nasıl çalışıyor? — 5 adımlı ortak akış (MD 2.4) */}
           <div className="mt-10">
-            <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">How it works</p>
+            <Reveal delay={100}>
+              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">How it works</p>
+            </Reveal>
             <div className="mt-5 grid gap-6 sm:grid-cols-5">
               {[
                 { n: "1", icon: <SearchIcon size={18} />, title: "Search", desc: "City, dates, group size — filter 329+ venues by MICE criteria" },
@@ -339,23 +346,25 @@ export default async function HomePage() {
                 { n: "4", icon: <ClockIcon size={18} />, title: "Get live offers", desc: "Hotels reply with live prices — negotiate on platform" },
                 { n: "5", icon: <CheckIcon size={18} />, title: "Contract digitally", desc: "E-sign the contract and manage your event online" },
               ].map((s, i) => (
-                <div key={s.n} className="relative text-center">
-                  {i < 4 && <div className="absolute left-[60%] top-6 hidden h-px w-[80%] bg-gray-200 sm:block" />}
-                  <div className="relative mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand text-white">
+                <Reveal key={s.n} delay={150 + i * 120} className="group relative text-center">
+                  {i < 4 && <div className="absolute left-[60%] top-6 hidden h-px w-[80%] bg-brand/15 sm:block" />}
+                  <div className="relative mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/30 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
                     {s.icon}
                   </div>
                   <h3 className="mt-3 text-[15px] font-bold text-ink">
                     {s.n}. {s.title}
                   </h3>
                   <p className="mt-1 text-xs leading-snug text-muted">{s.desc}</p>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
 
           {/* Güvenilirlik & avantajlar — iş modeli prensipleri (MD 2.2) */}
           <div className="mt-10">
-            <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">Trust &amp; advantages</p>
+            <Reveal delay={100}>
+              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">Trust &amp; advantages</p>
+            </Reveal>
             <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 { icon: <EuroIcon size={20} />, title: "Free for organizers", desc: "Commission is paid by the venue after the event — never by you. The quoted price is the final price." },
@@ -364,28 +373,30 @@ export default async function HomePage() {
                 { icon: <CheckIcon size={20} />, title: "Verified venues", desc: "Every hotel passes the D Event MICE inspection — capacity, transit access and service quality are checked on site." },
                 { icon: <UsersIcon size={20} />, title: "Coordinator support", desc: "Large groups get a dedicated coordinator. 150+ room congresses are fully managed by our expert team." },
                 { icon: <BuildingIcon size={20} />, title: "Backed by D Event", desc: "Operated by D Event Turizm — Est. 2012, Istanbul. TURSAB licensed travel agency (No. 7514), zero fault tolerance." },
-              ].map((f) => (
-                <div key={f.title} className="flex items-start gap-3 rounded-card border border-gray-100 bg-white p-4 shadow-card">
-                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand">
-                    {f.icon}
-                  </span>
-                  <div>
-                    <h3 className="text-[15px] font-bold text-ink">{f.title}</h3>
-                    <p className="mt-0.5 text-xs leading-snug text-muted">{f.desc}</p>
+              ].map((f, i) => (
+                <Reveal key={f.title} delay={i * 90}>
+                  <div className="group flex h-full items-start gap-3 rounded-card border border-gray-100 bg-white p-4 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-lg">
+                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand group-hover:text-white">
+                      {f.icon}
+                    </span>
+                    <div>
+                      <h3 className="text-[15px] font-bold text-ink">{f.title}</h3>
+                      <p className="mt-0.5 text-xs leading-snug text-muted">{f.desc}</p>
+                    </div>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           </div>
 
-          <div className="mt-8 flex items-center justify-center gap-4">
+          <Reveal delay={200} className="mt-8 flex items-center justify-center gap-4">
             <LinkButton href="/register" size="lg">
               Get started — it&apos;s free
             </LinkButton>
-            <Link href="/how-it-works" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
-              Learn more <ArrowRightIcon size={15} />
+            <Link href="/how-it-works" className="group inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
+              Learn more <ArrowRightIcon size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -395,16 +406,20 @@ export default async function HomePage() {
        * 3.2 /for-hotels (avantajlar + 3 adım), 2.5/6.7 (sponsorluk).
        * Komisyon oranı gösterilmez (MD 1046 kuralı) — "lowest commission".
        */}
-      <section className="flex min-h-[100dvh] snap-start items-center bg-gradient-to-br from-brand to-brand-dark py-12">
-        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-          <div className="mx-auto max-w-3xl text-center">
+      <section className="relative flex min-h-[100dvh] snap-start items-center overflow-hidden bg-gradient-to-br from-brand via-brand-dark to-brand py-12 animate-gradient-pan">
+        {/* Dekoratif yüzen ışık lekeleri */}
+        <div className="animate-float-slow pointer-events-none absolute -right-24 top-12 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
+        <div className="animate-float-slower pointer-events-none absolute -left-20 bottom-8 h-72 w-72 rounded-full bg-white/5 blur-3xl" />
+
+        <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
+          <Reveal className="mx-auto max-w-3xl text-center">
             <BuildingIcon size={34} className="mx-auto text-white" />
             <h2 className="mt-3 text-2xl font-bold text-white">List your venue on Turmeet</h2>
             <p className="mt-2 text-sm leading-relaxed text-white/70">
               Why should a hotel or congress center work with us? Guaranteed international group bookings at the
               lowest commission in the market — zero upfront cost, pay only for realized events.
             </p>
-          </div>
+          </Reveal>
 
           {/* Avantajlar — 6 kart */}
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -439,28 +454,30 @@ export default async function HomePage() {
                 title: "Sponsorship & visibility",
                 desc: "Sponsored placement above organic results, showcase tags and premium ranking backed by your MICE inspection score.",
               },
-            ].map((f) => (
-              <div key={f.title} className="flex items-start gap-3 rounded-card border border-white/15 bg-white/10 p-4">
-                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-brand">
-                  {f.icon}
-                </span>
-                <div>
-                  <h3 className="text-[15px] font-bold text-white">{f.title}</h3>
-                  <p className="mt-0.5 text-xs leading-snug text-white/65">{f.desc}</p>
+            ].map((f, i) => (
+              <Reveal key={f.title} delay={i * 90}>
+                <div className="group flex h-full items-start gap-3 rounded-card border border-white/15 bg-white/10 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/15 hover:shadow-xl hover:shadow-black/10">
+                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    {f.icon}
+                  </span>
+                  <div>
+                    <h3 className="text-[15px] font-bold text-white">{f.title}</h3>
+                    <p className="mt-0.5 text-xs leading-snug text-white/65">{f.desc}</p>
+                  </div>
                 </div>
-              </div>
+              </Reveal>
             ))}
           </div>
 
           {/* Nasıl başlanır — 3 adım (MD /for-hotels) */}
-          <div className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:justify-center">
+          <Reveal delay={200} className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:justify-center">
             {[
               { n: "1", label: "Apply", desc: "Submit your venue application" },
               { n: "2", label: "Create your profile", desc: "Photos, halls, room types, capacities" },
               { n: "3", label: "Receive quote requests", desc: "Reply with live prices, win events" },
             ].map((s, i) => (
-              <div key={s.n} className="flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-white">
+              <div key={s.n} className="group flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-white ring-1 ring-white/20 transition-all duration-300 group-hover:bg-white group-hover:text-brand">
                   {s.n}
                 </span>
                 <div>
@@ -470,16 +487,16 @@ export default async function HomePage() {
                 {i < 2 && <ArrowRightIcon size={16} className="ml-2 hidden text-white/40 sm:block" />}
               </div>
             ))}
-          </div>
+          </Reveal>
 
-          <div className="mt-8 flex items-center justify-center gap-4">
+          <Reveal delay={300} className="mt-8 flex items-center justify-center gap-4">
             <LinkButton href="/register/hotel" variant="secondary" size="lg">
               List Your Venue
             </LinkButton>
             <Link href="/login" className="text-sm font-semibold text-white/80 hover:text-white hover:underline">
               Partner Login
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
     </div>
