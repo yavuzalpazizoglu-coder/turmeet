@@ -208,14 +208,17 @@ export default async function HomePage() {
                   href={`/destinations/${d.slug}`}
                   className={`group relative overflow-hidden rounded-card ${span}`}
                 >
+                  {/* Fotoğraf — canlılık filtresi + hover'da yakınlaşma ve aydınlanma */}
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={d.imageUrl}
                     alt={d.name}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="h-full w-full object-cover brightness-[1.05] contrast-[1.06] saturate-[1.25] transition-all duration-500 group-hover:scale-105 group-hover:brightness-110"
                     loading="lazy"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/10" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/5" />
+                  {/* Hover ışıltı süpürmesi — karta gelince soldan sağa parlama geçer */}
+                  <div className="pointer-events-none absolute inset-0 -translate-x-[130%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[130%]" />
 
                   {/* Kategori rozeti — koyu buzlu cam + renk noktası + ince beyaz çerçeve */}
                   <span className="absolute left-4 top-4 inline-flex items-center gap-1.5 rounded-md border border-white/25 bg-black/35 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-white shadow-sm backdrop-blur-md">
