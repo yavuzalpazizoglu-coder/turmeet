@@ -259,34 +259,75 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── SAYFA 3: DESTİNASYONLAR ── */}
+      {/* ── SAYFA 3: DESTİNASYONLAR — geniş bant, bento mozaik düzeni ── */}
       <section className="flex min-h-[100dvh] snap-start items-center bg-surface py-10">
-        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          <h2 className="text-2xl font-bold text-ink">Destinations across Turkey</h2>
-          <p className="mt-1 text-sm text-muted">From congress cities to boutique retreats</p>
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {destinations.map((d) => (
-              <Link
-                key={d.slug}
-                href={`/destinations/${d.slug}`}
-                className="group relative h-52 overflow-hidden rounded-card"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={d.imageUrl}
-                  alt={d.name}
-                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-                <div className="absolute bottom-0 p-5 text-white">
-                  <p className="text-lg font-bold">{d.name}</p>
-                  <p className="text-sm text-white/80">
-                    {d.venueCount} venues · {d.tagline}
-                  </p>
-                </div>
-              </Link>
-            ))}
+        <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
+          <div className="mb-6 flex items-end justify-between">
+            <div>
+              <h2 className="text-2xl font-bold text-ink">Destinations across Turkey</h2>
+              <p className="mt-1 text-sm text-muted">From congress cities to boutique retreats</p>
+            </div>
+            <Link href="/destinations" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
+              All destinations <ArrowRightIcon size={15} />
+            </Link>
+          </div>
+
+          {/*
+           * Bento düzeni: Istanbul 2x2 büyük kart, Antalya geniş, diğerleri
+           * karışık boyut — çeşitlilik için her kart farklı ağırlıkta.
+           */}
+          <div className="grid auto-rows-[190px] gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {destinations.slice(0, 6).map((d, i) => {
+              const span =
+                i === 0
+                  ? "lg:col-span-2 lg:row-span-2 sm:col-span-2"
+                  : i === 1
+                    ? "lg:col-span-2"
+                    : i >= 4
+                      ? "lg:col-span-2"
+                      : "";
+              const categoryLabel: Record<string, string> = {
+                congress: "Congress City",
+                incentive: "Incentive & Resort",
+                cultural: "Cultural Retreat",
+                wellness: "Thermal & Wellness",
+              };
+              return (
+                <Link
+                  key={d.slug}
+                  href={`/destinations/${d.slug}`}
+                  className={`group relative overflow-hidden rounded-card ${span}`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={d.imageUrl}
+                    alt={d.name}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/10" />
+
+                  {/* Kategori rozeti */}
+                  <span className="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-ink backdrop-blur">
+                    {categoryLabel[d.category] ?? d.category}
+                  </span>
+
+                  <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                    <p className={`font-bold ${i === 0 ? "text-3xl" : "text-xl"}`}>{d.name}</p>
+                    <p className={`mt-0.5 text-white/85 ${i === 0 ? "text-sm" : "text-xs"}`}>{d.tagline}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-medium text-white/90">
+                      <span className="inline-flex items-center gap-1">
+                        <BuildingIcon size={13} /> {d.venueCount} venues
+                      </span>
+                      <span>{d.totalRooms.toLocaleString("en-US")} rooms</span>
+                      <span className="ml-auto inline-flex items-center gap-1 font-semibold opacity-0 transition-opacity group-hover:opacity-100">
+                        Explore <ArrowRightIcon size={13} />
+                      </span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
