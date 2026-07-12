@@ -5,6 +5,7 @@
  */
 import Link from "next/link";
 import { PublicHeader } from "@/components/layout/PublicHeader";
+import HeroSlideshow from "@/components/home/HeroSlideshow";
 import { VenueCard } from "@/components/venue/VenueCard";
 import { LinkButton } from "@/components/ui";
 import {
@@ -29,12 +30,7 @@ export default async function HomePage() {
 
       {/* ── HERO ── */}
       <section className="relative flex min-h-[640px] items-center justify-center overflow-hidden bg-ink">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/hero-istanbul.jpg"
-          alt="Istanbul — Blue Mosque at sunset"
-          className="absolute inset-0 h-full w-full object-cover opacity-70"
-        />
+        <HeroSlideshow />
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
 
         <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-12 pt-28 text-center">
