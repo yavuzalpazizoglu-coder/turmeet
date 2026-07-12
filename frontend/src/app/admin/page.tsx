@@ -6,10 +6,14 @@ import Link from "next/link";
 import { PageHeader, StatCard, Card, StatusBadge, LinkButton } from "@/components/ui";
 import { ArrowRightIcon } from "@/components/ui/icons";
 import { getPendingRegistrations, getQuoteRequests, getCommissions, getCoordinators } from "@/services";
+import { getPanelLang } from "@/lib/panel-i18n-server";
+import { makeT } from "@/lib/panel-i18n";
 
 export const metadata = { title: "Admin Dashboard — Turmeet" };
 
 export default async function AdminDashboard() {
+  const lang = await getPanelLang();
+  const t = makeT(lang);
   const [registrations, requests, commissions, coordinators] = await Promise.all([
     getPendingRegistrations(),
     getQuoteRequests(),
@@ -23,22 +27,25 @@ export default async function AdminDashboard() {
 
   return (
     <>
-      <PageHeader title="Platform overview" description="D Event operations dashboard" />
+      <PageHeader
+        title={t("Platform overview", "Platform özeti")}
+        description={t("Staff operations dashboard", "Staff operasyon paneli")}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Pending approvals" value={pendingRegs.length} tone="warning" hint="Customer registrations" />
-        <StatCard label="Active quote requests" value={requests.filter((r) => r.status !== "contracted").length} tone="brand" />
-        <StatCard label="Open commissions" value={`€ ${openAmount.toLocaleString("en-US")}`} tone="danger" hint={`${openCommissions.length} invoices`} />
-        <StatCard label="Active coordinators" value={coordinators.filter((c) => c.available).length} tone="success" hint={`of ${coordinators.length} total`} />
+        <StatCard label={t("Pending approvals", "Bekleyen onaylar")} value={pendingRegs.length} tone="warning" hint={t("Customer registrations", "Müşteri kayıtları")} />
+        <StatCard label={t("Active quote requests", "Aktif teklif talepleri")} value={requests.filter((r) => r.status !== "contracted").length} tone="brand" />
+        <StatCard label={t("Open commissions", "Açık komisyonlar")} value={`€ ${openAmount.toLocaleString("en-US")}`} tone="danger" hint={t(`${openCommissions.length} invoices`, `${openCommissions.length} fatura`)} />
+        <StatCard label={t("Active coordinators", "Aktif koordinatörler")} value={coordinators.filter((c) => c.available).length} tone="success" hint={t(`of ${coordinators.length} total`, `toplam ${coordinators.length}`)} />
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         {/* Onay kuyruğu */}
         <Card className="p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-bold text-ink">Approval queue</h2>
+            <h2 className="font-bold text-ink">{t("Approval queue", "Onay kuyruğu")}</h2>
             <Link href="/admin/registrations" className="inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline">
-              View all <ArrowRightIcon size={14} />
+              {t("View all", "Tümünü gör")} <ArrowRightIcon size={14} />
             </Link>
           </div>
           <div className="space-y-3">
@@ -50,7 +57,7 @@ export default async function AdminDashboard() {
                     {r.country} · {r.sector} · {new Date(r.appliedAt).toLocaleDateString("en-GB")}
                   </p>
                 </div>
-                <StatusBadge status={r.status} />
+                <StatusBadge status={r.status} lang={lang} />
               </div>
             ))}
           </div>
@@ -59,9 +66,9 @@ export default async function AdminDashboard() {
         {/* Koordinatör yükü */}
         <Card className="p-5">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-bold text-ink">Coordinator workload</h2>
+            <h2 className="font-bold text-ink">{t("Coordinator workload", "Koordinatör iş yükü")}</h2>
             <Link href="/admin/coordinators" className="inline-flex items-center gap-1 text-sm font-medium text-brand hover:underline">
-              Manage <ArrowRightIcon size={14} />
+              {t("Manage", "Yönet")} <ArrowRightIcon size={14} />
             </Link>
           </div>
           <div className="space-y-4">
@@ -70,7 +77,7 @@ export default async function AdminDashboard() {
                 <div className="mb-1 flex justify-between text-sm">
                   <span className="font-medium text-ink">{c.name}</span>
                   <span className="text-muted">
-                    {c.activeAssignments} active · SLA {c.slaCompliance}%
+                    {c.activeAssignments} {t("active", "aktif")} · SLA {c.slaCompliance}%
                   </span>
                 </div>
                 <div className="h-2.5 overflow-hidden rounded-full bg-surface">
@@ -88,9 +95,9 @@ export default async function AdminDashboard() {
       {/* Son talepler */}
       <Card className="mt-6 p-5">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-bold text-ink">Latest quote requests</h2>
+          <h2 className="font-bold text-ink">{t("Latest quote requests", "Son teklif talepleri")}</h2>
           <LinkButton href="/admin/requests" size="sm" variant="secondary">
-            All requests
+            {t("All requests", "Tüm talepler")}
           </LinkButton>
         </div>
         <div className="space-y-3">
@@ -99,10 +106,11 @@ export default async function AdminDashboard() {
               <div>
                 <p className="text-sm font-medium text-ink">{r.eventName}</p>
                 <p className="text-xs text-muted">
-                  {r.city} · {r.guests} guests · {r.venueIds.length} venues contacted
+                  {r.city} · {r.guests} {t("guests", "katılımcı")} · {r.venueIds.length}{" "}
+                  {t("venues contacted", "mekana iletildi")}
                 </p>
               </div>
-              <StatusBadge status={r.status} />
+              <StatusBadge status={r.status} lang={lang} />
             </div>
           ))}
         </div>

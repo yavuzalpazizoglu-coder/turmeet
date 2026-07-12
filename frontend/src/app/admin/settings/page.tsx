@@ -4,61 +4,72 @@
  * Backend: GET/PUT /api/v1/admin/settings
  */
 import { PageHeader, Card, Input, Field, Button, Badge } from "@/components/ui";
+import { getPanelLang } from "@/lib/panel-i18n-server";
+import { makeT } from "@/lib/panel-i18n";
 
 export const metadata = { title: "Settings — Turmeet Admin" };
 
 const STAFF = [
-  { name: "System Admin", email: "admin@turmeet.com", role: "Super Admin" },
-  { name: "Gizem Yılmaz", email: "gizem@turmeet.com", role: "Coordinator" },
-  { name: "Finance Team", email: "finance@turmeet.com", role: "Finance" },
+  { name: "System Admin", email: "admin@turmeet.com", role: "Super Admin", roleTr: "Süper Admin" },
+  { name: "Gizem Yılmaz", email: "gizem@turmeet.com", role: "Coordinator", roleTr: "Koordinatör" },
+  { name: "Finance Team", email: "finance@turmeet.com", role: "Finance", roleTr: "Finans" },
 ];
 
-export default function AdminSettingsPage() {
+export default async function AdminSettingsPage() {
+  const lang = await getPanelLang();
+  const t = makeT(lang);
+
   return (
     <>
-      <PageHeader title="Platform settings" description="Commission rates, SLA targets and staff access." />
+      <PageHeader
+        title={t("Platform settings", "Platform ayarları")}
+        description={t(
+          "Commission rates, SLA targets and staff access.",
+          "Komisyon oranları, SLA hedefleri ve personel erişimi.",
+        )}
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="p-6">
-          <h2 className="mb-4 font-bold text-ink">Commission & billing</h2>
+          <h2 className="mb-4 font-bold text-ink">{t("Commission & billing", "Komisyon & faturalama")}</h2>
           <div className="space-y-4">
-            <Field label="Standard commission rate (%)">
+            <Field label={t("Standard commission rate (%)", "Standart komisyon oranı (%)")}>
               <Input type="number" defaultValue={10} />
             </Field>
-            <Field label="Sponsored venue rate (%)">
+            <Field label={t("Sponsored venue rate (%)", "Sponsorlu mekan oranı (%)")}>
               <Input type="number" defaultValue={8} />
             </Field>
-            <Field label="VAT rate (%)">
+            <Field label={t("VAT rate (%)", "KDV oranı (%)")}>
               <Input type="number" defaultValue={20} />
             </Field>
-            <Field label="Payment term (days)">
+            <Field label={t("Payment term (days)", "Ödeme vadesi (gün)")}>
               <Input type="number" defaultValue={30} />
             </Field>
-            <Button>Save changes</Button>
+            <Button>{t("Save changes", "Değişiklikleri kaydet")}</Button>
           </div>
         </Card>
 
         <Card className="p-6">
-          <h2 className="mb-4 font-bold text-ink">SLA targets</h2>
+          <h2 className="mb-4 font-bold text-ink">{t("SLA targets", "SLA hedefleri")}</h2>
           <div className="space-y-4">
-            <Field label="Venue response SLA (hours)">
+            <Field label={t("Venue response SLA (hours)", "Mekan yanıt SLA'sı (saat)")}>
               <Input type="number" defaultValue={24} />
             </Field>
-            <Field label="Registration review SLA (hours)">
+            <Field label={t("Registration review SLA (hours)", "Kayıt inceleme SLA'sı (saat)")}>
               <Input type="number" defaultValue={24} />
             </Field>
-            <Field label="Coordinator first-touch SLA (hours)">
+            <Field label={t("Coordinator first-touch SLA (hours)", "Koordinatör ilk temas SLA'sı (saat)")}>
               <Input type="number" defaultValue={4} />
             </Field>
-            <Button>Save changes</Button>
+            <Button>{t("Save changes", "Değişiklikleri kaydet")}</Button>
           </div>
         </Card>
 
         <Card className="p-6 lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-bold text-ink">Staff accounts</h2>
+            <h2 className="font-bold text-ink">{t("Staff accounts", "Personel hesapları")}</h2>
             <Button size="sm" variant="secondary">
-              + Add staff
+              {t("+ Add staff", "+ Personel ekle")}
             </Button>
           </div>
           <div className="divide-y divide-gray-100">
@@ -68,7 +79,9 @@ export default function AdminSettingsPage() {
                   <p className="text-sm font-medium text-ink">{s.name}</p>
                   <p className="text-xs text-muted">{s.email}</p>
                 </div>
-                <Badge tone={s.role === "Super Admin" ? "brand" : "neutral"}>{s.role}</Badge>
+                <Badge tone={s.role === "Super Admin" ? "brand" : "neutral"}>
+                  {lang === "tr" ? s.roleTr : s.role}
+                </Badge>
               </div>
             ))}
           </div>

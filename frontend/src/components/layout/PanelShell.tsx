@@ -9,6 +9,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { MenuIcon, XIcon, BellIcon } from "@/components/ui/icons";
+import { LangSwitch } from "@/lib/panel-i18n-client";
+import type { PanelLang } from "@/lib/panel-i18n";
 
 export interface PanelNavItem {
   href: string;
@@ -21,11 +23,14 @@ export function PanelShell({
   nav,
   children,
   roleLabel,
+  lang,
 }: {
   title: string;
   nav: PanelNavItem[];
   children: ReactNode;
   roleLabel: string;
+  /** Verilirse üst barda EN/TR anahtarı gösterilir (partner + admin) */
+  lang?: PanelLang;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -59,7 +64,7 @@ export function PanelShell({
       <div className="border-t border-white/10 p-4">
         <p className="text-xs text-white/50">{roleLabel}</p>
         <Link href="/login" className="mt-1 block text-xs font-medium text-white/70 hover:text-white">
-          Switch role / Log out
+          {lang === "tr" ? "Rol değiştir / Çıkış yap" : "Switch role / Log out"}
         </Link>
       </div>
     </div>
@@ -86,6 +91,7 @@ export function PanelShell({
           </button>
           <div className="hidden lg:block" />
           <div className="flex items-center gap-4">
+            {lang && <LangSwitch current={lang} />}
             <button className="relative text-muted hover:text-ink" aria-label="Notifications">
               <BellIcon size={20} />
               <span className="absolute -right-0.5 -top-0.5 h-2 w-2 rounded-full bg-brand" />

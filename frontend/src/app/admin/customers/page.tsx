@@ -3,6 +3,8 @@
  * Backend: GET /api/v1/admin/customers
  */
 import { PageHeader, Table, Badge } from "@/components/ui";
+import { getPanelLang } from "@/lib/panel-i18n-server";
+import { makeT } from "@/lib/panel-i18n";
 
 export const metadata = { title: "Customers — Turmeet Admin" };
 
@@ -13,12 +15,29 @@ const CUSTOMERS = [
   { id: "cu4", company: "Vertex Events Ltd", country: "United Kingdom", sector: "Agency / PCO", users: 8, requests: 12, contracts: 4, revenue: "€ 287,900", tier: "Platinum" },
 ];
 
-export default function CustomersPage() {
+export default async function CustomersPage() {
+  const lang = await getPanelLang();
+  const t = makeT(lang);
+
   return (
     <>
-      <PageHeader title="Customers" description="Approved organizer accounts and their activity." />
+      <PageHeader
+        title={t("Customers", "Müşteriler")}
+        description={t("Approved organizer accounts and their activity.", "Onaylı organizatör hesapları ve aktiviteleri.")}
+      />
 
-      <Table headers={["Company", "Country", "Sector", "Users", "Requests", "Contracts", "Total revenue", "Tier"]}>
+      <Table
+        headers={[
+          t("Company", "Şirket"),
+          t("Country", "Ülke"),
+          t("Sector", "Sektör"),
+          t("Users", "Kullanıcı"),
+          t("Requests", "Talep"),
+          t("Contracts", "Kontrat"),
+          t("Total revenue", "Toplam gelir"),
+          t("Tier", "Seviye"),
+        ]}
+      >
         {CUSTOMERS.map((c) => (
           <tr key={c.id} className="hover:bg-surface/60">
             <td className="px-4 py-3 font-medium text-ink">{c.company}</td>

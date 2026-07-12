@@ -7,8 +7,12 @@ import { useEffect, useState } from "react";
 import { PageHeader, Card, Button, Input } from "@/components/ui";
 import { getThreads } from "@/services";
 import type { MessageThread } from "@/types";
+import { usePanelLang } from "@/lib/panel-i18n-client";
+import { makeT } from "@/lib/panel-i18n";
 
 export default function PartnerMessagesPage() {
+  const lang = usePanelLang();
+  const t = makeT(lang);
   const [threads, setThreads] = useState<MessageThread[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
 
@@ -23,7 +27,10 @@ export default function PartnerMessagesPage() {
 
   return (
     <>
-      <PageHeader title="Messages" description="Conversations with organizers via the platform." />
+      <PageHeader
+        title={t("Messages", "Mesajlar")}
+        description={t("Conversations with organizers via the platform.", "Platform üzerinden organizatörlerle yazışmalar.")}
+      />
 
       <Card className="grid min-h-[560px] overflow-hidden lg:grid-cols-[320px_1fr]">
         <div className="border-b border-gray-200 lg:border-b-0 lg:border-r">
@@ -70,12 +77,14 @@ export default function PartnerMessagesPage() {
                 })}
               </div>
               <form className="flex gap-2 border-t border-gray-200 p-4" onSubmit={(e) => e.preventDefault()}>
-                <Input placeholder="Type your message..." className="flex-1" />
-                <Button type="submit">Send</Button>
+                <Input placeholder={t("Type your message...", "Mesajınızı yazın...")} className="flex-1" />
+                <Button type="submit">{t("Send", "Gönder")}</Button>
               </form>
             </>
           ) : (
-            <div className="flex flex-1 items-center justify-center text-sm text-muted">Select a conversation</div>
+            <div className="flex flex-1 items-center justify-center text-sm text-muted">
+              {t("Select a conversation", "Bir konuşma seçin")}
+            </div>
           )}
         </div>
       </Card>

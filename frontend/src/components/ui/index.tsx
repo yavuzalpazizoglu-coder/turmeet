@@ -195,36 +195,37 @@ export function StarRow({ stars }: { stars: number }) {
 }
 
 // ── Durum badge eşlemeleri (master doküman durum renkleri) ────
-export function StatusBadge({ status }: { status: string }) {
-  const map: Record<string, { label: string; tone: BadgeTone }> = {
+// lang="tr" verilirse etiketler Türkçe gösterilir (partner + admin paneli).
+export function StatusBadge({ status, lang = "en" }: { status: string; lang?: "en" | "tr" }) {
+  const map: Record<string, { label: string; labelTr: string; tone: BadgeTone }> = {
     // QuoteRequest
-    waiting: { label: "Waiting", tone: "warning" },
-    quotes_received: { label: "Quotes received", tone: "success" },
-    expired: { label: "Expired", tone: "neutral" },
-    contracted: { label: "Contracted", tone: "brand" },
+    waiting: { label: "Waiting", labelTr: "Bekliyor", tone: "warning" },
+    quotes_received: { label: "Quotes received", labelTr: "Teklifler alındı", tone: "success" },
+    expired: { label: "Expired", labelTr: "Süresi doldu", tone: "neutral" },
+    contracted: { label: "Contracted", labelTr: "Kontratlandı", tone: "brand" },
     // Quote
-    pending: { label: "Pending", tone: "warning" },
-    received: { label: "Received", tone: "success" },
-    declined: { label: "Declined", tone: "danger" },
+    pending: { label: "Pending", labelTr: "Beklemede", tone: "warning" },
+    received: { label: "Received", labelTr: "Alındı", tone: "success" },
+    declined: { label: "Declined", labelTr: "Reddedildi", tone: "danger" },
     // Contract
-    draft: { label: "Draft", tone: "neutral" },
-    pending_signature: { label: "Pending signature", tone: "warning" },
-    active: { label: "Active", tone: "success" },
-    completed: { label: "Completed", tone: "brand" },
-    cancelled: { label: "Cancelled", tone: "danger" },
+    draft: { label: "Draft", labelTr: "Taslak", tone: "neutral" },
+    pending_signature: { label: "Pending signature", labelTr: "İmza bekliyor", tone: "warning" },
+    active: { label: "Active", labelTr: "Aktif", tone: "success" },
+    completed: { label: "Completed", labelTr: "Tamamlandı", tone: "brand" },
+    cancelled: { label: "Cancelled", labelTr: "İptal edildi", tone: "danger" },
     // Commission
-    accrued: { label: "Accrued", tone: "neutral" },
-    invoiced: { label: "Invoiced", tone: "warning" },
-    paid: { label: "Paid", tone: "success" },
-    overdue: { label: "Overdue", tone: "danger" },
-    disputed: { label: "Disputed", tone: "danger" },
+    accrued: { label: "Accrued", labelTr: "Tahakkuk etti", tone: "neutral" },
+    invoiced: { label: "Invoiced", labelTr: "Faturalandı", tone: "warning" },
+    paid: { label: "Paid", labelTr: "Ödendi", tone: "success" },
+    overdue: { label: "Overdue", labelTr: "Gecikmiş", tone: "danger" },
+    disputed: { label: "Disputed", labelTr: "İtirazlı", tone: "danger" },
     // Registration
-    approved: { label: "Approved", tone: "success" },
-    rejected: { label: "Rejected", tone: "danger" },
-    on_hold: { label: "On hold", tone: "warning" },
+    approved: { label: "Approved", labelTr: "Onaylandı", tone: "success" },
+    rejected: { label: "Rejected", labelTr: "Reddedildi", tone: "danger" },
+    on_hold: { label: "On hold", labelTr: "Beklemede", tone: "warning" },
   };
-  const item = map[status] ?? { label: status, tone: "neutral" as BadgeTone };
-  return <Badge tone={item.tone}>{item.label}</Badge>;
+  const item = map[status] ?? { label: status, labelTr: status, tone: "neutral" as BadgeTone };
+  return <Badge tone={item.tone}>{lang === "tr" ? item.labelTr : item.label}</Badge>;
 }
 
 // ── EmptyState ─────────────────────────────────────────────────

@@ -1,8 +1,10 @@
 /*
  * /partner — OTEL/PARTNER PANELİ LAYOUT
- * Master doküman Bölüm 5 (Partner Panel).
+ * Master doküman Bölüm 5 (Partner Panel). EN/TR iki dilli.
  */
 import { PanelShell } from "@/components/layout/PanelShell";
+import { getPanelLang } from "@/lib/panel-i18n-server";
+import { makeT } from "@/lib/panel-i18n";
 import {
   HomeIcon,
   FileTextIcon,
@@ -14,20 +16,28 @@ import {
   SettingsIcon,
 } from "@/components/ui/icons";
 
-const NAV = [
-  { href: "/partner", label: "Dashboard", icon: <HomeIcon size={18} /> },
-  { href: "/partner/requests", label: "Quote Requests", icon: <FileTextIcon size={18} /> },
-  { href: "/partner/contracts", label: "Contracts", icon: <CheckIcon size={18} /> },
-  { href: "/partner/messages", label: "Messages", icon: <MessageIcon size={18} /> },
-  { href: "/partner/reports", label: "Reports", icon: <BarChartIcon size={18} /> },
-  { href: "/partner/profile", label: "Venue Profile", icon: <BuildingIcon size={18} /> },
-  { href: "/partner/promotions", label: "Promotions", icon: <TagIcon size={18} /> },
-  { href: "/partner/settings", label: "Settings", icon: <SettingsIcon size={18} /> },
-];
+export default async function PartnerLayout({ children }: { children: React.ReactNode }) {
+  const lang = await getPanelLang();
+  const t = makeT(lang);
 
-export default function PartnerLayout({ children }: { children: React.ReactNode }) {
+  const nav = [
+    { href: "/partner", label: t("Dashboard", "Panel"), icon: <HomeIcon size={18} /> },
+    { href: "/partner/requests", label: t("Quote Requests", "Teklif Talepleri"), icon: <FileTextIcon size={18} /> },
+    { href: "/partner/contracts", label: t("Contracts", "Kontratlar"), icon: <CheckIcon size={18} /> },
+    { href: "/partner/messages", label: t("Messages", "Mesajlar"), icon: <MessageIcon size={18} /> },
+    { href: "/partner/reports", label: t("Reports", "Raporlar"), icon: <BarChartIcon size={18} /> },
+    { href: "/partner/profile", label: t("Venue Profile", "Tesis Profili"), icon: <BuildingIcon size={18} /> },
+    { href: "/partner/promotions", label: t("Promotions", "Promosyonlar"), icon: <TagIcon size={18} /> },
+    { href: "/partner/settings", label: t("Settings", "Ayarlar"), icon: <SettingsIcon size={18} /> },
+  ];
+
   return (
-    <PanelShell title="Partner Panel" nav={NAV} roleLabel="Swissôtel The Bosphorus — Sales">
+    <PanelShell
+      title={t("Partner Panel", "Partner Paneli")}
+      nav={nav}
+      roleLabel={t("Swissôtel The Bosphorus — Sales", "Swissôtel The Bosphorus — Satış")}
+      lang={lang}
+    >
       {children}
     </PanelShell>
   );

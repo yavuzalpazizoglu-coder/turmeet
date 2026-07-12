@@ -2,6 +2,8 @@
  * PARTNER AYARLARI — kullanıcılar + bildirim tercihleri.
  */
 import { PageHeader, Card, Input, Field, Button, Badge } from "@/components/ui";
+import { getPanelLang } from "@/lib/panel-i18n-server";
+import { makeT } from "@/lib/panel-i18n";
 
 export const metadata = { title: "Settings — Turmeet Partner" };
 
@@ -10,33 +12,39 @@ const TEAM = [
   { name: "Can Öztürk", email: "can.ozturk@swissotel.com", role: "Staff" },
 ];
 
-export default function PartnerSettingsPage() {
+export default async function PartnerSettingsPage() {
+  const lang = await getPanelLang();
+  const t = makeT(lang);
+
   return (
     <>
-      <PageHeader title="Settings" description="Manage your team and notification preferences." />
+      <PageHeader
+        title={t("Settings", "Ayarlar")}
+        description={t("Manage your team and notification preferences.", "Ekibinizi ve bildirim tercihlerinizi yönetin.")}
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <Card className="p-6">
-          <h2 className="mb-4 font-bold text-ink">Contact details</h2>
+          <h2 className="mb-4 font-bold text-ink">{t("Contact details", "İletişim bilgileri")}</h2>
           <div className="space-y-4">
-            <Field label="Sales contact">
+            <Field label={t("Sales contact", "Satış yetkilisi")}>
               <Input defaultValue="Merve Aksoy" />
             </Field>
-            <Field label="Email">
+            <Field label={t("Email", "E-posta")}>
               <Input defaultValue="mice.bosphorus@swissotel.com" type="email" />
             </Field>
-            <Field label="Phone">
+            <Field label={t("Phone", "Telefon")}>
               <Input defaultValue="+90 212 000 00 00" type="tel" />
             </Field>
-            <Button>Save changes</Button>
+            <Button>{t("Save changes", "Değişiklikleri kaydet")}</Button>
           </div>
         </Card>
 
         <Card className="p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="font-bold text-ink">Team members</h2>
+            <h2 className="font-bold text-ink">{t("Team members", "Ekip üyeleri")}</h2>
             <Button size="sm" variant="secondary">
-              + Invite
+              {t("+ Invite", "+ Davet et")}
             </Button>
           </div>
           <div className="divide-y divide-gray-100">
@@ -46,12 +54,17 @@ export default function PartnerSettingsPage() {
                   <p className="text-sm font-medium text-ink">{m.name}</p>
                   <p className="text-xs text-muted">{m.email}</p>
                 </div>
-                <Badge tone={m.role === "Manager" ? "brand" : "neutral"}>{m.role}</Badge>
+                <Badge tone={m.role === "Manager" ? "brand" : "neutral"}>
+                  {m.role === "Manager" ? t("Manager", "Yönetici") : t("Staff", "Personel")}
+                </Badge>
               </div>
             ))}
           </div>
           <p className="mt-4 text-xs text-muted">
-            Managers can respond to quotes and edit promotions. Staff can view and message only.
+            {t(
+              "Managers can respond to quotes and edit promotions. Staff can view and message only.",
+              "Yöneticiler teklifleri yanıtlayabilir ve promosyonları düzenleyebilir. Personel yalnızca görüntüleyip mesaj gönderebilir.",
+            )}
           </p>
         </Card>
       </div>

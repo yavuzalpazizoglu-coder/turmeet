@@ -8,8 +8,12 @@ import { useEffect, useState } from "react";
 import { PageHeader, Table, StatusBadge, Button } from "@/components/ui";
 import { getPendingRegistrations } from "@/services";
 import type { PendingRegistration } from "@/types";
+import { usePanelLang } from "@/lib/panel-i18n-client";
+import { makeT } from "@/lib/panel-i18n";
 
 export default function RegistrationsPage() {
+  const lang = usePanelLang();
+  const t = makeT(lang);
   const [items, setItems] = useState<PendingRegistration[]>([]);
 
   useEffect(() => {
@@ -24,11 +28,24 @@ export default function RegistrationsPage() {
   return (
     <>
       <PageHeader
-        title="Customer approvals"
-        description="Verify B2B applications — check company registry and sector before approving."
+        title={t("Customer approvals", "Müşteri onayları")}
+        description={t(
+          "Verify B2B applications — check company registry and sector before approving.",
+          "B2B başvurularını doğrulayın — onaylamadan önce şirket kaydını ve sektörü kontrol edin.",
+        )}
       />
 
-      <Table headers={["Company", "Contact", "Country", "Sector", "Applied", "Status", "Actions"]}>
+      <Table
+        headers={[
+          t("Company", "Şirket"),
+          t("Contact", "İletişim"),
+          t("Country", "Ülke"),
+          t("Sector", "Sektör"),
+          t("Applied", "Başvuru"),
+          t("Status", "Durum"),
+          t("Actions", "İşlemler"),
+        ]}
+      >
         {items.map((r) => (
           <tr key={r.id} className="hover:bg-surface/60">
             <td className="px-4 py-3">
@@ -40,16 +57,16 @@ export default function RegistrationsPage() {
             <td className="px-4 py-3">{r.sector}</td>
             <td className="px-4 py-3 whitespace-nowrap">{new Date(r.appliedAt).toLocaleDateString("en-GB")}</td>
             <td className="px-4 py-3">
-              <StatusBadge status={r.status} />
+              <StatusBadge status={r.status} lang={lang} />
             </td>
             <td className="px-4 py-3">
               {(r.status === "pending" || r.status === "on_hold") && (
                 <div className="flex gap-2">
                   <Button size="sm" onClick={() => decide(r.id, "approved")}>
-                    Approve
+                    {t("Approve", "Onayla")}
                   </Button>
                   <Button size="sm" variant="ghost" onClick={() => decide(r.id, "rejected")}>
-                    Reject
+                    {t("Reject", "Reddet")}
                   </Button>
                 </div>
               )}
