@@ -43,7 +43,8 @@ export default async function HomePage() {
           <h1 className="hero-text-shadow text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
             Plan Your Meeting in Turkey
           </h1>
-          <p className="hero-text-shadow mt-3 text-base font-semibold uppercase tracking-[0.15em] text-white sm:text-lg">
+          {/* Slogan — %50 küçük, saf beyaz + bold ile daha okunur */}
+          <p className="hero-text-shadow mt-3 text-[8px] font-bold uppercase tracking-[0.15em] text-white sm:text-[9px]">
             Compare. Choose. Organize.
           </p>
 
@@ -114,10 +115,11 @@ export default async function HomePage() {
             </div>
           </form>
 
-          <p className="hero-text-shadow mt-5 text-[21px] font-medium text-white">
+          {/* Popüler şehirler — %50 küçük, saf beyaz + bold ile daha okunur */}
+          <p className="hero-text-shadow mt-5 text-[11px] font-semibold text-white">
             Popular:{" "}
             {["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"].map((c, i) => (
-              <Link key={c} href={`/venues?city=${c}`} className="font-semibold text-white hover:underline">
+              <Link key={c} href={`/venues?city=${c}`} className="font-bold text-white hover:underline">
                 {c}
                 {i < 4 ? " · " : ""}
               </Link>
