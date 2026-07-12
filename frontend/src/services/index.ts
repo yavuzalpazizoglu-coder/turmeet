@@ -46,7 +46,31 @@ export interface VenueFilters {
   metro?: string;
   /** "1" → sürdürülebilirlik sertifikalı oteller (MICE Inspection I.1) */
   sustainable?: string;
+  /** Grup büyüklüğü uyumu (MICE Inspection B.2): small | medium | large | mega */
+  groupSize?: string;
+  /** Havalimanına maks. mesafe km (MICE Inspection C.1): 10 | 30 | 45 */
+  maxAirport?: string;
+  /** Şehir merkezine maks. mesafe km (MICE Inspection C.4): 5 | 20 */
+  maxCenter?: string;
+  /** Min. toplam oda sayısı (MICE Inspection D.1): 50 | 150 | 300 | 500 */
+  minRooms?: string;
+  /** Min. toplantı salonu sayısı (MICE Inspection E.2): 2 | 4 | 7 */
+  minMeetingRooms?: string;
+  /** "1" → hibrit & online yayın altyapısı (MICE Inspection F.3) */
+  hybrid?: string;
+  /** "1" → engelli erişilebilir oda & altyapı (MICE Inspection D.4) */
+  accessible?: string;
+  /** Min. D Event inspection puanı (PDF puan skalası): 85 | 70 | 55 */
+  minScore?: string;
 }
+
+/** B.2 grup büyüklüğü → mekanın karşılaması gereken min. tiyatro kapasitesi */
+const GROUP_SIZE_MIN_CAPACITY: Record<string, number> = {
+  small: 50, // Küçük grup (0-50 kişi)
+  medium: 250, // Orta grup (50-250 kişi)
+  large: 500, // Büyük grup (250-500 kişi)
+  mega: 1000, // Mega grup (500+ kişi)
+};
 
 /** GET /api/v1/hotels?city=&star=&capacity=&eventType=&budget=&metro= */
 export async function getVenues(filters: VenueFilters = {}): Promise<Venue[]> {
@@ -60,6 +84,15 @@ export async function getVenues(filters: VenueFilters = {}): Promise<Venue[]> {
   if (filters.budget) list = list.filter((v) => v.budgetSegment === filters.budget);
   if (filters.metro === "1") list = list.filter((v) => v.transitAccess === "metro");
   if (filters.sustainable === "1") list = list.filter((v) => v.sustainabilityCertified);
+  if (filters.groupSize && GROUP_SIZE_MIN_CAPACITY[filters.groupSize])
+    list = list.filter((v) => v.maxTheatreCapacity >= GROUP_SIZE_MIN_CAPACITY[filters.groupSize!]);
+  if (filters.maxAirport) list = list.filter((v) => v.airportDistanceKm <= Number(filters.maxAirport));
+  if (filters.maxCenter) list = list.filter((v) => v.cityCenterDistanceKm <= Number(filters.maxCenter));
+  if (filters.minRooms) list = list.filter((v) => v.totalRooms >= Number(filters.minRooms));
+  if (filters.minMeetingRooms) list = list.filter((v) => v.meetingRoomCount >= Number(filters.minMeetingRooms));
+  if (filters.hybrid === "1") list = list.filter((v) => v.hybridStudio);
+  if (filters.accessible === "1") list = list.filter((v) => v.accessibleRooms);
+  if (filters.minScore) list = list.filter((v) => v.inspectionScore >= Number(filters.minScore));
   if (filters.q) {
     const q = filters.q.toLowerCase();
     list = list.filter((v) => v.name.toLowerCase().includes(q) || v.city.toLowerCase().includes(q));
