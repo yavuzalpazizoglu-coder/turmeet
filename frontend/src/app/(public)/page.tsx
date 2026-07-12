@@ -38,11 +38,11 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
 
         <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-12 pt-28 text-center">
-          <h1 className="text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
+          <h1 className="hero-text-shadow text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
             Plan Your Meeting in Turkey
           </h1>
           {/* Slogan — kaynak: Turmeet_LinkedIn_Metinleri.md resmi tagline */}
-          <p className="mt-3 text-sm font-medium uppercase tracking-[0.15em] text-white/85 sm:text-base">
+          <p className="hero-text-shadow mt-3 text-sm font-medium uppercase tracking-[0.15em] text-white/85 sm:text-base">
             One Click to Meeting Venues Across Turkey — Zero Commission for Organizers
           </p>
 
@@ -77,7 +77,7 @@ export default async function HomePage() {
             </div>
           </form>
 
-          <p className="mt-5 text-[21px] text-white/70">
+          <p className="hero-text-shadow mt-5 text-[21px] text-white/70">
             Popular:{" "}
             {["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"].map((c, i) => (
               <Link key={c} href={`/venues?city=${c}`} className="font-medium text-white hover:underline">
@@ -95,7 +95,7 @@ export default async function HomePage() {
               { value: PLATFORM_STATS.cities, label: "Cities" },
               { value: PLATFORM_STATS.meetingHalls, label: "Meeting Halls" },
             ].map((s) => (
-              <div key={s.label}>
+              <div key={s.label} className="hero-text-shadow">
                 <p className="text-3xl font-extrabold text-white sm:text-4xl">{s.value}</p>
                 <p className="mt-1 text-xs font-medium uppercase tracking-widest text-white/75">{s.label}</p>
               </div>
