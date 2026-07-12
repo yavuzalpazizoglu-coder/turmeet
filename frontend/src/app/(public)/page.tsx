@@ -32,10 +32,10 @@ export default async function HomePage() {
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src="/images/hero-istanbul.jpg"
-          alt="Istanbul — Galata Tower"
-          className="absolute inset-0 h-full w-full object-cover opacity-60"
+          alt="Istanbul — Blue Mosque at sunset"
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
 
         <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-12 pt-28 text-center">
           <h1 className="text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
