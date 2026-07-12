@@ -136,18 +136,22 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── 3'LÜ DEĞER ÖNERİSİ (mockup 1) ── */}
+      {/* ── 3'LÜ DEĞER ÖNERİSİ (mockup 1) — kompakt ── */}
       <section className="border-b border-gray-100 bg-white">
-        <div className="mx-auto grid max-w-5xl gap-10 px-4 py-14 sm:grid-cols-3 sm:px-6">
+        <div className="mx-auto grid max-w-5xl gap-6 px-4 py-7 sm:grid-cols-3 sm:px-6">
           {[
-            { icon: <MapPinIcon size={36} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
-            { icon: <CalendarIcon size={36} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
-            { icon: <CheckIcon size={36} />, title: "Zero commission", desc: "Completely free for organizers — no hidden fees, no subscription" },
+            { icon: <MapPinIcon size={24} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
+            { icon: <CalendarIcon size={24} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
+            { icon: <CheckIcon size={24} />, title: "Zero commission", desc: "Completely free for organizers — no hidden fees, no subscription" },
           ].map((f) => (
-            <div key={f.title} className="text-center">
-              <div className="mx-auto flex h-16 w-16 items-center justify-center text-brand">{f.icon}</div>
-              <h3 className="mt-2 text-lg font-bold text-ink">{f.title}</h3>
-              <p className="mt-1 text-sm text-muted">{f.desc}</p>
+            <div key={f.title} className="flex items-start gap-3 text-left">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand">
+                {f.icon}
+              </div>
+              <div>
+                <h3 className="text-[15px] font-bold text-ink">{f.title}</h3>
+                <p className="mt-0.5 text-[13px] leading-snug text-muted">{f.desc}</p>
+              </div>
             </div>
           ))}
         </div>
