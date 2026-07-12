@@ -437,6 +437,31 @@ export default async function HomePage() {
               Partner Login
             </Link>
           </Reveal>
+
+          {/*
+           * Güven & sertifika bandı — sayfa güvenilirliği için küçük yazılı
+           * rozetler. Kaynak: MD 3.2.1b footer güven bandı (TURSAB 7514, ICVB,
+           * Est. 2012) + platform güvenlik prensipleri (e-sign, KVKK/GDPR).
+           */}
+          <Reveal delay={400}>
+            <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-white/15 pt-6 text-left sm:grid-cols-3 lg:grid-cols-5">
+              {[
+                { title: "TURSAB No. 7514", desc: "Licensed travel agency, Turkey" },
+                { title: "ICVB Member", desc: "Istanbul Convention & Visitors Bureau" },
+                { title: "ICCA / IAPCO Standards", desc: "Venues verified by on-site MICE inspection" },
+                { title: "KVKK & GDPR", desc: "Your data is protected — B2B privacy, no public links" },
+                { title: "Est. 2012 · Istanbul", desc: "Operated by D Event Tourism Organization Services Inc." },
+              ].map((c) => (
+                <div key={c.title} className="flex items-start gap-2">
+                  <CheckIcon size={13} className="mt-0.5 shrink-0 text-white/80" />
+                  <div>
+                    <p className="text-[11px] font-bold uppercase tracking-wide text-white/90">{c.title}</p>
+                    <p className="mt-0.5 text-[10px] leading-snug text-white/55">{c.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
     </div>
