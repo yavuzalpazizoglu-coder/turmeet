@@ -20,6 +20,9 @@ import {
   ClockIcon,
   EuroIcon,
   TagIcon,
+  PlaneIcon,
+  MonitorIcon,
+  StarIcon,
 } from "@/components/ui/icons";
 import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
@@ -476,17 +479,97 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── SAYFA 5: OTEL CTA ── */}
-      <section className="flex min-h-[100dvh] snap-start items-center bg-ink">
-        <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-4 py-14 text-center sm:px-6">
-          <BuildingIcon size={36} className="text-brand" />
-          <h2 className="text-2xl font-bold text-white">List your venue on Turmeet</h2>
-          <p className="max-w-xl text-sm text-white/70">
-            Reach international event organizers with the lowest commission in the market. Pay only for realized events.
-          </p>
-          <LinkButton href="/register/hotel" variant="primary" size="lg">
-            List Your Venue
-          </LinkButton>
+      {/*
+       * ── SAYFA 5: OTEL CTA — "Neden bizimle çalışsın?" ──
+       * Kaynak: TURMEET_MASTER_Kurulum.md 1.5 (otele vaat), 2.2 (iş modeli),
+       * 3.2 /for-hotels (avantajlar + 3 adım), 2.5/6.7 (sponsorluk).
+       * Komisyon oranı gösterilmez (MD 1046 kuralı) — "lowest commission".
+       */}
+      <section className="flex min-h-[100dvh] snap-start items-center bg-ink py-12">
+        <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
+          <div className="mx-auto max-w-3xl text-center">
+            <BuildingIcon size={34} className="mx-auto text-brand" />
+            <h2 className="mt-3 text-2xl font-bold text-white">List your venue on Turmeet</h2>
+            <p className="mt-2 text-sm leading-relaxed text-white/70">
+              Why should a hotel or congress center work with us? Guaranteed international group bookings at the
+              lowest commission in the market — zero upfront cost, pay only for realized events.
+            </p>
+          </div>
+
+          {/* Avantajlar — 6 kart */}
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {[
+              {
+                icon: <EuroIcon size={20} />,
+                title: "Lowest commission in the market",
+                desc: "No listing fee, no subscription, no upfront cost. You are invoiced only after the event is realized.",
+              },
+              {
+                icon: <PlaneIcon size={20} />,
+                title: "International group demand",
+                desc: "B2B organizers from Europe, the UK, North America and the Middle East — congresses, incentives and corporate meetings.",
+              },
+              {
+                icon: <TagIcon size={20} />,
+                title: "You stay in control",
+                desc: "You set your own live prices and use your own contract. The client pays you directly — Turmeet never holds the money.",
+              },
+              {
+                icon: <UsersIcon size={20} />,
+                title: "Qualified corporate leads",
+                desc: "Corporate-only platform: every quote request comes from a verified company, agency or PCO. No individual bookings.",
+              },
+              {
+                icon: <MonitorIcon size={20} />,
+                title: "Digital partner panel",
+                desc: "Quote requests, live pricing, contracts, messaging, reports and promotions — managed in one place at turmeet.com/partner.",
+              },
+              {
+                icon: <StarIcon size={20} />,
+                title: "Sponsorship & visibility",
+                desc: "Sponsored placement above organic results, showcase tags and premium ranking backed by your MICE inspection score.",
+              },
+            ].map((f) => (
+              <div key={f.title} className="flex items-start gap-3 rounded-card border border-white/10 bg-white/5 p-4">
+                <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand text-white">
+                  {f.icon}
+                </span>
+                <div>
+                  <h3 className="text-[15px] font-bold text-white">{f.title}</h3>
+                  <p className="mt-0.5 text-xs leading-snug text-white/65">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Nasıl başlanır — 3 adım (MD /for-hotels) */}
+          <div className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:justify-center">
+            {[
+              { n: "1", label: "Apply", desc: "Submit your venue application" },
+              { n: "2", label: "Create your profile", desc: "Photos, halls, room types, capacities" },
+              { n: "3", label: "Receive quote requests", desc: "Reply with live prices, win events" },
+            ].map((s, i) => (
+              <div key={s.n} className="flex items-center gap-3">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-white">
+                  {s.n}
+                </span>
+                <div>
+                  <p className="text-sm font-bold text-white">{s.label}</p>
+                  <p className="text-xs text-white/60">{s.desc}</p>
+                </div>
+                {i < 2 && <ArrowRightIcon size={16} className="ml-2 hidden text-white/40 sm:block" />}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <LinkButton href="/register/hotel" variant="primary" size="lg">
+              List Your Venue
+            </LinkButton>
+            <Link href="/login" className="text-sm font-semibold text-white/80 hover:text-white hover:underline">
+              Partner Login
+            </Link>
+          </div>
         </div>
       </section>
     </div>
