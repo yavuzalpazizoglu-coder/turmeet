@@ -55,6 +55,9 @@ export interface Venue {
   address: string;
   /** Otelin gerçek web alan adı — logo servisi bu alandan beslenir (bkz. lib/logo.ts) */
   domain: string;
+  /** Gerçek konum — arama sayfasındaki harita bu alanlardan beslenir */
+  lat: number;
+  lng: number;
   stars: 3 | 4 | 5;
   type: VenueType;
   boardTypes: BoardType[];
