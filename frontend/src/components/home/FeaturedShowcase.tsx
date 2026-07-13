@@ -33,16 +33,24 @@ function LeafIcon({ size = 12 }: { size?: number }) {
   );
 }
 
-/** MICE denetim puanı rozeti — D Event yerinde denetim güven sinyali */
-function MiceScore({ score, light = false }: { score: number; light?: boolean }) {
+/**
+ * Denetim puanı rozeti — Booking tarzı okunur skor kutusu: renkli puan
+ * karesi + "/100 score" etiketi. Renk kademesi: 90+ yeşil, 80+ mavi,
+ * altı amber. Kaynak: D Event yerinde MICE denetimi (inspectionScore).
+ */
+function InspectionScore({ score }: { score: number }) {
+  const tier = score >= 90 ? "bg-emerald-600" : score >= 80 ? "bg-sky-600" : "bg-amber-500";
   return (
     <span
-      className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold ${
-        light ? "bg-white/90 text-ink backdrop-blur-sm" : "bg-black/60 text-white backdrop-blur-sm"
-      }`}
-      title="D Event on-site MICE inspection score"
+      className="inline-flex items-center gap-1 rounded-lg bg-white/95 py-0.5 pl-0.5 pr-1.5 shadow-md backdrop-blur-sm"
+      title="D Event on-site inspection score (0-100)"
     >
-      <span className="text-brand">MICE</span> {score}
+      <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-black leading-none text-white ${tier}`}>{score}</span>
+      <span className="text-[8px] font-bold uppercase leading-tight tracking-wide text-ink/70">
+        /100
+        <br />
+        score
+      </span>
     </span>
   );
 }
@@ -167,13 +175,16 @@ export default function FeaturedShowcase({ venues }: { venues: Venue[] }) {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
 
+            {/* Hover ışıltı süpürmesi */}
+            <div className="pointer-events-none absolute inset-0 z-10 -translate-x-[130%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[130%]" />
+
             <div className="absolute left-3 top-3 flex items-center gap-2">
               {spotlight.showcaseTags[0] && (
-                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${tagDef(spotlight.showcaseTags[0]).chipClass}`}>
+                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide shadow-md ${tagDef(spotlight.showcaseTags[0]).chipClass}`}>
                   {tagDef(spotlight.showcaseTags[0]).labelEn}
                 </span>
               )}
-              <MiceScore score={spotlight.inspectionScore} light />
+              <InspectionScore score={spotlight.inspectionScore} />
             </div>
             {spotlight.isSponsored && (
               <span className="absolute right-3 top-3 rounded-sm bg-black/40 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm">
@@ -184,7 +195,7 @@ export default function FeaturedShowcase({ venues }: { venues: Venue[] }) {
             <div className="absolute inset-x-0 bottom-0 flex min-h-[280px] flex-col justify-end p-5">
               <p className="text-xl font-bold text-white">{spotlight.name}</p>
               <p className="mt-0.5 text-xs text-white/80">
-                {spotlight.city} · {spotlight.district} · {"★".repeat(spotlight.stars)}
+                {spotlight.city} · {spotlight.district} · <span className="text-amber-400">{"★".repeat(spotlight.stars)}</span>
               </p>
               <p className="mt-2 line-clamp-2 max-w-lg text-xs leading-relaxed text-white/75">{spotlight.description}</p>
               <div className="mt-3">
@@ -197,7 +208,7 @@ export default function FeaturedShowcase({ venues }: { venues: Venue[] }) {
           </Link>
         )}
 
-        {/* ── KOMPAKT KARTLAR ── */}
+        {/* ── KOMPAKT KARTLAR — zengin görünüm: ışıltı süpürmesi + marka çerçevesi ── */}
         {rest.map((v) => {
           const tag = v.showcaseTags[0];
           const d = tag ? tagDef(tag) : null;
@@ -205,7 +216,7 @@ export default function FeaturedShowcase({ venues }: { venues: Venue[] }) {
             <Link
               key={v.id}
               href={`/venues/${v.slug}`}
-              className="group overflow-hidden rounded-card border border-gray-100 bg-white shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lg"
+              className="group overflow-hidden rounded-card border border-gray-100 bg-white shadow-card ring-brand/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-brand/10 hover:ring-2"
             >
               <div className="relative h-24 overflow-hidden">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -213,28 +224,38 @@ export default function FeaturedShowcase({ venues }: { venues: Venue[] }) {
                   src={v.imageUrl}
                   alt={v.name}
                   loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="h-full w-full object-cover saturate-[1.1] transition-transform duration-500 group-hover:scale-110"
                 />
+                {/* Alt gradyan — rozetlerin okunurluğu + derinlik */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-black/10" />
+                {/* Hover ışıltı süpürmesi */}
+                <div className="pointer-events-none absolute inset-0 -translate-x-[130%] skew-x-[-20deg] bg-gradient-to-r from-transparent via-white/30 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[130%]" />
                 {d && (
-                  <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${d.chipClass}`}>
+                  <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide shadow-md ${d.chipClass}`}>
                     {d.labelEn}
                   </span>
                 )}
-                <span className="absolute right-2 top-2">
-                  <MiceScore score={v.inspectionScore} />
+                <span className="absolute bottom-2 right-2">
+                  <InspectionScore score={v.inspectionScore} />
                 </span>
               </div>
               <div className="p-2.5">
-                <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
+                <p className="truncate text-sm font-bold text-ink transition-colors group-hover:text-brand">{v.name}</p>
                 <p className="mt-0.5 text-[11px] text-muted">
-                  {v.city} · {v.district} · {"★".repeat(v.stars)}
+                  {v.city} · {v.district} · <span className="text-amber-500">{"★".repeat(v.stars)}</span>
                 </p>
                 <div className="mt-1.5">
                   <StatsRow v={v} />
                 </div>
                 <div className="mt-1.5 flex items-center justify-between border-t border-gray-100 pt-1.5">
                   <PriceOrCapacity v={v} />
-                  <MiniBadges v={v} />
+                  <span className="flex items-center gap-1.5">
+                    <MiniBadges v={v} />
+                    <ArrowRightIcon
+                      size={13}
+                      className="-translate-x-1 text-brand opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100"
+                    />
+                  </span>
                 </div>
               </div>
             </Link>

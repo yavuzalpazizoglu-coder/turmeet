@@ -17,14 +17,14 @@ const LOCAL_IMAGES: Record<string, string> = {
   // (Wikimedia Commons, venue-*.jpg). Commons'ta bulunamayanlar
   // (Hilton Bomonti, Kaya Palazzo, Titanic Deluxe) jenerik görsel kullanır.
   swissotel: "venue-swissotel-bosphorus",
-  hiltonbomonti: "hotel-2",
+  hiltonbomonti: "meeting-4", // Commons'ta foto yok — kongre salonu görseli (3.000 kişilik salon vurgusu)
   conrad: "venue-conrad-istanbul",
   pinebeach: "venue-pine-beach-belek",
   kayapalazzo: "hotel-5",
   jwankara: "venue-jw-marriott-ankara",
   buyukefes: "venue-swissotel-buyuk-efes",
   museumhotel: "venue-uchisar-cappadocia",
-  titanic: "hotel-8",
+  titanic: "hotel-4", // Commons'ta foto yok — lüks resort havuz görseli (Belek deluxe)
   hiltonbursa: "hotel-3",
   ciragan: "venue-ciragan-palace",
   sheratonadana: "venue-sheraton-adana",
