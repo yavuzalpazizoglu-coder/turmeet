@@ -183,8 +183,14 @@ export const MOCK_PROMOTIONS: Promotion[] = [
   },
 ];
 
+/*
+ * D Event koordinatör ekibi — MD 1824-1831 atama tablosu birebir:
+ * Ahmet 8 kontrat / %95 müsait, Gizem 6 / %92 yoğun, Alptekin 4 / %98 müsait.
+ * Elite müşteriler doğrudan Yavuzalp'e atanır (MD 2356).
+ */
 export const MOCK_COORDINATORS: Coordinator[] = [
-  { id: "co1", name: "Gizem Yılmaz", activeAssignments: 8, newThisWeek: 2, slaCompliance: 97, available: true },
-  { id: "co2", name: "Ahmet Kaya", activeAssignments: 12, newThisWeek: 3, slaCompliance: 91, available: true },
-  { id: "co3", name: "Elif Demir", activeAssignments: 15, newThisWeek: 1, slaCompliance: 88, available: false },
+  { id: "co1", name: "Ahmet", activeAssignments: 8, newThisWeek: 2, slaCompliance: 95, available: true },
+  { id: "co2", name: "Gizem", activeAssignments: 6, newThisWeek: 3, slaCompliance: 92, available: false },
+  { id: "co3", name: "Alptekin", activeAssignments: 4, newThisWeek: 1, slaCompliance: 98, available: true },
+  { id: "co4", name: "Yavuzalp — Elite accounts", activeAssignments: 2, newThisWeek: 1, slaCompliance: 100, available: true },
 ];

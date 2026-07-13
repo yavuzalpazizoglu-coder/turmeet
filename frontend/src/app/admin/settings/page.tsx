@@ -9,9 +9,12 @@ import { makeT } from "@/lib/panel-i18n";
 
 export const metadata = { title: "Settings — Turmeet Admin" };
 
+/* D Event ekibi — MD 9.5 operatörler (Ahmet, Gizem, Alptekin) + yetkili müdür */
 const STAFF = [
-  { name: "System Admin", email: "admin@turmeet.com", role: "Super Admin", roleTr: "Süper Admin" },
-  { name: "Gizem Yılmaz", email: "gizem@turmeet.com", role: "Coordinator", roleTr: "Koordinatör" },
+  { name: "Yavuzalp Azizoğlu", email: "yavuzalp@turmeet.com", role: "Super Admin", roleTr: "Süper Admin" },
+  { name: "Ahmet", email: "ahmet@turmeet.com", role: "Coordinator", roleTr: "Koordinatör" },
+  { name: "Gizem", email: "gizem@turmeet.com", role: "Coordinator", roleTr: "Koordinatör" },
+  { name: "Alptekin", email: "alptekin@turmeet.com", role: "Coordinator", roleTr: "Koordinatör" },
   { name: "Finance Team", email: "finance@turmeet.com", role: "Finance", roleTr: "Finans" },
 ];
 

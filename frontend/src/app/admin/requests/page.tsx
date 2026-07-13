@@ -56,7 +56,7 @@ export default async function AdminRequestsPage() {
                   {received}/{r.quotes.length}
                 </span>
               </td>
-              <td className="px-4 py-3">Gizem Yılmaz</td>
+              <td className="px-4 py-3">Gizem</td>
               <td className="px-4 py-3">
                 <StatusBadge status={r.status} lang={lang} />
               </td>
