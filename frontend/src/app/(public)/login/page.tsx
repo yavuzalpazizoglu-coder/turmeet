@@ -50,6 +50,12 @@ export default function LoginPage() {
               <Input type="password" placeholder="••••••••" defaultValue="demo1234" />
             </Field>
 
+            {/* Beni hatırla — mock; canlıda refresh token süresini uzatır */}
+            <label className="flex cursor-pointer items-center gap-2 text-sm text-ink">
+              <input type="checkbox" name="remember" defaultChecked className="h-4 w-4 accent-brand" />
+              Remember me
+            </label>
+
             <div>
               <span className="mb-1.5 block text-sm font-medium text-ink">Role (demo)</span>
               <div className="space-y-2">
