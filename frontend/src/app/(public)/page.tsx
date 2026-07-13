@@ -409,22 +409,22 @@ export default async function HomePage() {
             <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
               {[
                 {
-                  src: "/images/meeting-3.jpg",
-                  alt: "Packed conference audience",
+                  src: "/images/venue-icc-hall.jpg",
+                  alt: "Packed event at Istanbul Congress Hall",
                   title: "Fill your halls",
-                  desc: "Group bookings that occupy hundreds of rooms at once",
+                  desc: "Group bookings that occupy hundreds of rooms at once — Istanbul Congress Center",
                 },
                 {
-                  src: "/images/meeting-4.jpg",
-                  alt: "International keynote on a large stage",
+                  src: "/images/venue-icc-istanbul.jpg",
+                  alt: "Istanbul Congress Center entrance",
                   title: "Host global events",
-                  desc: "Congresses and incentives from 4 continents",
+                  desc: "Congresses and incentives from 4 continents — ICC Istanbul",
                 },
                 {
-                  src: "/images/hotel-1.jpg",
-                  alt: "Prestigious hotel illuminated at dusk",
+                  src: "/images/venue-ciragan-palace.jpg",
+                  alt: "Çırağan Palace on the Bosphorus, Istanbul",
                   title: "Get discovered",
-                  desc: "Your venue in front of verified corporate buyers",
+                  desc: "Your venue in front of verified corporate buyers — Çırağan Palace, Bosphorus",
                 },
               ].map((p, i) => (
                 <div
