@@ -93,7 +93,7 @@ export default async function HomePage() {
             {[
               { icon: <MapPinIcon size={28} />, title: "Browse venues", desc: "Explore verified hotels and congress centers across 34 cities in Turkey" },
               { icon: <CalendarIcon size={28} />, title: "Streamline booking", desc: "Request and compare live group offers from multiple venues at once" },
-              { icon: <CheckIcon size={28} />, title: "Zero commission", desc: "Completely free for organizers — no hidden fees, no subscription" },
+              { icon: <CheckIcon size={28} />, title: "Zero commission", desc: "Completely free for organizers\u00A0— no hidden fees, no subscription" },
             ].map((f) => (
               <div key={f.title} className="hero-text-shadow flex items-start gap-3 text-left">
                 <span className="mt-0.5 shrink-0 text-white">{f.icon}</span>
