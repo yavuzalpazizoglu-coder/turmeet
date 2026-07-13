@@ -11,6 +11,7 @@
  * param'lar gidecek (?city=&stars=&capacity=...).
  */
 import { PublicHeader } from "@/components/layout/PublicHeader";
+import { PageHero } from "@/components/layout/PageHero";
 import { getVenues } from "@/services";
 import { DetailedVenueFilters } from "@/components/search/SearchFilters";
 import { SearchResults } from "@/components/search/SearchResults";
@@ -46,20 +47,18 @@ export default async function VenuesPage({
   return (
     <>
       <PublicHeader />
-      <div className="mx-auto max-w-[1500px] px-4 py-8 sm:px-6">
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <div>
-            <h1 className="text-2xl font-bold text-ink">
-              {params.city ? `Meeting venues in ${params.city}` : "All meeting venues in Turkey"}
-            </h1>
-            <p className="mt-1 text-sm text-muted">
-              <span className="font-bold text-ink">{venues.length}</span> venues found · sponsored venues shown first
-            </p>
-          </div>
-        </div>
 
+      {/* İnce koyu hero bandı — anasayfa görsel diliyle bağ kurar */}
+      <PageHero
+        compact
+        image="/images/hero-slide-1.jpg"
+        title={params.city ? `Meeting venues in ${params.city}` : "All meeting venues in Turkey"}
+        subtitle={`${venues.length} venues found · every property inspected on site · sponsored venues shown first`}
+      />
+
+      <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
         {/* Kompakt filtre çubuğu — panel araması ile ortak bileşen */}
-        <div className="mt-4">
+        <div className="-mt-10 relative z-20">
           <DetailedVenueFilters current={params} basePath="/venues" />
         </div>
 
