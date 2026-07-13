@@ -13,19 +13,21 @@ import type { Venue, Destination, VenueMiceProfile, VenueShowcaseTag } from "@/t
  * LOCAL_IMAGES'a bir satır eklemek yeterli.
  */
 const LOCAL_IMAGES: Record<string, string> = {
-  // Mekan kapak görselleri
-  swissotel: "hotel-1",
+  // Mekan kapak görselleri — mümkün olan her otel için GERÇEK fotoğraf
+  // (Wikimedia Commons, venue-*.jpg). Commons'ta bulunamayanlar
+  // (Hilton Bomonti, Kaya Palazzo, Titanic Deluxe) jenerik görsel kullanır.
+  swissotel: "venue-swissotel-bosphorus",
   hiltonbomonti: "hotel-2",
-  conrad: "hotel-3",
-  pinebeach: "hotel-4",
+  conrad: "venue-conrad-istanbul",
+  pinebeach: "venue-pine-beach-belek",
   kayapalazzo: "hotel-5",
-  jwankara: "hotel-6",
-  buyukefes: "hotel-7",
-  museumhotel: "dest-cappadocia",
+  jwankara: "venue-jw-marriott-ankara",
+  buyukefes: "venue-swissotel-buyuk-efes",
+  museumhotel: "venue-uchisar-cappadocia",
   titanic: "hotel-8",
-  hiltonbursa: "meeting-4",
-  ciragan: "istanbul-2",
-  sheratonadana: "meeting-3",
+  hiltonbursa: "hotel-3",
+  ciragan: "venue-ciragan-palace",
+  sheratonadana: "venue-sheraton-adana",
   // Galeriler
   swiss1: "meeting-1", swiss2: "room-1", swiss3: "hotel-2", swiss4: "meeting-2", swiss5: "room-2",
   hilton1: "meeting-2", hilton2: "room-2", hilton3: "meeting-4", hilton4: "room-3",
@@ -38,10 +40,10 @@ const LOCAL_IMAGES: Record<string, string> = {
   titanic1: "room-2", titanic2: "meeting-1",
   bursa1: "room-3", bursa2: "meeting-2",
   ciragan1: "dest-istanbul", ciragan2: "room-1", ciragan3: "meeting-4",
-  // v13-v15 vitrin otelleri (görseller mevcut setten yeniden kullanılır)
-  intercontinental: "meeting-4", ic1: "room-2", ic2: "meeting-1",
-  rixosdowntown: "meeting-2", rixos1: "room-3", rixos2: "hotel-4",
-  wyndhamizmir: "meeting-1", wynd1: "room-4", wynd2: "hotel-7",
+  // v13-v15 vitrin otelleri
+  intercontinental: "venue-intercontinental-istanbul", ic1: "room-2", ic2: "meeting-1",
+  rixosdowntown: "venue-rixos-downtown", rixos1: "room-3", rixos2: "hotel-4",
+  wyndhamizmir: "venue-wyndham-izmir", wynd1: "room-4", wynd2: "hotel-7",
   adana1: "room-4", adana2: "meeting-1",
   // Destinasyonlar
   "istanbul-dest": "dest-istanbul",
