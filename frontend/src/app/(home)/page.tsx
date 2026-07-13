@@ -230,24 +230,37 @@ export default async function HomePage() {
        * 2.2 (iş modeli prensipleri = güven), 1.4-1.5 (değerler & vaatler).
        * Komisyon oranı bilinçli olarak gösterilmez (MD 3.2 /pricing kuralı).
        */}
-      <section className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-brand-light py-12">
+      <section id="why-turmeet" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-ink py-8">
+        {/*
+         * Koyu sinematik zemin — karartılmış gerçek kongre salonu fotoğrafı.
+         * Beyaz vitrin bölümünden sonra güçlü kontrast yaratır; hero ve
+         * For Hotels sayfasıyla aynı görsel dile bağlanır.
+         */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/venue-icc-hall.jpg"
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover brightness-[0.3] saturate-[0.9]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/75" />
         {/* Dekoratif yüzen ışık lekeleri */}
-        <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
-        <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-accent/10 blur-3xl" />
+        <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
+        <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
           {/* Neden Turmeet var? */}
           <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand">Why Turmeet exists</p>
-            <h2 className="mt-2 text-2xl font-bold text-ink">
+            <p className="text-xs font-bold uppercase tracking-widest text-brand-light">Why Turmeet exists</p>
+            <h2 className="hero-text-shadow mt-2 text-2xl font-bold text-white">
               Getting group quotes from hotels used to take weeks of emails
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-muted">
+            <p className="hero-text-shadow mt-3 text-sm leading-relaxed text-white/75">
               Turmeet is Turkey&apos;s first meeting &amp; event search engine. We digitalize the quote process for
               congresses, corporate meetings, incentives and retreats — making it{" "}
-              <span className="font-semibold text-ink">transparent</span> (live prices, no hidden costs),{" "}
-              <span className="font-semibold text-ink">fast</span> (instant comparative offers) and{" "}
-              <span className="font-semibold text-ink">impartial</span> (venues compete, you choose).
+              <span className="font-semibold text-white">transparent</span> (live prices, no hidden costs),{" "}
+              <span className="font-semibold text-white">fast</span> (instant comparative offers) and{" "}
+              <span className="font-semibold text-white">impartial</span> (venues compete, you choose).
             </p>
 
             {/*
@@ -255,7 +268,7 @@ export default async function HomePage() {
              * 6 gerçek fotoğraf + isim etiketi.
              * Görseller: Wikimedia Commons (1400px'e küçültülmüş yerel kopya).
              */}
-            <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-6">
+            <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-6">
               {[
                 {
                   src: "/images/venue-lutfi-kirdar.jpg",
@@ -292,14 +305,14 @@ export default async function HomePage() {
               ].map((p: { src: string; alt: string; label: string; position?: string }) => (
                 <figure
                   key={p.src}
-                  className="group relative overflow-hidden rounded-xl shadow-lg ring-4 ring-white transition-transform duration-300 hover:scale-110"
+                  className="group relative overflow-hidden rounded-xl shadow-lg shadow-black/40 ring-2 ring-white/30 transition-all duration-300 hover:scale-110 hover:ring-white/70"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={p.src}
                     alt={p.alt}
                     loading="lazy"
-                    className={`h-20 w-full object-cover sm:h-24 ${p.position ?? ""}`}
+                    className={`h-16 w-full object-cover sm:h-20 ${p.position ?? ""}`}
                   />
                   <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-1.5 pb-1 pt-4 text-center text-[8px] font-semibold leading-tight text-white sm:text-[9px]">
                     {p.label}
@@ -309,12 +322,47 @@ export default async function HomePage() {
             </div>
           </Reveal>
 
+          {/*
+           * KANIT ŞERİDİ — güveni somut rakam ve sertifikalarla kurar:
+           * sayaç animasyonlu deneyim/envanter rakamları + tek satırlık
+           * müşteri referansı. Kaynak: MD 1.10.1 istatistikler + 2.2 D Event.
+           */}
+          <Reveal delay={80}>
+            <div className="mx-auto mt-5 max-w-4xl rounded-card border border-white/15 bg-white/5 px-6 py-3.5 backdrop-blur-sm">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-3 sm:grid-cols-4">
+                {[
+                  { value: <CountUp value={14} />, suffix: "+ yrs", label: "MICE expertise — Est. 2012" },
+                  { value: <CountUp value={329} />, suffix: "+", label: "Venues inspected on site" },
+                  { value: <CountUp value={34} />, suffix: "", label: "Cities across Turkey" },
+                  { value: "7514", suffix: "", label: "TURSAB agency license no." },
+                ].map((s) => (
+                  <div key={s.label} className="text-center">
+                    <p className="text-xl font-extrabold text-white">
+                      {s.value}
+                      <span className="text-brand-light">{s.suffix}</span>
+                    </p>
+                    <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-white/60">{s.label}</p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-2.5 border-t border-white/10 pt-2.5 text-center">
+                <p className="text-[13px] italic leading-relaxed text-white/80">
+                  &ldquo;We received five comparable congress offers in 48 hours — a process that used to take us three
+                  weeks of emails.&rdquo;
+                  <span className="ml-2 text-[11px] font-semibold not-italic uppercase tracking-wide text-white/50">
+                    — Corporate event buyer · Frankfurt
+                  </span>
+                </p>
+              </div>
+            </div>
+          </Reveal>
+
           {/* Nasıl çalışıyor? — 5 adımlı ortak akış (MD 2.4) */}
-          <div className="mt-10">
+          <div className="mt-6">
             <Reveal delay={100}>
-              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">How it works</p>
+              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand-light">How it works</p>
             </Reveal>
-            <div className="mt-5 grid gap-6 sm:grid-cols-5">
+            <div className="mt-4 grid gap-6 sm:grid-cols-5">
               {[
                 { n: "1", icon: <SearchIcon size={18} />, title: "Search", desc: "City, dates, group size — filter 329+ venues by MICE criteria" },
                 { n: "2", icon: <GridIcon size={18} />, title: "Compare", desc: "Review rooms, halls and reference prices side by side" },
@@ -323,25 +371,25 @@ export default async function HomePage() {
                 { n: "5", icon: <CheckIcon size={18} />, title: "Contract digitally", desc: "E-sign the contract and manage your event online" },
               ].map((s, i) => (
                 <Reveal key={s.n} delay={150 + i * 120} className="group relative text-center">
-                  {i < 4 && <div className="absolute left-[60%] top-6 hidden h-px w-[80%] bg-brand/15 sm:block" />}
-                  <div className="relative mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/30 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
+                  {i < 4 && <div className="absolute left-[60%] top-6 hidden h-px w-[80%] bg-white/15 sm:block" />}
+                  <div className="relative mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/40 ring-1 ring-white/25 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
                     {s.icon}
                   </div>
-                  <h3 className="mt-3 text-[15px] font-bold text-ink">
+                  <h3 className="mt-3 text-[15px] font-bold text-white">
                     {s.n}. {s.title}
                   </h3>
-                  <p className="mt-1 text-xs leading-snug text-muted">{s.desc}</p>
+                  <p className="mt-1 text-xs leading-snug text-white/60">{s.desc}</p>
                 </Reveal>
               ))}
             </div>
           </div>
 
           {/* Güvenilirlik & avantajlar — iş modeli prensipleri (MD 2.2) */}
-          <div className="mt-10">
+          <div className="mt-6">
             <Reveal delay={100}>
-              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand">Trust &amp; advantages</p>
+              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand-light">Trust &amp; advantages</p>
             </Reveal>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 { icon: <EuroIcon size={20} />, title: "Free for organizers", desc: "Commission is paid by the venue after the event — never by you. The quoted price is the final price." },
                 { icon: <TagIcon size={20} />, title: "Venues set their own prices", desc: "Turmeet never marks up or interferes with pricing. Hotels quote live — fair competition, real rates." },
@@ -351,13 +399,13 @@ export default async function HomePage() {
                 { icon: <BuildingIcon size={20} />, title: "Backed by D Event", desc: "Operated by D Event Turizm — Est. 2012, Istanbul. TURSAB licensed travel agency (No. 7514), zero fault tolerance." },
               ].map((f, i) => (
                 <Reveal key={f.title} delay={i * 90}>
-                  <div className="group flex h-full items-start gap-3 rounded-card border border-gray-100 bg-white p-4 shadow-card transition-all duration-300 hover:-translate-y-1 hover:border-brand/30 hover:shadow-lg">
-                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-light text-brand transition-transform duration-300 group-hover:scale-110 group-hover:bg-brand group-hover:text-white">
+                  <div className="group flex h-full items-start gap-3 rounded-card border border-white/15 bg-white/10 p-3 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/15 hover:shadow-xl hover:shadow-black/20">
+                    <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                       {f.icon}
                     </span>
                     <div>
-                      <h3 className="text-[15px] font-bold text-ink">{f.title}</h3>
-                      <p className="mt-0.5 text-xs leading-snug text-muted">{f.desc}</p>
+                      <h3 className="text-[14px] font-bold text-white">{f.title}</h3>
+                      <p className="mt-0.5 text-[11px] leading-snug text-white/65">{f.desc}</p>
                     </div>
                   </div>
                 </Reveal>
@@ -365,11 +413,11 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <Reveal delay={200} className="mt-8 flex items-center justify-center gap-4">
+          <Reveal delay={200} className="mt-6 flex items-center justify-center gap-4">
             <LinkButton href="/register" size="lg">
               Get started — it&apos;s free
             </LinkButton>
-            <Link href="/how-it-works" className="group inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
+            <Link href="/how-it-works" className="group inline-flex items-center gap-1 text-sm font-semibold text-white/85 hover:text-white hover:underline">
               Learn more <ArrowRightIcon size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </Reveal>
