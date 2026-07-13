@@ -34,23 +34,30 @@ function LeafIcon({ size = 12 }: { size?: number }) {
 }
 
 /**
- * Denetim puanı rozeti — Booking tarzı okunur skor kutusu: renkli puan
- * karesi + "/100 score" etiketi. Renk kademesi: 90+ yeşil, 80+ mavi,
- * altı amber. Kaynak: D Event yerinde MICE denetimi (inspectionScore).
+ * Denetim puanı rozeti — 10'luk sisteme çevrilmiş şık skor: buzlu cam
+ * pill içinde gradyan puan yuvarlağı + kalite etiketi (Booking tarzı).
+ * 9.0+ Exceptional (yeşil) · 8.5+ Excellent (teal) · 8.0+ Very good
+ * (mavi) · altı Good (amber). Kaynak: yerinde denetim (inspectionScore).
  */
 function InspectionScore({ score }: { score: number }) {
-  const tier = score >= 90 ? "bg-emerald-600" : score >= 80 ? "bg-sky-600" : "bg-amber-500";
+  const rating = (score / 10).toFixed(1);
+  const [grad, label] =
+    score >= 90
+      ? ["from-emerald-400 to-emerald-600", "Exceptional"]
+      : score >= 85
+        ? ["from-teal-400 to-teal-600", "Excellent"]
+        : score >= 80
+          ? ["from-sky-400 to-sky-600", "Very good"]
+          : ["from-amber-400 to-amber-600", "Good"];
   return (
     <span
-      className="inline-flex items-center gap-1 rounded-lg bg-white/95 py-0.5 pl-0.5 pr-1.5 shadow-md backdrop-blur-sm"
-      title="D Event on-site inspection score (0-100)"
+      className="inline-flex items-center gap-1.5 rounded-full bg-black/45 py-[3px] pl-[3px] pr-2.5 shadow-lg ring-1 ring-white/25 backdrop-blur-md"
+      title="On-site inspection rating (0-10)"
     >
-      <span className={`rounded-md px-1.5 py-0.5 text-[11px] font-black leading-none text-white ${tier}`}>{score}</span>
-      <span className="text-[8px] font-bold uppercase leading-tight tracking-wide text-ink/70">
-        /100
-        <br />
-        score
+      <span className={`rounded-full bg-gradient-to-br px-1.5 py-0.5 text-[11px] font-black leading-none text-white shadow-sm ${grad}`}>
+        {rating}
       </span>
+      <span className="text-[10px] font-semibold leading-none text-white">{label}</span>
     </span>
   );
 }
