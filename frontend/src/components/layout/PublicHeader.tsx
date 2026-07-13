@@ -50,7 +50,7 @@ export function PublicHeader({ variant = "solid" }: { variant?: "solid" | "trans
             <Link
               key={item.href}
               href={item.href}
-              className={`text-sm font-medium leading-none transition-colors ${transparent ? "text-white/90 hover:text-white" : "text-ink hover:text-brand"}`}
+              className={`text-[15px] font-medium leading-none transition-colors ${transparent ? "text-white/90 hover:text-white" : "text-ink hover:text-brand"}`}
             >
               {item.label}
             </Link>
