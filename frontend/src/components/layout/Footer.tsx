@@ -102,7 +102,7 @@ export function Footer() {
           {" · "}
           <Link href="#" className="hover:text-white">Cookie Policy</Link>
           {" · "}
-          <Link href="#" className="hover:text-white">KVKK</Link>
+          <Link href="#" className="hover:text-white">Data Protection (GDPR)</Link>
         </div>
 
         {/* Bölüm 4 — Copyright */}

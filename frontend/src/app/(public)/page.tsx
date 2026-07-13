@@ -538,7 +538,7 @@ export default async function HomePage() {
                 { title: "TURSAB No. 7514", desc: "Licensed travel agency, Turkey" },
                 { title: "ICVB Member", desc: "Istanbul Convention & Visitors Bureau" },
                 { title: "ICCA / IAPCO Standards", desc: "Venues verified by on-site MICE inspection" },
-                { title: "KVKK & GDPR", desc: "Your data is protected — B2B privacy, no public links" },
+                { title: "GDPR & Data Protection", desc: "Your data is protected — B2B privacy, no public links" },
                 { title: "Est. 2012 · Istanbul", desc: "Operated by D Event Tourism Organization Services Inc." },
               ].map((c) => (
                 <div key={c.title} className="flex items-start gap-2">
