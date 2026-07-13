@@ -274,10 +274,11 @@ export default async function HomePage() {
             </p>
 
             {/*
-             * Türkiye'nin ikonik kongre mekanları — 3 polaroid kart + isim etiketi.
+             * Türkiye'nin ikonik kongre mekanları — 6 polaroid kart + isim
+             * etiketi (6 farklı şehir/mekan, gerçek fotoğraflar).
              * Görseller: Wikimedia Commons (1400px'e küçültülmüş yerel kopya).
              */}
-            <div className="mt-6 flex items-center justify-center gap-3">
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               {[
                 {
                   src: "/images/venue-lutfi-kirdar.jpg",
@@ -296,6 +297,24 @@ export default async function HomePage() {
                   alt: "Regnum Carya resort and convention venue, Antalya",
                   label: "Regnum Carya · Antalya",
                   rotate: "-rotate-2",
+                },
+                {
+                  src: "/images/venue-sheraton-adana.jpg",
+                  alt: "Sheraton Grand Adana on the Seyhan River",
+                  label: "Sheraton Grand · Adana",
+                  rotate: "rotate-3",
+                },
+                {
+                  src: "/images/venue-jw-marriott-ankara.jpg",
+                  alt: "JW Marriott Hotel Ankara tower",
+                  label: "JW Marriott · Ankara",
+                  rotate: "-rotate-1",
+                },
+                {
+                  src: "/images/venue-swissotel-buyuk-efes.jpg",
+                  alt: "Swissôtel Büyük Efes Izmir facade",
+                  label: "Swissôtel Büyük Efes · Izmir",
+                  rotate: "rotate-2",
                 },
               ].map((p) => (
                 <figure
