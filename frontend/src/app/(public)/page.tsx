@@ -378,21 +378,54 @@ export default async function HomePage() {
               lowest commission in the market — zero upfront cost, pay only for realized events.
             </p>
 
-            {/* Otel & toplantı görselleri — "Why Turmeet exists" ile aynı polaroid dili */}
-            <div className="mt-6 flex items-center justify-center gap-3">
+          </Reveal>
+
+          {/*
+           * Kayda özendirici görsel şerit — otelin kazanacağı sonuçları gösterir:
+           * dolu kongre salonu, uluslararası sahne, vitrine çıkan tesis.
+           * Her kartta gradyan üzerine fayda mesajı yazılıdır.
+           */}
+          <Reveal delay={100}>
+            <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
               {[
-                { src: "/images/hotel-2.jpg", alt: "Partner hotel exterior", rotate: "-rotate-3" },
-                { src: "/images/meeting-1.jpg", alt: "Conference hall set for a congress", rotate: "rotate-2" },
-                { src: "/images/room-1.jpg", alt: "Hotel guest room", rotate: "-rotate-2" },
-              ].map((p) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                {
+                  src: "/images/meeting-3.jpg",
+                  alt: "Packed conference audience",
+                  title: "Fill your halls",
+                  desc: "Group bookings that occupy hundreds of rooms at once",
+                },
+                {
+                  src: "/images/meeting-4.jpg",
+                  alt: "International keynote on a large stage",
+                  title: "Host global events",
+                  desc: "Congresses and incentives from 4 continents",
+                },
+                {
+                  src: "/images/hotel-1.jpg",
+                  alt: "Prestigious hotel illuminated at dusk",
+                  title: "Get discovered",
+                  desc: "Your venue in front of verified corporate buyers",
+                },
+              ].map((p, i) => (
+                <div
                   key={p.src}
-                  src={p.src}
-                  alt={p.alt}
-                  loading="lazy"
-                  className={`h-20 w-28 rounded-xl object-cover shadow-lg shadow-black/25 ring-4 ring-white/90 transition-transform duration-300 hover:rotate-0 hover:scale-110 sm:h-24 sm:w-32 ${p.rotate}`}
-                />
+                  className={`group relative h-44 overflow-hidden rounded-2xl shadow-lg shadow-black/25 ring-1 ring-white/25 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:ring-white/60 ${
+                    i === 1 ? "sm:-mt-3 sm:h-[188px]" : ""
+                  }`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={p.src}
+                    alt={p.alt}
+                    loading="lazy"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-4 text-left">
+                    <p className="text-[15px] font-bold text-white">{p.title}</p>
+                    <p className="mt-0.5 text-xs leading-snug text-white/75">{p.desc}</p>
+                  </div>
+                </div>
               ))}
             </div>
           </Reveal>
