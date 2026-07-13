@@ -1344,14 +1344,42 @@ export const MOCK_VENUES: Venue[] = BASE_VENUES.map((v) => ({
   showcaseTags: SHOWCASE_TAGS[v.id] ?? [],
 }));
 
-export const MOCK_DESTINATIONS: Destination[] = [
-  { slug: "istanbul", name: "Istanbul", venueCount: 112, totalRooms: 25158, category: "congress", tagline: "The heart of congress tourism — ICCA world #18", imageUrl: img("istanbul-dest", 600, 400) },
-  { slug: "antalya", name: "Antalya", venueCount: 67, totalRooms: 32544, category: "incentive", tagline: "Resort & incentive capital", imageUrl: img("antalya-dest", 600, 400) },
-  { slug: "ankara", name: "Ankara", venueCount: 23, totalRooms: 3899, category: "congress", tagline: "Diplomatic meeting center", imageUrl: img("ankara-dest", 600, 400) },
-  { slug: "izmir", name: "Izmir", venueCount: 24, totalRooms: 5072, category: "congress", tagline: "Gateway to the Aegean", imageUrl: img("izmir-dest", 600, 400) },
-  { slug: "cappadocia", name: "Cappadocia", venueCount: 10, totalRooms: 1390, category: "cultural", tagline: "Boutique retreats & experiences", imageUrl: img("cappadocia-dest", 600, 400) },
-  { slug: "bursa", name: "Bursa", venueCount: 10, totalRooms: 1602, category: "wellness", tagline: "Thermal & mountain resort destination", imageUrl: img("bursa-dest", 600, 400) },
+/*
+ * Destinasyon istatistikleri OTOMATİK hesaplanır: taban katalog değeri
+ * (henüz platforma taşınmamış şehir envanteri) + MOCK_VENUES'taki canlı
+ * mekan sayısı/oda toplamı. Yeni mekan eklendikçe kartlar kendiliğinden
+ * güncellenir. Backend'de aynı davranış GET /api/v1/destinations
+ * endpoint'inin şehir bazlı COUNT/SUM aggregate'i ile sağlanacak.
+ */
+const liveCityStats = (cities: string[]) => {
+  const list = MOCK_VENUES.filter((v) => cities.includes(v.city));
+  return {
+    venues: list.length,
+    rooms: list.reduce((sum, v) => sum + v.totalRooms, 0),
+  };
+};
+
+const DESTINATION_BASE = [
+  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22436 }, category: "congress", tagline: "The heart of congress tourism — ICCA world #18", img: "istanbul-dest" },
+  { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 59, rooms: 29341 }, category: "incentive", tagline: "Resort & incentive capital", img: "antalya-dest" },
+  { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 21, rooms: 3449 }, category: "congress", tagline: "Diplomatic meeting center", img: "ankara-dest" },
+  { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 21, rooms: 4380 }, category: "congress", tagline: "Gateway to the Aegean", img: "izmir-dest" },
+  { slug: "cappadocia", name: "Cappadocia", cities: ["Nevşehir"], base: { venues: 9, rooms: 1360 }, category: "cultural", tagline: "Boutique retreats & experiences", img: "cappadocia-dest" },
+  { slug: "bursa", name: "Bursa", cities: ["Bursa"], base: { venues: 9, rooms: 1252 }, category: "wellness", tagline: "Thermal & mountain resort destination", img: "bursa-dest" },
 ];
+
+export const MOCK_DESTINATIONS: Destination[] = DESTINATION_BASE.map((d) => {
+  const live = liveCityStats(d.cities);
+  return {
+    slug: d.slug,
+    name: d.name,
+    venueCount: d.base.venues + live.venues,
+    totalRooms: d.base.rooms + live.rooms,
+    category: d.category as Destination["category"],
+    tagline: d.tagline,
+    imageUrl: img(d.img, 600, 400),
+  };
+});
 
 // Anasayfa güven istatistikleri (master doküman 1.10.1)
 export const PLATFORM_STATS = {

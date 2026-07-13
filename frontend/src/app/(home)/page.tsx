@@ -26,7 +26,9 @@ import {
   PlaneIcon,
   MonitorIcon,
   StarIcon,
+  HomeIcon,
 } from "@/components/ui/icons";
+import { CountUp } from "@/components/ui/CountUp";
 import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
 import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
@@ -129,7 +131,7 @@ export default async function HomePage() {
       </section>
 
       {/* ── SAYFA 3: DESTİNASYONLAR — geniş bant, bento mozaik düzeni ── */}
-      <section className="flex min-h-[100dvh] snap-start items-center bg-surface py-10">
+      <section id="destinations" className="flex min-h-[100dvh] snap-start items-center bg-surface py-10">
         <div className="mx-auto w-full max-w-[1400px] px-4 sm:px-6">
           <div className="mb-6 flex items-end justify-between">
             <div>
@@ -190,12 +192,27 @@ export default async function HomePage() {
                   <div className="absolute inset-x-0 bottom-0 p-5 text-white">
                     <p className={`font-bold ${i === 0 ? "text-3xl" : "text-xl"}`}>{d.name}</p>
                     <p className={`mt-0.5 text-white/85 ${i === 0 ? "text-sm" : "text-xs"}`}>{d.tagline}</p>
-                    <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-medium text-white/90">
-                      <span className="inline-flex items-center gap-1">
-                        <BuildingIcon size={13} /> {d.venueCount} venues
+                    {/*
+                     * İstatistik rozetleri — buzlu cam chip + sayaç animasyonu.
+                     * Değerler MOCK_VENUES envanterinden otomatik hesaplanır;
+                     * yeni mekan eklendikçe kendiliğinden artar.
+                     */}
+                    <div className="mt-2.5 flex flex-wrap items-center gap-2">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-2.5 py-1 shadow-sm backdrop-blur-md transition-colors group-hover:bg-white/25">
+                        <BuildingIcon size={12} className="text-brand-light" />
+                        <span className={`font-extrabold leading-none ${i === 0 ? "text-sm" : "text-xs"}`}>
+                          <CountUp value={d.venueCount} />
+                        </span>
+                        <span className="text-[10px] font-medium uppercase tracking-wide text-white/75">venues</span>
                       </span>
-                      <span>{d.totalRooms.toLocaleString("en-US")} rooms</span>
-                      <span className="ml-auto inline-flex items-center gap-1 font-semibold opacity-0 transition-opacity group-hover:opacity-100">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/15 px-2.5 py-1 shadow-sm backdrop-blur-md transition-colors group-hover:bg-white/25">
+                        <HomeIcon size={12} className="text-brand-light" />
+                        <span className={`font-extrabold leading-none ${i === 0 ? "text-sm" : "text-xs"}`}>
+                          <CountUp value={d.totalRooms} />
+                        </span>
+                        <span className="text-[10px] font-medium uppercase tracking-wide text-white/75">rooms</span>
+                      </span>
+                      <span className="ml-auto inline-flex items-center gap-1 text-xs font-semibold opacity-0 transition-opacity group-hover:opacity-100">
                         Explore <ArrowRightIcon size={13} />
                       </span>
                     </div>
