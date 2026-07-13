@@ -18,11 +18,12 @@ import { SearchIcon, ChevronDownIcon } from "@/components/ui/icons";
 import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 
 const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nevşehir"];
+/* Mekan tipi etiketleri — ICCA sınıflandırmasıyla uyumlu (bkz. FeaturedShowcase) */
 const TYPES: { value: string; label: string }[] = [
-  { value: "city_hotel", label: "City Hotel" },
-  { value: "resort", label: "Resort" },
-  { value: "congress_center", label: "Congress Center" },
-  { value: "boutique", label: "Boutique" },
+  { value: "city_hotel", label: "City & Conference Hotel" },
+  { value: "resort", label: "Resort Congress Hotel" },
+  { value: "congress_center", label: "Congress & Exhibition Center" },
+  { value: "boutique", label: "Boutique & Retreat" },
 ];
 
 const TEXT_KEYS = [

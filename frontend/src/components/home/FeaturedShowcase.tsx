@@ -1,11 +1,17 @@
 /*
  * ÖNE ÇIKAN MEKANLAR VİTRİNİ — anasayfa "Featured hotels" bölümü.
- * Sekmeli yapı: City Hotels / Resorts & Incentive / Congress Centers.
+ * Sekmeler ICCA/IAPCO mekan sınıflandırmasını izler:
+ *  - City & Conference Hotels  → ICCA kategori A: otel bünyesinde toplantı
+ *    tesisi (Hilton Bomonti gibi "conference hotel"lar da buradadır —
+ *    amaca yönelik kongre merkezi DEĞİLDİR).
+ *  - Resort Congress Hotels    → kıyı/golf resortları; residential congress
+ *    ve incentive formatının mekanı ("incentive" etkinlik tipidir, mekan
+ *    tipi değildir — bu yüzden sekme adı mekan sınıfını söyler).
+ *  - Congress & Exhibition Centers → ICCA kategori B: amaca yönelik inşa
+ *    edilmiş kongre/fuar merkezleri (Lütfi Kırdar, Tüyap, Cam Piramit...).
  * Sıralama: sponsorlu önce, sonra MICE denetim puanı. Her sekmenin ilk
  * mekanı 2 sütunluk "spotlight" kartıdır (sponsor görünürlüğü — partner
- * teşviki). Kartlar MICE odaklıdır: kapasite + salon sayısı + denetim
- * puanı öne çıkar, fiyat küçük referans bilgisi olarak kalır.
- * Vitrin etiketleri Staff panelinden atanır (showcaseTags).
+ * teşviki). Vitrin etiketleri Staff panelinden atanır (showcaseTags).
  */
 "use client";
 
@@ -17,10 +23,25 @@ import { UsersIcon, GridIcon, ClockIcon, ArrowRightIcon } from "@/components/ui/
 
 type TabId = "city" | "resort" | "congress";
 
-const TABS: { id: TabId; label: string; match: (v: Venue) => boolean }[] = [
-  { id: "city", label: "City Hotels", match: (v) => v.type === "city_hotel" },
-  { id: "resort", label: "Resorts & Incentive", match: (v) => v.type === "resort" || v.type === "boutique" },
-  { id: "congress", label: "Congress Centers", match: (v) => v.type === "congress_center" },
+const TABS: { id: TabId; label: string; desc: string; match: (v: Venue) => boolean }[] = [
+  {
+    id: "city",
+    label: "City & Conference Hotels",
+    desc: "Urban hotels with in-house meeting facilities — ICCA venue category A",
+    match: (v) => v.type === "city_hotel" || v.type === "airport_hotel",
+  },
+  {
+    id: "resort",
+    label: "Resort Congress Hotels",
+    desc: "Coastal & golf resorts built for residential congresses and incentive programs",
+    match: (v) => v.type === "resort" || v.type === "boutique" || v.type === "mountain_resort",
+  },
+  {
+    id: "congress",
+    label: "Congress & Exhibition Centers",
+    desc: "Purpose-built congress and exhibition venues — ICCA venue category B",
+    match: (v) => v.type === "congress_center",
+  },
 ];
 
 /** Mini yaprak ikonu — sürdürülebilirlik sertifikası rozeti */
@@ -166,7 +187,10 @@ export default function FeaturedShowcase({ venues }: { venues: Venue[] }) {
         })}
       </div>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {/* Aktif sekmenin ICCA kategori açıklaması — sınıflandırma şeffaflığı */}
+      <p className="mt-2 text-xs text-muted">{active.desc}</p>
+
+      <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {/* ── SPOTLIGHT — sekmenin 1. mekanı, 2 sütun geniş kart ── */}
         {spotlight && (
           <Link
