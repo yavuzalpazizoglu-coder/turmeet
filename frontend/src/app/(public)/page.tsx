@@ -377,6 +377,24 @@ export default async function HomePage() {
               Why should a hotel or congress center work with us? Guaranteed international group bookings at the
               lowest commission in the market — zero upfront cost, pay only for realized events.
             </p>
+
+            {/* Otel & toplantı görselleri — "Why Turmeet exists" ile aynı polaroid dili */}
+            <div className="mt-6 flex items-center justify-center gap-3">
+              {[
+                { src: "/images/hotel-2.jpg", alt: "Partner hotel exterior", rotate: "-rotate-3" },
+                { src: "/images/meeting-1.jpg", alt: "Conference hall set for a congress", rotate: "rotate-2" },
+                { src: "/images/room-1.jpg", alt: "Hotel guest room", rotate: "-rotate-2" },
+              ].map((p) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={p.src}
+                  src={p.src}
+                  alt={p.alt}
+                  loading="lazy"
+                  className={`h-20 w-28 rounded-xl object-cover shadow-lg shadow-black/25 ring-4 ring-white/90 transition-transform duration-300 hover:rotate-0 hover:scale-110 sm:h-24 sm:w-32 ${p.rotate}`}
+                />
+              ))}
+            </div>
           </Reveal>
 
           {/* Avantajlar — 6 kart */}
