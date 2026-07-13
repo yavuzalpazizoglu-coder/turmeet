@@ -274,55 +274,56 @@ export default async function HomePage() {
             </p>
 
             {/*
-             * Türkiye'nin ikonik kongre mekanları — 6 polaroid kart + isim
-             * etiketi (6 farklı şehir/mekan, gerçek fotoğraflar).
+             * Türkiye'nin ikonik kongre mekanları — tek sıra, eşit boyutlu
+             * 6 gerçek fotoğraf + isim etiketi.
              * Görseller: Wikimedia Commons (1400px'e küçültülmüş yerel kopya).
              */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <div className="mt-6 grid grid-cols-3 gap-3 sm:grid-cols-6">
               {[
                 {
                   src: "/images/venue-lutfi-kirdar.jpg",
                   alt: "Istanbul Lütfi Kırdar Convention and Exhibition Centre",
                   label: "Lütfi Kırdar ICEC · Istanbul",
-                  rotate: "-rotate-3",
                 },
                 {
                   src: "/images/venue-halic-congress.jpg",
                   alt: "Haliç Congress Center on the Golden Horn, Istanbul",
                   label: "Haliç Congress Center",
-                  rotate: "rotate-2",
+                },
+                {
+                  src: "/images/venue-icc-istanbul.jpg",
+                  alt: "Istanbul Congress Center entrance",
+                  label: "ICC · Istanbul",
+                },
+                {
+                  src: "/images/venue-ciragan-palace.jpg",
+                  alt: "Çırağan Palace Kempinski on the Bosphorus, Istanbul",
+                  label: "Çırağan Palace · Bosphorus",
                 },
                 {
                   src: "/images/venue-regnum-carya.jpg",
                   alt: "Regnum Carya resort and convention venue, Antalya",
                   label: "Regnum Carya · Antalya",
-                  rotate: "-rotate-2",
-                },
-                {
-                  src: "/images/venue-sheraton-adana.jpg",
-                  alt: "Sheraton Grand Adana on the Seyhan River",
-                  label: "Sheraton Grand · Adana",
-                  rotate: "rotate-3",
-                },
-                {
-                  src: "/images/venue-jw-marriott-ankara.jpg",
-                  alt: "JW Marriott Hotel Ankara tower",
-                  label: "JW Marriott · Ankara",
-                  rotate: "-rotate-1",
                 },
                 {
                   src: "/images/venue-swissotel-buyuk-efes.jpg",
-                  alt: "Swissôtel Büyük Efes Izmir facade",
+                  alt: "Swissôtel Büyük Efes, Izmir",
                   label: "Swissôtel Büyük Efes · Izmir",
-                  rotate: "rotate-2",
+                  // Kadraj aşağı kaydırıldı — üstteki güneş parlaması yerine bina görünür
+                  position: "object-[center_65%]",
                 },
-              ].map((p) => (
+              ].map((p: { src: string; alt: string; label: string; position?: string }) => (
                 <figure
                   key={p.src}
-                  className={`group relative overflow-hidden rounded-xl shadow-lg ring-4 ring-white transition-transform duration-300 hover:rotate-0 hover:scale-110 ${p.rotate}`}
+                  className="group relative overflow-hidden rounded-xl shadow-lg ring-4 ring-white transition-transform duration-300 hover:scale-110"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={p.src} alt={p.alt} loading="lazy" className="h-20 w-28 object-cover sm:h-24 sm:w-32" />
+                  <img
+                    src={p.src}
+                    alt={p.alt}
+                    loading="lazy"
+                    className={`h-20 w-full object-cover sm:h-24 ${p.position ?? ""}`}
+                  />
                   <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-1.5 pb-1 pt-4 text-center text-[8px] font-semibold leading-tight text-white sm:text-[9px]">
                     {p.label}
                   </figcaption>
