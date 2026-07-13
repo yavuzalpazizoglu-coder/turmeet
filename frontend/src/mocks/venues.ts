@@ -1459,7 +1459,8 @@ const liveCityStats = (cities: string[]) => {
  * hotel / congress & exhibition center) tagline'larda da kullanılır.
  */
 const DESTINATION_BASE = [
-  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22436 }, category: "congress", tagline: "Purpose-built congress centers & city hotels — ICCA world #18", img: "istanbul-dest" },
+  // ICCA 2023 Country & City Rankings: Istanbul 72 kongre ile dünya #21 / Avrupa #16
+  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22436 }, category: "congress", tagline: "Purpose-built congress centers & city hotels — ICCA world #21", img: "istanbul-dest" },
   { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 59, rooms: 29341 }, category: "incentive", tagline: "Resort congress capital — incentives & residential congresses", img: "antalya-dest" },
   { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 21, rooms: 3449 }, category: "congress", tagline: "Diplomatic congress hub — conference hotels & Congresium", img: "ankara-dest" },
   { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 21, rooms: 4380 }, category: "congress", tagline: "Aegean congress & exhibition gateway", img: "izmir-dest" },
