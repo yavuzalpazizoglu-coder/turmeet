@@ -14,6 +14,7 @@ import {
   BarChartIcon,
   SettingsIcon,
   CheckIcon,
+  MessageIcon,
 } from "@/components/ui/icons";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -26,6 +27,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { href: "/admin/customers", label: t("Customers", "Müşteriler"), icon: <UsersIcon size={18} /> },
     { href: "/admin/venues", label: t("Venues", "Mekanlar"), icon: <BuildingIcon size={18} /> },
     { href: "/admin/requests", label: t("Quote Requests", "Teklif Talepleri"), icon: <FileTextIcon size={18} /> },
+    { href: "/admin/messages", label: t("Messages", "Mesajlar"), icon: <MessageIcon size={18} /> },
     { href: "/admin/commissions", label: t("Commissions", "Komisyonlar"), icon: <EuroIcon size={18} /> },
     { href: "/admin/coordinators", label: t("Coordinators", "Koordinatörler"), icon: <UsersIcon size={18} /> },
     { href: "/admin/reports", label: t("Reports", "Raporlar"), icon: <BarChartIcon size={18} /> },

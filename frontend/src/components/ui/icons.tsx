@@ -31,6 +31,14 @@ export const SearchIcon = (p: IconProps) => (
   </Base>
 );
 
+export const GlobeIcon = (p: IconProps) => (
+  <Base {...p}>
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+  </Base>
+);
+
 export const MapPinIcon = (p: IconProps) => (
   <Base {...p}>
     <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
