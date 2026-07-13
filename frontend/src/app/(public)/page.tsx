@@ -272,21 +272,41 @@ export default async function HomePage() {
               <span className="font-semibold text-ink">impartial</span> (venues compete, you choose).
             </p>
 
-            {/* Türkiye görselleri — hero setinden 3 küçük polaroid kart */}
+            {/*
+             * Türkiye'nin ikonik kongre mekanları — 3 polaroid kart + isim etiketi.
+             * Görseller: Wikimedia Commons (1400px'e küçültülmüş yerel kopya).
+             */}
             <div className="mt-6 flex items-center justify-center gap-3">
               {[
-                { src: "/images/hero-slide-3.jpg", alt: "Istanbul — Golden Horn panorama", rotate: "-rotate-3" },
-                { src: "/images/hero-slide-1.jpg", alt: "Cappadocia — hot air balloons", rotate: "rotate-2" },
-                { src: "/images/hero-slide-6.jpg", alt: "Antalya — turquoise coast", rotate: "-rotate-2" },
+                {
+                  src: "/images/venue-lutfi-kirdar.jpg",
+                  alt: "Istanbul Lütfi Kırdar Convention and Exhibition Centre",
+                  label: "Lütfi Kırdar ICEC · Istanbul",
+                  rotate: "-rotate-3",
+                },
+                {
+                  src: "/images/venue-halic-congress.jpg",
+                  alt: "Haliç Congress Center on the Golden Horn, Istanbul",
+                  label: "Haliç Congress Center",
+                  rotate: "rotate-2",
+                },
+                {
+                  src: "/images/venue-regnum-carya.jpg",
+                  alt: "Regnum Carya resort and convention venue, Antalya",
+                  label: "Regnum Carya · Antalya",
+                  rotate: "-rotate-2",
+                },
               ].map((p) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <figure
                   key={p.src}
-                  src={p.src}
-                  alt={p.alt}
-                  loading="lazy"
-                  className={`h-20 w-28 rounded-xl object-cover shadow-lg ring-4 ring-white transition-transform duration-300 hover:rotate-0 hover:scale-110 sm:h-24 sm:w-32 ${p.rotate}`}
-                />
+                  className={`group relative overflow-hidden rounded-xl shadow-lg ring-4 ring-white transition-transform duration-300 hover:rotate-0 hover:scale-110 ${p.rotate}`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={p.src} alt={p.alt} loading="lazy" className="h-20 w-28 object-cover sm:h-24 sm:w-32" />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-1.5 pb-1 pt-4 text-center text-[8px] font-semibold leading-tight text-white sm:text-[9px]">
+                    {p.label}
+                  </figcaption>
+                </figure>
               ))}
             </div>
           </Reveal>
