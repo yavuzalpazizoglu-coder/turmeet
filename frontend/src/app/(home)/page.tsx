@@ -5,6 +5,7 @@
  */
 import Link from "next/link";
 import { PublicHeader } from "@/components/layout/PublicHeader";
+import { Footer } from "@/components/layout/Footer";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
 import HeroSearch from "@/components/home/HeroSearch";
 import { LinkButton } from "@/components/ui";
@@ -553,6 +554,15 @@ export default async function HomePage() {
           </Reveal>
         </div>
       </section>
+
+      {/*
+       * Footer — snap kapsayıcısının İÇİNDE, snap-end hedefi olarak durur.
+       * Dışarıda (layout'ta) kalsaydı zorunlu snap yüzünden kaydırınca
+       * erişilemiyordu; içeride son sayfadan sonra doğal olarak görünür.
+       */}
+      <div className="snap-end">
+        <Footer />
+      </div>
     </div>
   );
 }
