@@ -19,6 +19,17 @@ import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 
 const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nevşehir", "Cappadocia"];
 
+/** Arama kutusunun altında chip olarak gösterilen popüler şehirler */
+const POPULAR_CITIES = ["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"];
+
+/** Daktilo efekti — placeholder'da harf harf yazılan örnek aramalar */
+const PLACEHOLDER_QUERIES = [
+  "Congress in Istanbul · 300 pax",
+  "Incentive resort in Antalya",
+  "Boutique retreat in Cappadocia",
+  "Hotel near metro · Ankara",
+];
+
 export interface VenueSuggestion {
   name: string;
   slug: string;
@@ -29,7 +40,9 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
+  const [placeholder, setPlaceholder] = useState("");
   const boxRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   // Dışarı tıklanınca öneri menüsünü kapat
   useEffect(() => {
@@ -39,6 +52,46 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
     document.addEventListener("mousedown", onClick);
     return () => document.removeEventListener("mousedown", onClick);
   }, []);
+
+  /*
+   * Daktilo efekti: örnek aramalar placeholder'a harf harf yazılır,
+   * bekler, harf harf silinir, sıradakine geçer. Kullanıcı kutuya
+   * yazmaya başlayınca (q dolu) animasyon durur.
+   */
+  useEffect(() => {
+    if (q) return; // kullanıcı yazıyor — animasyonu durdur
+    let qi = 0; // hangi örnek sorgu
+    let ci = 0; // kaç karakter yazıldı
+    let deleting = false;
+    let timer: ReturnType<typeof setTimeout>;
+
+    function tick() {
+      const text = PLACEHOLDER_QUERIES[qi];
+      if (!deleting) {
+        ci++;
+        setPlaceholder(text.slice(0, ci));
+        if (ci === text.length) {
+          deleting = true;
+          timer = setTimeout(tick, 2200); // tam yazılmış halde bekle
+          return;
+        }
+        timer = setTimeout(tick, 55);
+      } else {
+        ci--;
+        setPlaceholder(text.slice(0, ci));
+        if (ci === 0) {
+          deleting = false;
+          qi = (qi + 1) % PLACEHOLDER_QUERIES.length;
+          timer = setTimeout(tick, 400);
+          return;
+        }
+        timer = setTimeout(tick, 28);
+      }
+    }
+
+    timer = setTimeout(tick, 600);
+    return () => clearTimeout(timer);
+  }, [q]);
 
   const query = q.trim().toLowerCase();
   const cityMatches = query ? CITIES.filter((c) => c.toLowerCase().includes(query)).slice(0, 4) : [];
@@ -64,6 +117,7 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
   }
 
   return (
+    <>
     <form action={submit} className="mx-auto mt-8 max-w-3xl rounded-2xl bg-white shadow-xl">
       {/* Satır 1: nerede · ne zaman · kaç kişi */}
       <div className="flex flex-col sm:flex-row sm:items-center">
@@ -72,6 +126,7 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
           <div className="flex items-center gap-2 border-b border-gray-200 px-5 py-3.5 sm:border-r">
             <MapPinIcon size={18} className="shrink-0 text-muted" />
             <input
+              ref={inputRef}
               name="q"
               value={q}
               onChange={(e) => {
@@ -79,7 +134,7 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
                 setOpen(true);
               }}
               onFocus={() => setOpen(true)}
-              placeholder="Search for venues or cities"
+              placeholder={placeholder || "Search for venues or cities"}
               autoComplete="off"
               className="w-full text-[15px] outline-none placeholder:text-muted"
             />
@@ -184,5 +239,25 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
         </button>
       </div>
     </form>
+
+    {/* Popüler şehirler — tıklanınca arama kutusuna yazılır ve öneriler açılır */}
+    <div className="hero-text-shadow mt-5 flex flex-wrap items-center justify-center gap-2">
+      <span className="text-sm font-semibold text-white">Popular:</span>
+      {POPULAR_CITIES.map((c) => (
+        <button
+          key={c}
+          type="button"
+          onClick={() => {
+            setQ(c);
+            setOpen(true);
+            inputRef.current?.focus();
+          }}
+          className="rounded-full border border-white/30 bg-white/10 px-3 py-1 text-sm font-bold text-white backdrop-blur-sm transition-all hover:border-white/70 hover:bg-white/25 hover:shadow-[0_0_12px_rgba(255,255,255,0.35)]"
+        >
+          {c}
+        </button>
+      ))}
+    </div>
+    </>
   );
 }

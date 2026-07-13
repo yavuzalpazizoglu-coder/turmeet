@@ -41,7 +41,7 @@ export default function HeroSlideshow() {
           alt={s.alt}
           loading={i === 0 ? "eager" : "lazy"}
           className={`absolute inset-0 h-full w-full object-cover brightness-[0.8] transition-opacity duration-[2000ms] ease-in-out ${
-            i === index ? "opacity-70" : "opacity-0"
+            i === index ? "animate-kenburns opacity-70" : "opacity-0"
           }`}
         />
       ))}

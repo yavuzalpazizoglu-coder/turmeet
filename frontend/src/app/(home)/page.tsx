@@ -53,6 +53,15 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/20 to-black/50" />
 
         <div className="relative z-10 mx-auto w-full max-w-4xl px-4 pb-12 pt-28 text-center">
+          {/* "Türkiye'nin ilki" rozeti — buzlu cam pill + periyodik ışık süpürmesi */}
+          <div className="relative mx-auto mb-4 inline-flex items-center gap-2 overflow-hidden rounded-full border border-white/30 bg-white/10 px-4 py-1.5 backdrop-blur-md">
+            <span className="text-[13px] text-amber-300">★</span>
+            <span className="text-[12px] font-bold uppercase tracking-[0.14em] text-white sm:text-[13px]">
+              Turkey&apos;s First Meeting &amp; Event Search Engine
+            </span>
+            <span className="animate-shimmer pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-transparent via-white/40 to-transparent" />
+          </div>
+
           <h1 className="hero-text-shadow text-4xl font-bold uppercase tracking-wide text-white sm:text-5xl">
             Plan Your Meeting in Turkey
           </h1>
@@ -61,19 +70,8 @@ export default async function HomePage() {
             Compare. Choose. Organize.
           </p>
 
-          {/* Arama kutusu — aktif öneri menüsü + tarih seçici (HeroSearch, client) */}
+          {/* Arama kutusu + tıklanabilir Popular chip'leri (HeroSearch, client) */}
           <HeroSearch venues={venues.map((v) => ({ name: v.name, slug: v.slug, city: v.city }))} />
-
-          {/* Popüler şehirler — gövde metinleriyle eşit boyut (14px) */}
-          <p className="hero-text-shadow mt-5 text-sm font-semibold text-white">
-            Popular:{" "}
-            {["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"].map((c, i) => (
-              <Link key={c} href={`/venues?city=${c}`} className="font-bold text-white hover:underline">
-                {c}
-                {i < 4 ? " · " : ""}
-              </Link>
-            ))}
-          </p>
 
           {/* İstatistikler — ilk ekranda görünür */}
           <div className="mx-auto mt-10 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-4">
