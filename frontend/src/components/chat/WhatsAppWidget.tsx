@@ -51,6 +51,18 @@ function SparklesIcon({ size = 22 }: { size?: number }) {
   );
 }
 
+/** Konuşma balonu — buton bir mesaj kutusu gibi algılansın diye */
+function ChatBubbleIcon({ size = 24 }: { size?: number }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} fill="currentColor" aria-hidden>
+      <path d="M12 3C6.5 3 2 6.9 2 11.7c0 2.1.9 4 2.3 5.5-.2 1.2-.8 2.6-1.9 3.6-.2.2 0 .5.2.5 1.9-.1 3.6-.8 4.8-1.6 1.4.5 2.9.8 4.6.8 5.5 0 10-3.9 10-8.8S17.5 3 12 3z" />
+      <circle cx="8" cy="11.7" r="1.2" fill="#fff" />
+      <circle cx="12" cy="11.7" r="1.2" fill="#fff" />
+      <circle cx="16" cy="11.7" r="1.2" fill="#fff" />
+    </svg>
+  );
+}
+
 function CloseIcon({ size = 18 }: { size?: number }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" aria-hidden>
@@ -221,8 +233,8 @@ export default function WhatsAppWidget() {
               <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-brand bg-green-400" />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold leading-tight">Turmeet AI Assistant</p>
-              <p className="text-[11px] text-white/75">Instant answers · {AI_PROVIDER_LABEL}</p>
+              <p className="text-sm font-bold leading-tight">Turmeet Chat</p>
+              <p className="text-[11px] text-white/75">AI-powered instant answers · {AI_PROVIDER_LABEL}</p>
             </div>
             <button
               onClick={() => setPanel(null)}
@@ -389,17 +401,17 @@ export default function WhatsAppWidget() {
 
       {/* ══ YÜZEN BUTONLAR — AI solda, WhatsApp sağda ══ */}
       <div className="flex items-center gap-3">
-        {/* AI asistan butonu */}
+        {/* Mesaj kutusu butonu — konuşma balonu, AI vurgusu panelin içinde kalır */}
         <button
           onClick={() => {
             setPanel((p) => (p === "ai" ? null : "ai"));
             setSeen(true);
           }}
-          aria-label={panel === "ai" ? "Close AI assistant" : "Open AI assistant"}
+          aria-label={panel === "ai" ? "Close chat" : "Open chat"}
           className="group relative flex h-14 items-center gap-2 rounded-full bg-gradient-to-r from-brand to-brand-dark px-4 text-white shadow-xl transition-transform hover:scale-105 active:scale-95"
         >
-          {panel === "ai" ? <CloseIcon size={20} /> : <SparklesIcon size={22} />}
-          <span className="text-sm font-bold">AI</span>
+          {panel === "ai" ? <CloseIcon size={20} /> : <ChatBubbleIcon size={24} />}
+          <span className="text-sm font-bold">Chat</span>
         </button>
 
         {/* WhatsApp butonu */}
