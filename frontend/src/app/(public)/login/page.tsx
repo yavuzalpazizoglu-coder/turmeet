@@ -13,9 +13,9 @@ import { useState } from "react";
 import { Button, Input, Field, Card } from "@/components/ui";
 
 const ROLES = [
-  { value: "customer", label: "Event Organizer (Customer)", target: "/app" },
-  { value: "partner", label: "Hotel / Venue (Partner)", target: "/partner" },
-  { value: "admin", label: "Staff (Admin)", target: "/admin" },
+  { value: "customer", label: "Event Organizer", target: "/app" },
+  { value: "partner", label: "Hotel / Venue", target: "/partner" },
+  { value: "admin", label: "Staff", target: "/admin" },
 ];
 
 export default function LoginPage() {
