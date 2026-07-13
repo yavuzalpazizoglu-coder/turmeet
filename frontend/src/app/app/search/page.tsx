@@ -6,8 +6,8 @@
  */
 import { PageHeader } from "@/components/ui";
 import { getVenues } from "@/services";
-import { DetailedVenueFilters } from "./detailed-filters";
-import { SearchResults } from "./search-results";
+import { DetailedVenueFilters } from "@/components/search/SearchFilters";
+import { SearchResults } from "@/components/search/SearchResults";
 
 export const metadata = { title: "Venue Search — Turmeet" };
 

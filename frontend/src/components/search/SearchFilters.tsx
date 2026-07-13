@@ -1,5 +1,7 @@
 /*
- * DETAYLI MEKAN ARAMA — kompakt yatay filtre çubuğu (müşteri paneli).
+ * DETAYLI MEKAN ARAMA — kompakt yatay filtre çubuğu.
+ * Hem müşteri paneli (/app/search) hem public SERP (/venues) kullanır;
+ * hedef sayfa `basePath` prop'u ile belirlenir.
  *
  * Tasarım kararı: filtreler sol sütun yerine üstte tek çubukta durur,
  * sonuç listesi tam genişlik kullanır — müşteri kaydırmadan arar.
@@ -57,7 +59,13 @@ const selectCls =
   "h-10 cursor-pointer rounded-lg border border-gray-200 bg-white px-2.5 text-sm text-ink outline-none focus:border-brand";
 const checkCls = "flex h-10 cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 text-sm text-ink";
 
-export function DetailedVenueFilters({ current }: { current: Record<string, string | undefined> }) {
+export function DetailedVenueFilters({
+  current,
+  basePath = "/app/search",
+}: {
+  current: Record<string, string | undefined>;
+  basePath?: string;
+}) {
   const router = useRouter();
   // İleri filtrelerden biri doluysa çubuk açık başlar
   const [more, setMore] = useState(ADVANCED_KEYS.some((k) => current[k]));
@@ -71,7 +79,7 @@ export function DetailedVenueFilters({ current }: { current: Record<string, stri
     for (const key of CHECKBOX_KEYS) {
       if (formData.get(key)) params.set(key, "1");
     }
-    router.push(`/app/search?${params.toString()}`);
+    router.push(`${basePath}?${params.toString()}`);
   }
 
   return (
@@ -225,7 +233,7 @@ export function DetailedVenueFilters({ current }: { current: Record<string, stri
           </label>
           <button
             type="button"
-            onClick={() => router.push("/app/search")}
+            onClick={() => router.push(basePath)}
             className="ml-auto h-10 px-2 text-xs font-semibold text-brand hover:underline"
           >
             Reset all
