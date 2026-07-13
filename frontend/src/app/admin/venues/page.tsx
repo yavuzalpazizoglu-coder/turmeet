@@ -3,6 +3,7 @@
  * Backend: GET /api/v1/admin/venues
  */
 import { PageHeader, Table, Badge, Button, StarRow } from "@/components/ui";
+import { venueTypeLabel } from "@/lib/mice-criteria";
 import { getAdminVenues } from "@/services";
 import { getPanelLang } from "@/lib/panel-i18n-server";
 import { makeT } from "@/lib/panel-i18n";
@@ -40,7 +41,7 @@ export default async function AdminVenuesPage() {
           <tr key={v.id} className="hover:bg-surface/60">
             <td className="px-4 py-3">
               <p className="font-medium text-ink">{v.name}</p>
-              <p className="text-xs text-muted">{v.type.replace(/_/g, " ")}</p>
+              <p className="text-xs text-muted">{venueTypeLabel(v.type)}</p>
             </td>
             <td className="px-4 py-3">{v.city}</td>
             <td className="px-4 py-3">

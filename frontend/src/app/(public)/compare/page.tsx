@@ -6,6 +6,8 @@ import Link from "next/link";
 import { PublicHeader } from "@/components/layout/PublicHeader";
 import { LinkButton, StarRow, Stars } from "@/components/ui";
 import { HotelLogo } from "@/components/venue/HotelLogo";
+import { InspectionScoreLight } from "@/components/venue/InspectionScore";
+import { venueTypeLabel } from "@/lib/mice-criteria";
 import { getVenuesByIds, getVenues } from "@/services";
 
 export const metadata = { title: "Compare Venues — Turmeet" };
@@ -20,6 +22,8 @@ export default async function ComparePage({
   const venues = idList.length > 0 ? await getVenuesByIds(idList) : (await getVenues()).slice(0, 3);
 
   const rows: { label: string; render: (v: (typeof venues)[number]) => React.ReactNode }[] = [
+    { label: "Venue category (ICCA)", render: (v) => venueTypeLabel(v.type) },
+    { label: "Inspection score", render: (v) => <InspectionScoreLight score={v.inspectionScore} /> },
     { label: "Star rating", render: (v) => <StarRow stars={v.stars} /> },
     { label: "Guest rating", render: (v) => <Stars rating={v.rating} count={v.reviewCount} /> },
     { label: "City", render: (v) => `${v.city}, ${v.district}` },

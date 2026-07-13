@@ -9,6 +9,7 @@ import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { PageHeader, Card, Button, Input, Field, Select, Textarea, Badge } from "@/components/ui";
 import { CheckIcon } from "@/components/ui/icons";
+import { EVENT_TYPES } from "@/lib/mice-criteria";
 import { getVenues, createQuoteRequest } from "@/services";
 import type { Venue } from "@/types";
 
@@ -56,13 +57,16 @@ function NewQuoteForm() {
                   <Input required placeholder="Annual Sales Kick-off 2027" />
                 </Field>
               </div>
+              {/* Etkinlik tipi — ICCA/IAPCO sözlüğü (arama filtreleriyle aynı liste) */}
               <Field label="Event type">
                 <Select required defaultValue="">
                   <option value="" disabled>
                     Select...
                   </option>
-                  {["Congress", "Incentive", "Corporate meeting", "Training", "Gala dinner", "Retreat", "Other"].map((t) => (
-                    <option key={t}>{t}</option>
+                  {EVENT_TYPES.map((t) => (
+                    <option key={t.value} value={t.value}>
+                      {t.label}
+                    </option>
                   ))}
                 </Select>
               </Field>

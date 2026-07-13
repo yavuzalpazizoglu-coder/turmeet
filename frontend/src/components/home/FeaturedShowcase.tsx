@@ -19,6 +19,7 @@ import { useState } from "react";
 import Link from "next/link";
 import type { Venue } from "@/types";
 import { tagDef } from "@/lib/venue-tags";
+import { InspectionScore } from "@/components/venue/InspectionScore";
 import { UsersIcon, GridIcon, ClockIcon, ArrowRightIcon } from "@/components/ui/icons";
 
 type TabId = "city" | "resort" | "congress";
@@ -51,35 +52,6 @@ function LeafIcon({ size = 12 }: { size?: number }) {
       <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
       <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
     </svg>
-  );
-}
-
-/**
- * Denetim puanı rozeti — 10'luk sisteme çevrilmiş şık skor: buzlu cam
- * pill içinde gradyan puan yuvarlağı + kalite etiketi (Booking tarzı).
- * 9.0+ Exceptional (yeşil) · 8.5+ Excellent (teal) · 8.0+ Very good
- * (mavi) · altı Good (amber). Kaynak: yerinde denetim (inspectionScore).
- */
-function InspectionScore({ score }: { score: number }) {
-  const rating = (score / 10).toFixed(1);
-  const [grad, label] =
-    score >= 90
-      ? ["from-emerald-400 to-emerald-600", "Exceptional"]
-      : score >= 85
-        ? ["from-teal-400 to-teal-600", "Excellent"]
-        : score >= 80
-          ? ["from-sky-400 to-sky-600", "Very good"]
-          : ["from-amber-400 to-amber-600", "Good"];
-  return (
-    <span
-      className="inline-flex items-center gap-1.5 rounded-full bg-black/45 py-[3px] pl-[3px] pr-2.5 shadow-lg ring-1 ring-white/25 backdrop-blur-md"
-      title="On-site inspection rating (0-10)"
-    >
-      <span className={`rounded-full bg-gradient-to-br px-1.5 py-0.5 text-[11px] font-black leading-none text-white shadow-sm ${grad}`}>
-        {rating}
-      </span>
-      <span className="text-[10px] font-semibold leading-none text-white">{label}</span>
-    </span>
   );
 }
 

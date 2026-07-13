@@ -27,5 +27,24 @@ export const BUDGET_SEGMENTS: { value: BudgetSegment; label: string }[] = [
 ];
 
 export function eventTypeLabel(value: string): string {
-  return EVENT_TYPES.find((e) => e.value === value)?.label ?? value;
+  return EVENT_TYPES.find((e) => e.value === value)?.label ?? value.replace(/_/g, " ");
+}
+
+/*
+ * ICCA mekan sınıflandırması — tüm sayfalarda AYNI etiketler kullanılır
+ * (Featured hotels sekmeleri, arama filtreleri, mekan detay, karşılaştırma,
+ * admin envanteri). Kategori A = otel bünyesinde toplantı tesisi,
+ * kategori B = amaca yönelik kongre/fuar merkezi.
+ */
+export const VENUE_TYPES: { value: string; label: string }[] = [
+  { value: "city_hotel", label: "City & Conference Hotel" },
+  { value: "resort", label: "Resort Congress Hotel" },
+  { value: "congress_center", label: "Congress & Exhibition Center" },
+  { value: "boutique", label: "Boutique & Retreat" },
+  { value: "mountain_resort", label: "Thermal & Mountain Resort" },
+  { value: "airport_hotel", label: "Airport Conference Hotel" },
+];
+
+export function venueTypeLabel(value: string): string {
+  return VENUE_TYPES.find((t) => t.value === value)?.label ?? value.replace(/_/g, " ");
 }

@@ -9,6 +9,8 @@ import { PublicHeader } from "@/components/layout/PublicHeader";
 import { Badge, Stars, StarRow, Table, LinkButton, Card } from "@/components/ui";
 import { MapPinIcon, PlaneIcon, BuildingIcon, CheckIcon, ClockIcon } from "@/components/ui/icons";
 import { HotelLogo } from "@/components/venue/HotelLogo";
+import { InspectionScoreLight } from "@/components/venue/InspectionScore";
+import { venueTypeLabel, eventTypeLabel } from "@/lib/mice-criteria";
 import { getVenueBySlug } from "@/services";
 
 export default async function VenueDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -67,7 +69,32 @@ export default async function VenueDetailPage({ params }: { params: Promise<{ sl
               </span>
             </div>
 
+            {/* ICCA sınıfı + denetim puanı + sürdürülebilirlik — tüm listelerle aynı dil */}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-brand-light px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-brand">
+                {venueTypeLabel(venue.type)}
+              </span>
+              <InspectionScoreLight score={venue.inspectionScore} />
+              {venue.sustainabilityCertified && (
+                <span className="rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700">Eco-certified</span>
+              )}
+              {venue.hybridStudio && (
+                <span className="rounded-full bg-violet-50 px-2.5 py-1 text-xs font-medium text-violet-700">Hybrid studio</span>
+              )}
+            </div>
+
             <p className="mt-5 leading-relaxed text-ink/80">{venue.description}</p>
+
+            {/* Desteklenen etkinlik formatları (ICCA/IAPCO sınıflandırması) */}
+            {venue.supportedEventTypes.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {venue.supportedEventTypes.map((e) => (
+                  <span key={e} className="rounded-full border border-gray-200 bg-surface px-2.5 py-1 text-xs text-ink/70">
+                    {eventTypeLabel(e)}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Öne çıkanlar */}
             <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">

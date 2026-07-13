@@ -17,6 +17,7 @@ import "leaflet/dist/leaflet.css";
 import type { Venue } from "@/types";
 import { CITY_MAP_LAYERS } from "@/lib/city-map-data";
 import { UsersIcon, GridIcon, ArrowRightIcon } from "@/components/ui/icons";
+import { scoreParts } from "@/components/venue/InspectionScore";
 
 export function SearchResults({ venues }: { venues: Venue[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -160,7 +161,18 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
                   <span className="inline-flex items-center gap-1">
                     <GridIcon size={11} /> {v.meetingRoomCount} halls
                   </span>
-                  <span className="rounded bg-brand-light px-1.5 py-0.5 font-semibold text-brand">MICE {v.inspectionScore}</span>
+                  {/* 10'luk denetim puanı — vitrindeki rozetle aynı dil */}
+                  {(() => {
+                    const s = scoreParts(v.inspectionScore);
+                    return (
+                      <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white py-px pl-px pr-1.5">
+                        <span className={`rounded-full bg-gradient-to-br px-1 py-0.5 text-[10px] font-black leading-none text-white ${s.grad}`}>
+                          {s.rating}
+                        </span>
+                        <span className="text-[9px] font-semibold leading-none text-ink/70">{s.label}</span>
+                      </span>
+                    );
+                  })()}
                 </div>
               </div>
 

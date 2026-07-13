@@ -4,6 +4,7 @@
  */
 import Link from "next/link";
 import { PageHeader, Table, StatusBadge } from "@/components/ui";
+import { eventTypeLabel } from "@/lib/mice-criteria";
 import { getPartnerRequests } from "@/services";
 import { getPanelLang } from "@/lib/panel-i18n-server";
 import { makeT } from "@/lib/panel-i18n";
@@ -40,7 +41,8 @@ export default async function PartnerRequestsPage() {
         {requests.map((r) => (
           <tr key={r.id} className="hover:bg-surface/60">
             <td className="px-4 py-3 font-medium text-ink">{r.eventName}</td>
-            <td className="px-4 py-3 capitalize">{r.eventType.replace(/_/g, " ")}</td>
+            {/* ICCA etkinlik etiketi — public arama filtreleriyle aynı sözlük */}
+            <td className="px-4 py-3">{eventTypeLabel(r.eventType)}</td>
             <td className="px-4 py-3 whitespace-nowrap">
               {r.checkIn} → {r.checkOut}
             </td>

@@ -15,16 +15,11 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SearchIcon, ChevronDownIcon } from "@/components/ui/icons";
-import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
+import { EVENT_TYPES, BUDGET_SEGMENTS, VENUE_TYPES } from "@/lib/mice-criteria";
 
 const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nevşehir"];
-/* Mekan tipi etiketleri — ICCA sınıflandırmasıyla uyumlu (bkz. FeaturedShowcase) */
-const TYPES: { value: string; label: string }[] = [
-  { value: "city_hotel", label: "City & Conference Hotel" },
-  { value: "resort", label: "Resort Congress Hotel" },
-  { value: "congress_center", label: "Congress & Exhibition Center" },
-  { value: "boutique", label: "Boutique & Retreat" },
-];
+/* Mekan tipi etiketleri — merkezi ICCA sözlüğünden (lib/mice-criteria) */
+const TYPES = VENUE_TYPES;
 
 const TEXT_KEYS = [
   "q",
@@ -202,11 +197,12 @@ export function DetailedVenueFilters({
             <option value="4">4+ halls</option>
             <option value="7">7+ halls</option>
           </select>
-          <select name="minScore" defaultValue={current.minScore ?? ""} className={selectCls} aria-label="MICE score">
-            <option value="">MICE score: any</option>
-            <option value="85">85+ Premium</option>
-            <option value="70">70+ Very good</option>
-            <option value="55">55+ Suitable</option>
+          {/* Denetim puanı — 10'luk gösterim dili (rozetlerle aynı); değerler backend'e 100'lük gider */}
+          <select name="minScore" defaultValue={current.minScore ?? ""} className={selectCls} aria-label="Inspection score">
+            <option value="">Inspection score: any</option>
+            <option value="90">9.0+ Exceptional</option>
+            <option value="85">8.5+ Excellent</option>
+            <option value="80">8.0+ Very good</option>
           </select>
           <label className={checkCls}>
             <input

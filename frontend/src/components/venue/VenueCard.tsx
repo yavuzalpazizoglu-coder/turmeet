@@ -9,8 +9,10 @@ import Link from "next/link";
 import { useState } from "react";
 import type { Venue } from "@/types";
 import { Badge, Stars } from "@/components/ui";
-import { HeartIcon, UsersIcon, GridIcon } from "@/components/ui/icons";
+import { HeartIcon, UsersIcon, GridIcon, TagIcon } from "@/components/ui/icons";
 import { HotelLogo } from "./HotelLogo";
+import { InspectionScoreLight } from "./InspectionScore";
+import { venueTypeLabel } from "@/lib/mice-criteria";
 
 export function VenueCard({ venue }: { venue: Venue }) {
   const [fav, setFav] = useState(false);
@@ -55,6 +57,8 @@ export function VenueCard({ venue }: { venue: Venue }) {
             {venue.city}, {venue.district}
           </span>
         </div>
+        {/* ICCA mekan sınıfı — tüm sayfalarla aynı etiket sözlüğü */}
+        <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-brand">{venueTypeLabel(venue.type)}</p>
         <div className="mt-2 flex items-center gap-4 text-sm text-muted">
           <span className="inline-flex items-center gap-1">
             <UsersIcon size={14} /> {venue.maxTheatreCapacity.toLocaleString("en-US")} guests
@@ -63,8 +67,9 @@ export function VenueCard({ venue }: { venue: Venue }) {
             <GridIcon size={14} /> {venue.meetingRoomCount} meeting rooms
           </span>
         </div>
-        {/* MICE Inspection göstergeleri: metro erişimi + D Event puanı */}
+        {/* MICE Inspection göstergeleri: 10'luk denetim puanı + metro + sürdürülebilirlik */}
         <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+          <InspectionScoreLight score={venue.inspectionScore} />
           {venue.transitAccess === "metro" && venue.nearestMetro && (
             <span className="inline-flex items-center gap-1 rounded bg-blue-50 px-1.5 py-0.5 font-medium text-blue-700">
               <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blue-700 text-[8px] font-bold text-white">
@@ -73,9 +78,6 @@ export function VenueCard({ venue }: { venue: Venue }) {
               {venue.nearestMetro}
             </span>
           )}
-          <span className="inline-flex items-center gap-1 rounded bg-brand-light px-1.5 py-0.5 font-medium text-brand">
-            MICE score {venue.inspectionScore}/100
-          </span>
           {venue.sustainabilityCertified && (
             <span className="rounded bg-green-50 px-1.5 py-0.5 font-medium text-green-700">Eco-certified</span>
           )}
@@ -90,7 +92,9 @@ export function VenueCard({ venue }: { venue: Venue }) {
         )}
         <p className="mt-1 text-xs text-muted">Responds within {venue.responseTimeHours} hr</p>
         {venue.specialOffer && (
-          <p className="mt-2 line-clamp-1 text-xs font-medium text-accent">🏷 {venue.specialOffer}</p>
+          <p className="mt-2 line-clamp-1 inline-flex items-center gap-1 text-xs font-medium text-accent">
+            <TagIcon size={12} /> {venue.specialOffer}
+          </p>
         )}
       </Link>
     </div>

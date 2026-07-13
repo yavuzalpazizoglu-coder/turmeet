@@ -174,7 +174,7 @@ export default async function HomePage() {
               return (
                 <Link
                   key={d.slug}
-                  href={`/destinations/${d.slug}`}
+                  href={`/venues?city=${encodeURIComponent(d.name)}`}
                   className={`group relative overflow-hidden rounded-card ${span}`}
                 >
                   {/* Fotoğraf — canlılık filtresi + hover'da yakınlaşma ve aydınlanma */}
