@@ -113,8 +113,9 @@ export default async function HomePage() {
           <div className="mb-4 flex items-end justify-between">
             <div>
               <h2 className="text-2xl font-bold text-ink">Featured hotels</h2>
+              {/* MD 1.10.1 platform istatistikleri + 1.4 doğrulanmış mekan vaadi */}
               <p className="mt-1 text-sm text-muted">
-                All venues inspected on-site by the D Event MICE team — sorted by inspection score
+                329+ verified venues across 34 cities — every property inspected on site and ranked by score
               </p>
             </div>
             <Link href="/venues" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
