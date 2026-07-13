@@ -1453,13 +1453,18 @@ const liveCityStats = (cities: string[]) => {
   };
 };
 
+/*
+ * Destinasyon anlatım dili Featured hotels vitriniyle hizalıdır:
+ * ICCA mekan kategorileri (city & conference hotel / resort congress
+ * hotel / congress & exhibition center) tagline'larda da kullanılır.
+ */
 const DESTINATION_BASE = [
-  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22436 }, category: "congress", tagline: "The heart of congress tourism — ICCA world #18", img: "istanbul-dest" },
-  { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 59, rooms: 29341 }, category: "incentive", tagline: "Resort & incentive capital", img: "antalya-dest" },
-  { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 21, rooms: 3449 }, category: "congress", tagline: "Diplomatic meeting center", img: "ankara-dest" },
-  { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 21, rooms: 4380 }, category: "congress", tagline: "Gateway to the Aegean", img: "izmir-dest" },
-  { slug: "cappadocia", name: "Cappadocia", cities: ["Nevşehir"], base: { venues: 9, rooms: 1360 }, category: "cultural", tagline: "Boutique retreats & experiences", img: "cappadocia-dest" },
-  { slug: "bursa", name: "Bursa", cities: ["Bursa"], base: { venues: 9, rooms: 1252 }, category: "wellness", tagline: "Thermal & mountain resort destination", img: "bursa-dest" },
+  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22436 }, category: "congress", tagline: "Purpose-built congress centers & city hotels — ICCA world #18", img: "istanbul-dest" },
+  { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 59, rooms: 29341 }, category: "incentive", tagline: "Resort congress capital — incentives & residential congresses", img: "antalya-dest" },
+  { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 21, rooms: 3449 }, category: "congress", tagline: "Diplomatic congress hub — conference hotels & Congresium", img: "ankara-dest" },
+  { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 21, rooms: 4380 }, category: "congress", tagline: "Aegean congress & exhibition gateway", img: "izmir-dest" },
+  { slug: "cappadocia", name: "Cappadocia", cities: ["Nevşehir"], base: { venues: 9, rooms: 1360 }, category: "cultural", tagline: "Boutique retreats for executive meetings & incentives", img: "cappadocia-dest" },
+  { slug: "bursa", name: "Bursa", cities: ["Bursa"], base: { venues: 9, rooms: 1252 }, category: "wellness", tagline: "Thermal & mountain resorts with conference facilities", img: "bursa-dest" },
 ];
 
 export const MOCK_DESTINATIONS: Destination[] = DESTINATION_BASE.map((d) => {

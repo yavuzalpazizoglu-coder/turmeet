@@ -15,12 +15,15 @@ import { PLATFORM_STATS } from "@/mocks/venues";
 
 export const metadata = { title: "Destinations — Turmeet" };
 
-/* Kategori rozetleri — anasayfa destinasyon bandıyla birebir aynı */
+/*
+ * Kategori rozetleri — anasayfa destinasyon bandı ve Featured hotels
+ * sekmeleriyle aynı ICCA sınıflandırma dili.
+ */
 const CATEGORY: Record<string, { label: string; dot: string }> = {
-  congress: { label: "Congress City", dot: "bg-brand" },
-  incentive: { label: "Incentive & Resort", dot: "bg-orange-400" },
-  cultural: { label: "Cultural Retreat", dot: "bg-amber-300" },
-  wellness: { label: "Thermal & Wellness", dot: "bg-teal-300" },
+  congress: { label: "Congress & Exhibition Hub", dot: "bg-brand" },
+  incentive: { label: "Resort Congress & Incentive", dot: "bg-orange-400" },
+  cultural: { label: "Boutique & Retreat", dot: "bg-amber-300" },
+  wellness: { label: "Thermal & Mountain Resort", dot: "bg-teal-300" },
 };
 
 export default async function DestinationsPage() {

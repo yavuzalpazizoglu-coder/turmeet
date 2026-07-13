@@ -136,7 +136,10 @@ export default async function HomePage() {
           <div className="mb-6 flex items-end justify-between">
             <div>
               <h2 className="text-2xl font-bold text-ink">Destinations across Turkey</h2>
-              <p className="mt-1 text-sm text-muted">From congress cities to boutique retreats</p>
+              {/* Featured hotels vitriniyle aynı ICCA kategori dili */}
+              <p className="mt-1 text-sm text-muted">
+                City &amp; conference hotels, resort congress hotels and purpose-built centers — mapped by destination
+              </p>
             </div>
             <Link href="/destinations" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
               All destinations <ArrowRightIcon size={15} />
@@ -157,12 +160,15 @@ export default async function HomePage() {
                     : i >= 4
                       ? "lg:col-span-2"
                       : "";
-              /* Kategori rozetleri — buzlu cam zemin + kategoriye özel renk noktası */
+              /*
+               * Kategori rozetleri — Featured hotels sekmeleriyle aynı ICCA
+               * sınıflandırma dili (buzlu cam zemin + kategoriye özel renk noktası).
+               */
               const category: Record<string, { label: string; dot: string }> = {
-                congress: { label: "Congress City", dot: "bg-brand" },
-                incentive: { label: "Incentive & Resort", dot: "bg-orange-400" },
-                cultural: { label: "Cultural Retreat", dot: "bg-amber-300" },
-                wellness: { label: "Thermal & Wellness", dot: "bg-teal-300" },
+                congress: { label: "Congress & Exhibition Hub", dot: "bg-brand" },
+                incentive: { label: "Resort Congress & Incentive", dot: "bg-orange-400" },
+                cultural: { label: "Boutique & Retreat", dot: "bg-amber-300" },
+                wellness: { label: "Thermal & Mountain Resort", dot: "bg-teal-300" },
               };
               const cat = category[d.category] ?? { label: d.category, dot: "bg-white" };
               return (

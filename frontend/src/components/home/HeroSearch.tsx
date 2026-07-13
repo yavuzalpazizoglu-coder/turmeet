@@ -22,12 +22,18 @@ const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nev
 /** Arama kutusunun altında chip olarak gösterilen popüler şehirler */
 const POPULAR_CITIES = ["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"];
 
-/** Daktilo efekti — placeholder'da harf harf yazılan örnek aramalar */
+/*
+ * Daktilo efekti — placeholder'da harf harf yazılan örnek aramalar.
+ * Featured hotels vitrini ile aynı dil: ICCA mekan kategorileri
+ * (city & conference hotel / resort congress hotel / congress &
+ * exhibition center) + MICE istatistikleri (pax, halls, metro).
+ */
 const PLACEHOLDER_QUERIES = [
-  "Congress in Istanbul · 300 pax",
-  "Incentive resort in Antalya",
-  "Boutique retreat in Cappadocia",
-  "Hotel near metro · Ankara",
+  "City & conference hotel in Istanbul · 300 pax",
+  "Resort congress hotel in Antalya · incentive",
+  "Congress & exhibition center · 2,000 pax",
+  "Boutique retreat in Cappadocia · 60 pax",
+  "Near metro in Ankara · hybrid studio",
 ];
 
 export interface VenueSuggestion {
