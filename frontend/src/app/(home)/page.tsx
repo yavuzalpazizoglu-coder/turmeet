@@ -8,6 +8,7 @@ import { PublicHeader } from "@/components/layout/PublicHeader";
 import { Footer } from "@/components/layout/Footer";
 import HeroSlideshow from "@/components/home/HeroSlideshow";
 import HeroSearch from "@/components/home/HeroSearch";
+import FeaturedShowcase from "@/components/home/FeaturedShowcase";
 import { LinkButton } from "@/components/ui";
 import {
   SearchIcon,
@@ -29,14 +30,13 @@ import {
 import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
 import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
-import { tagDef } from "@/lib/venue-tags";
 import { Reveal } from "@/components/ui/Reveal";
 
 export default async function HomePage() {
   const [venues, destinations] = await Promise.all([getVenues(), getDestinations()]);
 
-  /* Vitrin — en az 15 otel, sade tek tip kart (sıralama: sponsor > MICE puanı > rating) */
-  const featured = venues.slice(0, 15);
+  /* Vitrin — tüm envanter FeaturedShowcase'e gider; sekme + sıralama orada yapılır */
+  const featured = venues;
 
   return (
     /*
@@ -107,62 +107,23 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* ── SAYFA 2: ÖNE ÇIKAN OTELLER — 3 ana başlık × 3 otel ── */}
-      <section className="flex min-h-[100dvh] snap-start flex-col justify-center bg-white py-10">
+      {/* ── SAYFA 2: ÖNE ÇIKAN MEKANLAR — sekmeli vitrin (FeaturedShowcase) ── */}
+      <section id="featured" className="flex min-h-[100dvh] snap-start flex-col justify-center bg-white py-8">
         <div className="mx-auto w-full max-w-7xl px-4 sm:px-6">
-          <div className="mb-8 flex items-end justify-between">
+          <div className="mb-4 flex items-end justify-between">
             <div>
               <h2 className="text-2xl font-bold text-ink">Featured hotels</h2>
-              <p className="mt-1 text-sm text-muted">Top meeting hotels across Turkey — ranked by MICE inspection score</p>
+              <p className="mt-1 text-sm text-muted">
+                All venues inspected on-site by the D Event MICE team — sorted by inspection score
+              </p>
             </div>
             <Link href="/venues" className="inline-flex items-center gap-1 text-sm font-semibold text-brand hover:underline">
               View all <ArrowRightIcon size={15} />
             </Link>
           </div>
 
-          {/*
-           * Sade vitrin: 15 otel, tek tip kompakt kart — görsel + tek etiket
-           * + isim + şehir/yıldız + fiyat. Etiketler Staff panelinden atanır.
-           */}
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
-            {featured.map((v) => {
-              const tag = v.showcaseTags[0];
-              const d = tag ? tagDef(tag) : null;
-              return (
-                <Link
-                  key={v.id}
-                  href={`/venues/${v.slug}`}
-                  className="group overflow-hidden rounded-card border border-gray-100 bg-white shadow-card transition-shadow hover:shadow-lg"
-                >
-                  <div className="relative h-28 overflow-hidden">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={v.imageUrl}
-                      alt={v.name}
-                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                    {d && (
-                      <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${d.chipClass}`}>
-                        {d.labelEn}
-                      </span>
-                    )}
-                  </div>
-                  <div className="p-3">
-                    <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
-                    <p className="mt-0.5 text-xs text-muted">
-                      {v.city} · {"★".repeat(v.stars)}
-                    </p>
-                    {v.referencePrice !== null && (
-                      <p className="mt-1 text-sm font-bold text-brand">
-                        € {v.referencePrice} <span className="text-[10px] font-normal text-muted">/night</span>
-                      </p>
-                    )}
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+          {/* Sekmeler + spotlight + MICE odaklı kartlar (client bileşen) */}
+          <FeaturedShowcase venues={featured} />
         </div>
       </section>
 

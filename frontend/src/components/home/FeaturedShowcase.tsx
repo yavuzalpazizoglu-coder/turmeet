@@ -1,0 +1,246 @@
+/*
+ * ÖNE ÇIKAN MEKANLAR VİTRİNİ — anasayfa "Featured hotels" bölümü.
+ * Sekmeli yapı: City Hotels / Resorts & Incentive / Congress Centers.
+ * Sıralama: sponsorlu önce, sonra MICE denetim puanı. Her sekmenin ilk
+ * mekanı 2 sütunluk "spotlight" kartıdır (sponsor görünürlüğü — partner
+ * teşviki). Kartlar MICE odaklıdır: kapasite + salon sayısı + denetim
+ * puanı öne çıkar, fiyat küçük referans bilgisi olarak kalır.
+ * Vitrin etiketleri Staff panelinden atanır (showcaseTags).
+ */
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import type { Venue } from "@/types";
+import { tagDef } from "@/lib/venue-tags";
+import { UsersIcon, GridIcon, ClockIcon, ArrowRightIcon } from "@/components/ui/icons";
+
+type TabId = "city" | "resort" | "congress";
+
+const TABS: { id: TabId; label: string; match: (v: Venue) => boolean }[] = [
+  { id: "city", label: "City Hotels", match: (v) => v.type === "city_hotel" },
+  { id: "resort", label: "Resorts & Incentive", match: (v) => v.type === "resort" || v.type === "boutique" },
+  { id: "congress", label: "Congress Centers", match: (v) => v.type === "congress_center" },
+];
+
+/** Mini yaprak ikonu — sürdürülebilirlik sertifikası rozeti */
+function LeafIcon({ size = 12 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+    </svg>
+  );
+}
+
+/** MICE denetim puanı rozeti — D Event yerinde denetim güven sinyali */
+function MiceScore({ score, light = false }: { score: number; light?: boolean }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-bold ${
+        light ? "bg-white/90 text-ink backdrop-blur-sm" : "bg-black/60 text-white backdrop-blur-sm"
+      }`}
+      title="D Event on-site MICE inspection score"
+    >
+      <span className="text-brand">MICE</span> {score}
+    </span>
+  );
+}
+
+/** Kapasite / salon / yanıt hızı satırı — organizatörün ilk baktığı bilgiler */
+function StatsRow({ v, light = false }: { v: Venue; light?: boolean }) {
+  const base = light ? "text-white/85" : "text-muted";
+  return (
+    <div className={`flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] font-medium ${base}`}>
+      <span className="inline-flex items-center gap-1">
+        <UsersIcon size={12} /> {v.maxTheatreCapacity.toLocaleString("en-US")} pax
+      </span>
+      <span className="inline-flex items-center gap-1">
+        <GridIcon size={12} /> {v.meetingRoomCount} halls
+      </span>
+      {v.responseTimeHours <= 6 ? (
+        <span className={`inline-flex items-center gap-1 font-bold ${light ? "text-emerald-300" : "text-emerald-600"}`}>
+          <ClockIcon size={12} /> Fast reply
+        </span>
+      ) : (
+        <span className="inline-flex items-center gap-1">
+          <ClockIcon size={12} /> ~{v.responseTimeHours}h reply
+        </span>
+      )}
+    </div>
+  );
+}
+
+/** Metro + sürdürülebilirlik mini rozetleri */
+function MiniBadges({ v }: { v: Venue }) {
+  if (!v.nearestMetro && !v.sustainabilityCertified) return null;
+  return (
+    <span className="inline-flex items-center gap-1">
+      {v.nearestMetro && (
+        <span
+          className="flex h-4 w-4 items-center justify-center rounded-sm bg-sky-600 text-[9px] font-black text-white"
+          title={`Nearest metro: ${v.nearestMetro}`}
+        >
+          M
+        </span>
+      )}
+      {v.sustainabilityCertified && (
+        <span className="flex h-4 w-4 items-center justify-center rounded-sm bg-emerald-600 text-white" title="Sustainability certified">
+          <LeafIcon size={10} />
+        </span>
+      )}
+    </span>
+  );
+}
+
+/** Fiyat (otel) veya kapasite (kongre merkezi) vurgusu */
+function PriceOrCapacity({ v }: { v: Venue }) {
+  if (v.type === "congress_center" || v.referencePrice === null) {
+    return (
+      <p className="text-[11px] font-bold text-ink">
+        Up to {v.maxTheatreCapacity.toLocaleString("en-US")} <span className="font-normal text-muted">pax</span>
+      </p>
+    );
+  }
+  return (
+    <p className="text-[11px] text-muted">
+      from <span className="font-bold text-ink">€{v.referencePrice}</span> /night
+    </p>
+  );
+}
+
+export default function FeaturedShowcase({ venues }: { venues: Venue[] }) {
+  const [tab, setTab] = useState<TabId>("city");
+
+  const sorted = [...venues].sort(
+    (a, b) => Number(b.isSponsored) - Number(a.isSponsored) || b.inspectionScore - a.inspectionScore,
+  );
+
+  const active = TABS.find((t) => t.id === tab)!;
+  /* Spotlight (2x2 = 4 hücre) + 8 kompakt kart = 4 sütunlu grid'de 3 tam satır */
+  const list = sorted.filter(active.match).slice(0, 9);
+  const [spotlight, ...rest] = list;
+
+  return (
+    <div>
+      {/* Sekmeler — mekan sayısı rozetli */}
+      <div className="flex flex-wrap items-center gap-2">
+        {TABS.map((t) => {
+          const count = sorted.filter(t.match).length;
+          const isActive = t.id === tab;
+          return (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-bold transition-all ${
+                isActive
+                  ? "bg-brand text-white shadow-lg shadow-brand/25"
+                  : "border border-gray-200 bg-white text-ink hover:border-brand/40 hover:text-brand"
+              }`}
+            >
+              {t.label}
+              <span
+                className={`rounded-full px-1.5 py-0.5 text-[10px] font-bold ${
+                  isActive ? "bg-white/20 text-white" : "bg-gray-100 text-muted"
+                }`}
+              >
+                {count}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        {/* ── SPOTLIGHT — sekmenin 1. mekanı, 2 sütun geniş kart ── */}
+        {spotlight && (
+          <Link
+            href={`/venues/${spotlight.slug}`}
+            className="group relative overflow-hidden rounded-card shadow-card transition-shadow hover:shadow-xl sm:col-span-2 sm:row-span-2"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={spotlight.imageUrl}
+              alt={spotlight.name}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+
+            <div className="absolute left-3 top-3 flex items-center gap-2">
+              {spotlight.showcaseTags[0] && (
+                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${tagDef(spotlight.showcaseTags[0]).chipClass}`}>
+                  {tagDef(spotlight.showcaseTags[0]).labelEn}
+                </span>
+              )}
+              <MiceScore score={spotlight.inspectionScore} light />
+            </div>
+            {spotlight.isSponsored && (
+              <span className="absolute right-3 top-3 rounded-sm bg-black/40 px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-white/80 backdrop-blur-sm">
+                Sponsored
+              </span>
+            )}
+
+            <div className="absolute inset-x-0 bottom-0 flex min-h-[280px] flex-col justify-end p-5">
+              <p className="text-xl font-bold text-white">{spotlight.name}</p>
+              <p className="mt-0.5 text-xs text-white/80">
+                {spotlight.city} · {spotlight.district} · {"★".repeat(spotlight.stars)}
+              </p>
+              <p className="mt-2 line-clamp-2 max-w-lg text-xs leading-relaxed text-white/75">{spotlight.description}</p>
+              <div className="mt-3">
+                <StatsRow v={spotlight} light />
+              </div>
+              <span className="mt-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-brand px-4 py-2 text-xs font-bold text-white transition-transform group-hover:scale-105">
+                Request quote <ArrowRightIcon size={13} />
+              </span>
+            </div>
+          </Link>
+        )}
+
+        {/* ── KOMPAKT KARTLAR ── */}
+        {rest.map((v) => {
+          const tag = v.showcaseTags[0];
+          const d = tag ? tagDef(tag) : null;
+          return (
+            <Link
+              key={v.id}
+              href={`/venues/${v.slug}`}
+              className="group overflow-hidden rounded-card border border-gray-100 bg-white shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lg"
+            >
+              <div className="relative h-24 overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={v.imageUrl}
+                  alt={v.name}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                {d && (
+                  <span className={`absolute left-2 top-2 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${d.chipClass}`}>
+                    {d.labelEn}
+                  </span>
+                )}
+                <span className="absolute right-2 top-2">
+                  <MiceScore score={v.inspectionScore} />
+                </span>
+              </div>
+              <div className="p-2.5">
+                <p className="truncate text-sm font-bold text-ink group-hover:text-brand">{v.name}</p>
+                <p className="mt-0.5 text-[11px] text-muted">
+                  {v.city} · {v.district} · {"★".repeat(v.stars)}
+                </p>
+                <div className="mt-1.5">
+                  <StatsRow v={v} />
+                </div>
+                <div className="mt-1.5 flex items-center justify-between border-t border-gray-100 pt-1.5">
+                  <PriceOrCapacity v={v} />
+                  <MiniBadges v={v} />
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
