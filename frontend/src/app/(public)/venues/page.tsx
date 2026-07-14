@@ -56,28 +56,21 @@ export default async function VenuesPage({
         subtitle={`${venues.length} venues found · every property inspected on site · sponsored venues shown first`}
       />
 
-      {/* Midnight Glass zemini — anasayfayla aynı koyu doku + pembe ışık lekeleri */}
-      <div className="relative overflow-hidden bg-ink">
-        <div className="absolute inset-0 bg-gradient-to-b from-ink via-[#1c1420] to-ink" />
-        <div className="animate-float-slow pointer-events-none absolute -left-24 top-24 h-80 w-80 rounded-full bg-brand/15 blur-3xl" />
-        <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-16 h-72 w-72 rounded-full bg-white/5 blur-3xl" />
+      <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
+        {/* Kompakt filtre çubuğu — panel araması ile ortak bileşen */}
+        <div className="-mt-10 relative z-20">
+          <DetailedVenueFilters current={params} basePath="/venues" />
+        </div>
 
-        <div className="relative mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
-          {/* Kompakt filtre çubuğu — panel araması ile ortak bileşen */}
-          <div className="-mt-10 relative z-20">
-            <DetailedVenueFilters current={params} basePath="/venues" />
-          </div>
-
-          <div className="mt-4">
-            {venues.length === 0 ? (
-              <p className="rounded-card border border-dashed border-white/25 p-12 text-center text-white/60">
-                No venues match your filters. Try widening your search.
-              </p>
-            ) : (
-              /* 2 blok: solda otel kolonu, sağda harita */
-              <SearchResults venues={venues} />
-            )}
-          </div>
+        <div className="mt-4">
+          {venues.length === 0 ? (
+            <p className="rounded-card border border-dashed border-gray-300 p-12 text-center text-muted">
+              No venues match your filters. Try widening your search.
+            </p>
+          ) : (
+            /* 2 blok: solda otel kolonu, sağda harita */
+            <SearchResults venues={venues} />
+          )}
         </div>
       </div>
     </>

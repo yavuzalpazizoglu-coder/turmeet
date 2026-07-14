@@ -51,15 +51,9 @@ const ADVANCED_KEYS = [
   "accessible",
 ];
 
-/*
- * Midnight Glass teması: koyu zemin üzerinde buzlu cam filtre çubuğu.
- * Select option'ları native açılır listede beyaz zeminde çizilir;
- * [&>option]:text-ink ile okunur kalırlar.
- */
 const selectCls =
-  "h-10 cursor-pointer rounded-lg border border-white/15 bg-white/10 px-2.5 text-sm text-white outline-none backdrop-blur-sm focus:border-brand [&>option]:bg-white [&>option]:text-ink";
-const checkCls =
-  "flex h-10 cursor-pointer items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-2.5 text-sm text-white/85";
+  "h-10 cursor-pointer rounded-lg border border-gray-200 bg-white px-2.5 text-sm text-ink outline-none focus:border-brand";
+const checkCls = "flex h-10 cursor-pointer items-center gap-1.5 rounded-lg border border-gray-200 px-2.5 text-sm text-ink";
 
 export function DetailedVenueFilters({
   current,
@@ -85,19 +79,16 @@ export function DetailedVenueFilters({
   }
 
   return (
-    <form
-      action={apply}
-      className="rounded-card border border-white/10 bg-white/[0.07] p-3 shadow-xl shadow-black/30 backdrop-blur-md"
-    >
+    <form action={apply} className="rounded-card border border-gray-200 bg-white p-3 shadow-card">
       {/* Satır 1 — en önemli kriterler + arama */}
       <div className="flex flex-wrap items-center gap-2">
-        <div className="flex h-10 min-w-[180px] flex-1 items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-3">
-          <SearchIcon size={15} className="shrink-0 text-white/50" />
+        <div className="flex h-10 min-w-[180px] flex-1 items-center gap-2 rounded-lg border border-gray-200 px-3">
+          <SearchIcon size={15} className="shrink-0 text-muted" />
           <input
             name="q"
             defaultValue={current.q}
             placeholder="Venue name or keyword..."
-            className="w-full bg-transparent text-sm text-white outline-none placeholder:text-white/40"
+            className="w-full text-sm outline-none placeholder:text-muted"
           />
         </div>
         <select name="city" defaultValue={current.city ?? ""} className={selectCls} aria-label="City">
@@ -145,7 +136,7 @@ export function DetailedVenueFilters({
           type="button"
           onClick={() => setMore((m) => !m)}
           aria-expanded={more}
-          className="flex h-10 items-center gap-1 rounded-lg border border-white/15 px-3 text-sm font-medium text-white/70 transition-colors hover:border-brand hover:text-white"
+          className="flex h-10 items-center gap-1 rounded-lg border border-gray-200 px-3 text-sm font-medium text-muted transition-colors hover:border-brand hover:text-brand"
         >
           More filters
           <ChevronDownIcon size={14} className={`transition-transform ${more ? "rotate-180" : ""}`} />
@@ -154,7 +145,7 @@ export function DetailedVenueFilters({
 
       {/* Satır 2 — MICE Inspection ileri kriterleri (açılır) */}
       {more && (
-        <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-white/10 pt-2">
+        <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-gray-100 pt-2">
           <select name="stars" defaultValue={current.stars ?? ""} className={selectCls} aria-label="Stars">
             <option value="">Any stars</option>
             <option value="5">5 stars</option>
@@ -175,7 +166,7 @@ export function DetailedVenueFilters({
             min={1}
             defaultValue={current.capacity}
             placeholder="Min. attendees"
-            className="h-10 w-32 rounded-lg border border-white/15 bg-white/5 px-2.5 text-sm text-white outline-none placeholder:text-white/40 focus:border-brand"
+            className="h-10 w-32 rounded-lg border border-gray-200 px-2.5 text-sm outline-none placeholder:text-muted focus:border-brand"
           />
           <select name="maxAirport" defaultValue={current.maxAirport ?? ""} className={selectCls} aria-label="Airport distance">
             <option value="">Airport: any</option>
@@ -240,7 +231,7 @@ export function DetailedVenueFilters({
           <button
             type="button"
             onClick={() => router.push(basePath)}
-            className="ml-auto h-10 px-2 text-xs font-semibold text-brand-light hover:text-white hover:underline"
+            className="ml-auto h-10 px-2 text-xs font-semibold text-brand hover:underline"
           >
             Reset all
           </button>

@@ -39,8 +39,7 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
       });
       mapRef.current = map;
 
-      /* Midnight Glass teması: koyu CARTO basemap — pembe pinler neon gibi parlar */
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
         attribution:
           '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
         maxZoom: 19,
@@ -136,28 +135,26 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
               type="button"
               onClick={() => setSelected(v.id)}
               aria-pressed={active}
-              className={`group flex w-full items-center gap-3 rounded-card border p-2.5 text-left backdrop-blur-sm transition-all ${
-                active
-                  ? "border-brand bg-brand/15 shadow-lg shadow-brand/20 ring-1 ring-brand"
-                  : "border-white/10 bg-white/[0.06] hover:border-brand/50 hover:bg-white/10 hover:shadow-lg hover:shadow-black/20"
+              className={`group flex w-full items-center gap-3 rounded-card border bg-white p-2.5 text-left transition-all ${
+                active ? "border-brand shadow-card ring-1 ring-brand" : "border-gray-200 hover:border-brand/40 hover:shadow-card"
               }`}
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={v.imageUrl} alt={v.name} loading="lazy" className="h-[72px] w-24 shrink-0 rounded-lg object-cover ring-1 ring-white/10" />
+              <img src={v.imageUrl} alt={v.name} loading="lazy" className="h-[72px] w-24 shrink-0 rounded-lg object-cover" />
 
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <p className={`truncate text-sm font-bold ${active ? "text-white" : "text-white group-hover:text-brand-light"}`}>
+                  <p className={`truncate text-sm font-bold ${active ? "text-brand" : "text-ink group-hover:text-brand"}`}>
                     {v.name}
                   </p>
                   {v.isSponsored && (
-                    <span className="shrink-0 rounded bg-brand px-1.5 py-0.5 text-[9px] font-bold uppercase text-white">Sponsored</span>
+                    <span className="shrink-0 rounded bg-ink px-1.5 py-0.5 text-[9px] font-bold uppercase text-white">Sponsored</span>
                   )}
                 </div>
-                <p className="mt-0.5 text-xs text-white/55">
+                <p className="mt-0.5 text-xs text-muted">
                   {v.city}, {v.district} · {"★".repeat(v.stars)} · {v.rating}
                 </p>
-                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-white/55">
+                <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted">
                   <span className="inline-flex items-center gap-1">
                     <UsersIcon size={11} /> {v.maxTheatreCapacity.toLocaleString("en-US")}
                   </span>
@@ -168,11 +165,11 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
                   {(() => {
                     const s = scoreParts(v.inspectionScore);
                     return (
-                      <span className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/10 py-px pl-px pr-1.5">
+                      <span className="inline-flex items-center gap-1 rounded-full border border-gray-200 bg-white py-px pl-px pr-1.5">
                         <span className={`rounded-full bg-gradient-to-br px-1 py-0.5 text-[10px] font-black leading-none text-white ${s.grad}`}>
                           {s.rating}
                         </span>
-                        <span className="text-[9px] font-semibold leading-none text-white/70">{s.label}</span>
+                        <span className="text-[9px] font-semibold leading-none text-ink/70">{s.label}</span>
                       </span>
                     );
                   })()}
@@ -182,16 +179,16 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
               <div className="shrink-0 text-right">
                 {v.referencePrice !== null ? (
                   <>
-                    <p className="text-sm font-bold text-[#ff87b8]">€ {v.referencePrice}</p>
-                    <p className="text-[10px] text-white/50">/ night</p>
+                    <p className="text-sm font-bold text-brand">€ {v.referencePrice}</p>
+                    <p className="text-[10px] text-muted">/ night</p>
                   </>
                 ) : (
-                  <p className="text-[10px] font-medium text-white/50">On request</p>
+                  <p className="text-[10px] font-medium text-muted">On request</p>
                 )}
                 <Link
                   href={`/venues/${v.slug}`}
                   onClick={(e) => e.stopPropagation()}
-                  className="mt-1 inline-flex items-center gap-0.5 text-[11px] font-semibold text-brand-light hover:text-white hover:underline"
+                  className="mt-1 inline-flex items-center gap-0.5 text-[11px] font-semibold text-brand hover:underline"
                 >
                   View <ArrowRightIcon size={11} />
                 </Link>
@@ -202,14 +199,14 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
       </div>
 
       {/* ── BLOK 2: HARİTA ── */}
-      <div className="sticky top-20 h-[calc(100vh-220px)] min-h-[420px] overflow-hidden rounded-card border border-white/10 bg-[#16101c] shadow-xl shadow-black/30">
-        <div className="flex items-center justify-between border-b border-white/10 px-4 py-2.5">
-          <p className="text-sm font-bold text-white">Map view</p>
-          <p className="text-xs text-white/50">Click a hotel to locate it · {venues.length} venues</p>
+      <div className="sticky top-20 h-[calc(100vh-220px)] min-h-[420px] overflow-hidden rounded-card border border-gray-200 bg-white shadow-card">
+        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-2.5">
+          <p className="text-sm font-bold text-ink">Map view</p>
+          <p className="text-xs text-muted">Click a hotel to locate it · {venues.length} venues</p>
         </div>
         <div ref={containerRef} className="h-[calc(100%-84px)] w-full" />
         {/* Lejant */}
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-white/10 px-4 py-2 text-[11px] text-white/55">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-gray-200 px-4 py-2 text-[11px] text-muted">
           <span className="inline-flex items-center gap-1.5">
             <span className="inline-block h-3 w-3 rounded-full bg-brand ring-2 ring-white" /> Venue
           </span>
@@ -269,19 +266,10 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
           border: 2px solid #fff;
           box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
         }
-        /* Koyu harita zemini — tile'lar yüklenirken de koyu kalsın */
-        .leaflet-container {
-          background: #16101c;
-        }
         .leaflet-popup-content-wrapper {
           border-radius: 12px;
           padding: 0;
           overflow: hidden;
-          background: #221826;
-          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-        }
-        .leaflet-popup-tip {
-          background: #221826;
         }
         .leaflet-popup-content {
           margin: 0;
@@ -290,7 +278,7 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
         .tm-pop {
           display: block;
           text-decoration: none;
-          color: #fff;
+          color: #2d2d2d;
         }
         .tm-pop img {
           width: 100%;
@@ -304,22 +292,21 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
         .tm-pop-name {
           font: 600 13px/1.3 var(--font-inter), sans-serif;
           margin: 0 0 4px;
-          color: #fff;
         }
         .tm-pop-meta {
           font-size: 11px;
-          color: rgba(255, 255, 255, 0.55);
+          color: #9e9e9e;
           margin: 0 0 6px;
         }
         .tm-pop-price {
           font: 700 14px/1 var(--font-inter), sans-serif;
-          color: #ff87b8;
+          color: #cf2c73;
           margin: 0;
         }
         .tm-pop-price span {
           font-weight: 400;
           font-size: 11px;
-          color: rgba(255, 255, 255, 0.5);
+          color: #9e9e9e;
         }
       `}</style>
     </div>
