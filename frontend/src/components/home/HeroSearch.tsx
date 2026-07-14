@@ -161,6 +161,7 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
   const [placeholder, setPlaceholder] = useState("");
   const [checkin, setCheckin] = useState("");
   const [checkout, setCheckout] = useState("");
+  const [searching, setSearching] = useState(false);
   const boxRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -241,11 +242,45 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
   const eventMatches = query ? EVENT_TYPES.filter((e) => e.label.toLowerCase().includes(query)).slice(0, 3) : [];
   const hasSuggestions = cityMatches.length > 0 || venueMatches.length > 0 || typeMatches.length > 0 || eventMatches.length > 0;
 
-  function submit(formData: FormData) {
-    // Serbest metin akıllı çözümlenir: şehir / kategori / toplantı tipi /
-    // pax / metro gerçek filtre param'larına dönüşür (arama sayfası dili)
+  /*
+   * AI çözümleme — /api/ai-search serbest metni filtrelere çevirir
+   * (TR/EN/DE, yazım hatalı, karmaşık sorgular). Anahtar yoksa, hata
+   * olursa veya 3 sn içinde yanıt gelmezse null döner → regex yedeği.
+   */
+  async function aiParse(raw: string): Promise<URLSearchParams | null> {
+    try {
+      const res = await fetch("/api/ai-search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: raw }),
+        signal: AbortSignal.timeout(3000),
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data?.filters || typeof data.filters !== "object") return null;
+
+      const params = new URLSearchParams();
+      for (const [key, val] of Object.entries(data.filters as Record<string, unknown>)) {
+        if (val === true) params.set(key, "1"); // metro/hybrid/sustainable/accessible
+        else if (typeof val === "string" || typeof val === "number") params.set(key, String(val));
+      }
+      return params.size > 0 ? params : null;
+    } catch {
+      return null; // ağ hatası / zaman aşımı — regex yedeğine düş
+    }
+  }
+
+  async function submit(formData: FormData) {
+    // Serbest metin önce AI ile, olmazsa regex ile filtrelere çevrilir:
+    // şehir / kategori / toplantı tipi / pax / metro (arama sayfası dili)
     const qVal = String(formData.get("q") ?? "").trim();
-    const params = qVal ? parseQuery(qVal) : new URLSearchParams();
+    let params: URLSearchParams | null = null;
+    if (qVal) {
+      setSearching(true);
+      params = await aiParse(qVal);
+      setSearching(false);
+    }
+    params ??= qVal ? parseQuery(qVal) : new URLSearchParams();
 
     // Formdaki açık seçimler serbest metinden türeyenleri ezer
     for (const key of ["checkin", "checkout", "capacity", "eventType", "budget"]) {
@@ -414,9 +449,10 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
         </label>
         <button
           type="submit"
-          className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-brand px-8 text-[15px] font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark"
+          disabled={searching}
+          className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-xl bg-brand px-8 text-[15px] font-semibold uppercase tracking-wide text-white transition-colors hover:bg-brand-dark disabled:opacity-80"
         >
-          <SearchIcon size={17} /> Search
+          <SearchIcon size={17} /> {searching ? "Searching..." : "Search"}
         </button>
       </div>
     </form>
