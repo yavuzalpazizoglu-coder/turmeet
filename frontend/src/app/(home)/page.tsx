@@ -242,10 +242,19 @@ export default async function HomePage() {
       {/* Tam sayfa kuralı: içerik 900px yüksekliğe sığacak şekilde sıkılaştırıldı */}
       <section id="why-turmeet" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden py-3">
         {/*
-         * AÇIK tema — bir ton koyulaştırılmış pastel pembe gradyan:
-         * beyaz kartlar zeminden ayrışsın diye zemin artık saf beyaz değil.
+         * Zemin: G20 Antalya Zirvesi 2015 aile fotoğrafı (Türkiye'nin ev
+         * sahipliğindeki en büyük uluslararası toplantı) — açık tema ve
+         * kart okunabilirliği için beyaz/pembe yıkama katmanıyla yumuşatılır.
          */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f9e7f0] via-[#f3d6e4] to-[#f6dde9]" />
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/images/why-g20-antalya.jpg"
+          alt=""
+          aria-hidden
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/65 to-white/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f9e7f0]/50 via-transparent to-[#f6dde9]/50" />
         <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/15 blur-3xl" />
         <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-brand/10 blur-3xl" />
 
