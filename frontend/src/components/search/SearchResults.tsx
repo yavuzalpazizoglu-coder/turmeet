@@ -40,19 +40,26 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
       mapRef.current = map;
 
       /*
-       * Turizm atlası görünümü — Esri National Geographic altlığı:
-       * renkli kabartma, deniz tonları ve okunaklı yer adları.
-       * (maxZoom 16; şehir içi yakınlaşmada da yeterli detay verir.)
+       * Modern minimal altlık — CARTO Positron: çok açık, sade zemin.
+       * Beyaz fiyat rozetleri ve pembe vurgular bu zeminde net okunur
+       * (Airbnb / Google Maps görsel dili).
        */
-      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}", {
-        attribution: "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ",
-        maxZoom: 16,
+      L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+        maxZoom: 19,
       }).addTo(map);
 
       markersRef.current = {};
+      /* Fiyatsız mekanlar için bina glifi — beyaz yuvarlak rozet içinde */
+      const buildingGlyph =
+        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9.5 7h.01M9.5 11h.01M9.5 15h.01M14.5 7h.01M14.5 11h.01M14.5 15h.01"/></svg>';
       const markers = venues.map((v) => {
-        const label = v.referencePrice !== null ? `€${v.referencePrice}` : "★";
-        const icon = L.divIcon({ className: "", html: `<div class="tm-pin">${label}</div>`, iconSize: [0, 0] });
+        const html =
+          v.referencePrice !== null
+            ? `<div class="tm-pin">€${v.referencePrice}</div>`
+            : `<div class="tm-pin tm-pin--icon">${buildingGlyph}</div>`;
+        const icon = L.divIcon({ className: "", html, iconSize: [0, 0] });
 
         const marker = L.marker([v.lat, v.lng], { icon }).addTo(map);
         marker.bindPopup(
@@ -117,8 +124,14 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
     };
   }, [venues]);
 
-  // Otel kutusuna tıklanınca: haritada o otele uç + baloncuğu aç
+  // Otel kutusuna tıklanınca: haritada o otele uç + baloncuğu aç.
+  // Seçili rozet pembeye döner ve z-index ile öne alınır (üst üste binme çözümü).
   useEffect(() => {
+    for (const [id, m] of Object.entries(markersRef.current)) {
+      const el = m.getElement()?.querySelector(".tm-pin");
+      el?.classList.toggle("tm-pin--active", id === selected);
+      m.setZIndexOffset(id === selected ? 1000 : 0);
+    }
     if (!selected) return;
     const map = mapRef.current;
     const marker = markersRef.current[selected];
@@ -212,7 +225,7 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
         {/* Lejant */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-gray-200 px-4 py-2 text-[11px] text-muted">
           <span className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-3 w-3 rounded-full bg-brand ring-2 ring-white" /> Venue
+            <span className="inline-block h-3.5 w-7 rounded-full bg-white shadow-sm ring-1 ring-gray-300" /> Venue
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#1d4ed8] text-[8px] font-bold text-white">M</span>{" "}
@@ -229,22 +242,45 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
 
       {/* Pin ve popup stilleri (Leaflet DOM'una global sızması gerekiyor) */}
       <style jsx global>{`
+        /* Airbnb tarzı fiyat rozeti: beyaz chip + koyu yazı + yumuşak gölge */
         .tm-pin {
-          transform: translate(-50%, -100%);
-          background: #cf2c73;
-          color: #fff;
+          transform: translate(-50%, -50%);
+          background: #fff;
+          color: #1f1f1f;
           font: 700 12px/1 var(--font-inter), sans-serif;
-          padding: 6px 10px;
+          padding: 7px 11px;
           border-radius: 999px;
           white-space: nowrap;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-          border: 2px solid #fff;
+          box-shadow:
+            0 2px 8px rgba(0, 0, 0, 0.18),
+            0 0 0 1px rgba(0, 0, 0, 0.06);
           cursor: pointer;
-          transition: transform 0.15s;
+          transition:
+            transform 0.15s,
+            background 0.15s,
+            color 0.15s,
+            box-shadow 0.15s;
         }
         .tm-pin:hover {
-          transform: translate(-50%, -100%) scale(1.12);
-          background: #a91f5c;
+          transform: translate(-50%, -50%) scale(1.1);
+          background: #cf2c73;
+          color: #fff;
+          box-shadow: 0 4px 14px rgba(207, 44, 115, 0.45);
+        }
+        /* Seçili otel — kalıcı pembe vurgu */
+        .tm-pin--active {
+          background: #cf2c73;
+          color: #fff;
+          box-shadow: 0 4px 14px rgba(207, 44, 115, 0.5);
+        }
+        /* Fiyatsız mekan — bina ikonlu yuvarlak rozet */
+        .tm-pin--icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 30px;
+          height: 30px;
+          padding: 0;
         }
         .tm-metro {
           transform: translate(-50%, -50%);
