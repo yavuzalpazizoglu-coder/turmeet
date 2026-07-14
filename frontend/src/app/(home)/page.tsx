@@ -241,19 +241,19 @@ export default async function HomePage() {
       {/* Tam sayfa kuralı: içerik 900px yüksekliğe sığacak şekilde sıkılaştırıldı */}
       <section id="why-turmeet" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden py-3">
         {/*
-         * Zemin: Lütfi Kırdar ICEC — Türkiye'nin uluslararası kongre simgesi
-         * (NATO 2004 zirvesi dahil). Fotoğraf görünür kalsın diye hafif
-         * beyaz yıkama; metin bantlarında okunabilirlik korunur.
+         * Zemin: Istanbul Congress Center (ICC) — uluslararası kongre vadisinin
+         * modern simgesi. Fotoğraf belirgin kalsın diye yıkama hafif tutulur;
+         * kartlar opak olduğundan okunabilirlik bozulmaz.
          */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/venue-lutfi-kirdar.jpg"
+          src="/images/venue-icc-istanbul.jpg"
           alt=""
           aria-hidden
           className="absolute inset-0 h-full w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/75 via-white/55 to-white/80" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#f9e7f0]/40 via-transparent to-[#f6dde9]/45" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/65 via-white/40 to-white/70" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f9e7f0]/35 via-transparent to-[#f6dde9]/40" />
         <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/15 blur-3xl" />
         <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-brand/10 blur-3xl" />
 
