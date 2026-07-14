@@ -17,42 +17,54 @@ import {
   PlaneIcon,
   MonitorIcon,
   StarIcon,
+  GlobeIcon,
+  BarChartIcon,
   ArrowRightIcon,
 } from "@/components/ui/icons";
 
 export const metadata = { title: "For Hotels — Turmeet" };
 
-/* Anasayfa otel CTA bölümüyle aynı 6 avantaj — stratejik tutarlılık */
+/* Anasayfa "Partner advantages" kuşağıyla birebir aynı 8 avantaj */
 const BENEFITS = [
   {
     icon: <EuroIcon size={20} />,
-    title: "Lowest commission in the market",
-    desc: "No listing fee, no subscription, no upfront cost. You are invoiced only after the event is realized.",
+    title: "Lowest commission",
+    desc: "No listing fee, no subscription, no upfront cost. Invoiced only after the event is realized.",
   },
   {
     icon: <PlaneIcon size={20} />,
-    title: "International group demand",
-    desc: "B2B organizers from Europe, the UK, North America and the Middle East — congresses, incentives and corporate meetings.",
+    title: "International demand",
+    desc: "B2B organizers from Europe, the UK, North America and the Middle East — congresses, incentives, meetings.",
   },
   {
     icon: <TagIcon size={20} />,
     title: "You stay in control",
-    desc: "You set your own live prices and use your own contract. The client pays you directly — Turmeet never holds the money.",
+    desc: "Your own live prices, your own contract. The client pays you directly — Turmeet never holds the money.",
   },
   {
     icon: <UsersIcon size={20} />,
     title: "Qualified corporate leads",
-    desc: "Corporate-only platform: every quote request comes from a verified company, agency or PCO. No individual bookings.",
+    desc: "Every quote request comes from a verified company, agency or PCO. No individual bookings.",
+  },
+  {
+    icon: <GlobeIcon size={20} />,
+    title: "Global fair presence",
+    desc: "Turmeet exhibits at international MICE fairs — partner venues are showcased to global buyers at no extra cost.",
   },
   {
     icon: <MonitorIcon size={20} />,
     title: "Digital partner panel",
-    desc: "Quote requests, live pricing, contracts, messaging, reports and promotions — managed in one place at turmeet.com/partner.",
+    desc: "Quote requests, live pricing, contracts, messaging, reports and promotions — all in one place.",
   },
   {
     icon: <StarIcon size={20} />,
     title: "Sponsorship & visibility",
-    desc: "Sponsored placement above organic results, showcase tags and premium ranking backed by your MICE inspection score.",
+    desc: "Sponsored placement above organic results, showcase tags and ranking backed by your MICE inspection score.",
+  },
+  {
+    icon: <BarChartIcon size={20} />,
+    title: "Market insights",
+    desc: "Demand reports and performance analytics for your destination — see where your next group comes from.",
   },
 ];
 
@@ -64,13 +76,13 @@ export default function ForHotelsPage() {
       <PageHero
         image="/images/venue-icc-istanbul.jpg"
         badge="329+ Partner Venues · 34 Cities"
-        title="Fill your meeting rooms with international events"
-        subtitle="Join Turkey's meeting & event search engine. Qualified group requests, transparent terms, and payment only on success."
+        title="Put your halls in front of the world's event buyers"
+        subtitle="Join Turkey's largest MICE inventory — international group demand, zero upfront cost, and you pay only on success."
         stats={[
-          { value: "0", label: "Upfront cost" },
-          { value: "24h", label: "Target SLA" },
+          { value: "89,600+", label: "Rooms listed" },
+          { value: "2,580+", label: "Meeting halls" },
           { value: "4", label: "Continents of demand" },
-          { value: "100%", label: "Your own pricing" },
+          { value: "0", label: "Upfront cost" },
         ]}
       >
         <LinkButton href="/register/hotel" size="lg">
@@ -147,16 +159,17 @@ export default function ForHotelsPage() {
             ))}
           </div>
 
-          {/* Ortaklık nasıl işler — 4 adım */}
+          {/* Ortaklık nasıl işler — anasayfayla aynı 5 adım */}
           <Reveal delay={150}>
             <div className="mx-auto mt-10 max-w-3xl rounded-card border border-white/15 bg-white/10 p-6 backdrop-blur-sm">
               <h2 className="text-lg font-bold text-white">How partnership works</h2>
               <ul className="mt-4 space-y-3">
                 {[
-                  "Apply with your venue details — our team verifies and builds your profile with you.",
-                  "Receive structured quote requests matched to your capacity and availability.",
-                  "Respond with your group offer directly on the platform within your SLA.",
-                  "Win the event, host the group — commission is invoiced only after realization.",
+                  "Apply — submit your venue application; our team verifies it with you.",
+                  "Create your profile — photos, halls, room types and capacities.",
+                  "Receive requests — structured quote requests matched to your capacity.",
+                  "Quote live prices — reply with your group offer within your SLA.",
+                  "Win & host — host the group; commission only after realization.",
                 ].map((step, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-white/85">
                     <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white/15 text-[11px] font-bold text-white ring-1 ring-white/25">
@@ -178,6 +191,22 @@ export default function ForHotelsPage() {
                   <ArrowRightIcon size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </div>
+            </div>
+          </Reveal>
+
+          {/* Dijital pazarlama ağı çağrısı — anasayfa kuşağıyla aynı mesaj */}
+          <Reveal delay={200}>
+            <div className="mx-auto mt-6 flex max-w-3xl flex-col items-center gap-3 rounded-card border border-white/25 bg-white/10 p-4 backdrop-blur-sm sm:flex-row sm:justify-between">
+              <div className="text-center sm:text-left">
+                <p className="text-[15px] font-bold text-white">Join the Turmeet digital marketing network</p>
+                <p className="mt-0.5 text-xs leading-snug text-white/65">
+                  Destination campaigns, buyer newsletters, social showcases and international fair stands — your venue
+                  promoted to thousands of corporate planners worldwide.
+                </p>
+              </div>
+              <LinkButton href="/register/hotel" variant="secondary" className="shrink-0">
+                List Your Venue — Free
+              </LinkButton>
             </div>
           </Reveal>
 
