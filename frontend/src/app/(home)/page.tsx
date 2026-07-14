@@ -281,30 +281,34 @@ export default async function HomePage() {
               </p>
             </Reveal>
             <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
+              {/* Eski yöntem — kırmızı tonlu kart, kırmızı çarpı maddeler */}
               <Reveal delay={120}>
-                <div className="h-full rounded-card border border-white/10 bg-white/5 p-3">
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-white/40">The old way</p>
+                <div className="h-full rounded-card border border-red-500/40 bg-gradient-to-br from-red-950/50 via-red-900/20 to-transparent p-3">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-red-300">The old way</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-red-200/80">Calculate commission rates on top of it all.</p>
                   <ul className="mt-2 space-y-1.5">
                     {[
-                      "Contact hotels one by one and chase replies for weeks",
-                      "Hand the job to a PCO / DMC and wait for offers to be collected",
-                      "Build your own hotel list, send emails, hope for answers",
+                      "Search the web for hotels, gather their details and try to judge their ratings",
+                      "Hand the job over to a PCO / DMC and wait for the offers to be collected",
+                      "Build your own hotel list, send emails, wait for replies — then manage it all yourself",
                     ].map((t) => (
-                      <li key={t} className="flex items-start gap-2 text-[13px] leading-snug text-white/55">
-                        <XIcon size={14} className="mt-0.5 shrink-0 text-white/35" />
+                      <li key={t} className="flex items-start gap-2 text-[13px] leading-snug text-white/60">
+                        <XIcon size={14} className="mt-0.5 shrink-0 text-red-400" />
                         {t}
                       </li>
                     ))}
                   </ul>
                 </div>
               </Reveal>
+              {/* Turmeet — yeşil tonlu kart, yeşil tik maddeler */}
               <Reveal delay={200}>
-                <div className="relative h-full overflow-hidden rounded-card border border-brand/50 bg-gradient-to-br from-brand/25 via-brand/10 to-transparent p-3 shadow-lg shadow-brand/20">
+                <div className="relative h-full overflow-hidden rounded-card border border-emerald-500/50 bg-gradient-to-br from-emerald-900/50 via-emerald-900/20 to-transparent p-3 shadow-lg shadow-emerald-900/30">
                   {/* 48 saat vurgusu — kartın sağ üst köşesinde rozet */}
-                  <span className="absolute right-3 top-3 rounded-full bg-brand px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white shadow-md">
+                  <span className="absolute right-3 top-3 rounded-full bg-emerald-500 px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white shadow-md">
                     48h
                   </span>
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-brand-light">With Turmeet</p>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-300">With Turmeet</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-emerald-200/90">Zero commission. No subscription.</p>
                   <ul className="mt-2 space-y-1.5">
                     {[
                       "Comparative offers from every hotel you choose — within 48 hours, direct from the hotels",
@@ -312,7 +316,7 @@ export default async function HomePage() {
                       "Extra services and local needs delivered digitally, on request",
                     ].map((t) => (
                       <li key={t} className="flex items-start gap-2 text-[13px] font-medium leading-snug text-white">
-                        <CheckIcon size={14} className="mt-0.5 shrink-0 text-brand-light" />
+                        <CheckIcon size={14} className="mt-0.5 shrink-0 text-emerald-400" />
                         {t}
                       </li>
                     ))}
