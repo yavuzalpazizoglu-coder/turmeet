@@ -262,10 +262,6 @@ export default async function HomePage() {
               <span className="font-semibold text-white">fast</span> and{" "}
               <span className="font-semibold text-white">impartial</span>.
             </p>
-            {/* Rakamlar tek satır metin olarak — kutu/sayaç yok */}
-            <p className="mt-1.5 text-[12px] font-medium uppercase tracking-wider text-white/50">
-              14+ years of MICE expertise · 329+ venues inspected on site · 34 cities · TURSAB licence no. 7514
-            </p>
           </Reveal>
 
           {/*
@@ -324,11 +320,6 @@ export default async function HomePage() {
                 </div>
               </Reveal>
             </div>
-            <Reveal delay={260}>
-              <p className="mt-2 text-center text-sm font-semibold text-white/85">
-                Planning a meeting in Turkey? We guide you with a fresh perspective.
-              </p>
-            </Reveal>
           </div>
 
           {/* ── KUŞAK 3: NASIL ÇALIŞIR — 5 adım tek yatay şerit (MD 2.4) ── */}
