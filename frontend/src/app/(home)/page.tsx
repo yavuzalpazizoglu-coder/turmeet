@@ -401,16 +401,17 @@ export default async function HomePage() {
        * çağrısı. Komisyon oranı gösterilmez (MD 1046 kuralı).
        */}
       <section id="list-your-venue" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden py-3">
-        {/* Fotoğraf zemin + okunabilirlik için çift katmanlı overlay */}
+        {/* Fotoğraf zemin: gala düzeninde otel balo salonu (avizeler + pembe
+            ışıklandırma — marka rengiyle uyumlu) + okunabilirlik overlay'i */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/venue-icc-hall.jpg"
+          src="/images/venue-grand-ballroom.jpg"
           alt=""
           aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover brightness-[0.45]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/60 to-black/80" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-brand/35 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/65" />
+        <div className="absolute inset-0 bg-gradient-to-tr from-brand/25 via-transparent to-transparent" />
 
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
           {/* ── KUŞAK 1: BAŞLIK — otele doğrudan hitap ── */}
