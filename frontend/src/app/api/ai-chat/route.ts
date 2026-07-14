@@ -30,7 +30,7 @@ Facts you can rely on:
 - 329+ verified venues, 89,000+ rooms, 2,500+ meeting halls across 34 cities in Turkey.
 - Turmeet is 100% free for organizers; commission is paid by the venue after the event. The quoted price is the final price.
 - Organizers send one request and receive live comparative offers from multiple hotels; contracts are e-signed on the platform and the client pays the venue directly.
-- Groups of 30+ rooms get a dedicated coordinator free of charge. 150+ room congresses are fully managed by the D Event expert team.
+- For events above 150 guests or rooms, a dedicated coordinator — or a full team, at the client's request — is assigned free of charge and follows the event end to end, like a classic PCO.
 - Every venue passes the D Event MICE inspection (capacity, transit access, service quality). Operated by D Event Turizm (Est. 2012, Istanbul, TURSAB No. 7514).
 - Hotel/venue registrations are handled at devent-online.com or info@devent-online.com.
 - Live human support is available Mon-Fri 09:00-18:00 Istanbul time; outside these hours you are the first line of support and can suggest leaving a message via the Messages panel.

@@ -52,7 +52,7 @@ const TRUST = [
   { icon: <TagIcon size={20} />, title: "Venues set their own prices", desc: "Turmeet never marks up or interferes with pricing. Hotels quote live — fair competition, real rates." },
   { icon: <FileTextIcon size={20} />, title: "You pay the venue directly", desc: "Turmeet reviews every detail of your contract against national regulations and international standards. Payments go directly to the venue you choose — never to Turmeet. Fully compliant and transparent." },
   { icon: <CheckIcon size={20} />, title: "Verified venues", desc: "Every hotel passes an on-site MICE inspection — capacity, transit access and service quality are checked in person." },
-  { icon: <UsersIcon size={20} />, title: "Coordinator support", desc: "Large groups get a dedicated coordinator. 150+ room congresses are fully managed by our expert team." },
+  { icon: <UsersIcon size={20} />, title: "Coordinator support", desc: "For events above 150 guests or rooms, a dedicated coordinator — or a full team, at your request — is assigned to you and follows your event end to end, just like a classic PCO." },
   { icon: <BuildingIcon size={20} />, title: "Backed by D Event", desc: "Operated by D Event Turizm — Est. 2012, Istanbul. TURSAB licensed travel agency (No. 7514)." },
 ];
 

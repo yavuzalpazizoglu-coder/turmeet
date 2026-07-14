@@ -33,10 +33,10 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     id: "coordinator",
-    question: "What about groups of 30+ rooms?",
+    question: "What about large groups (150+ guests or rooms)?",
     answer:
-      "For groups of 30+ rooms, a dedicated Turmeet coordinator is assigned to your event — free of charge. Your coordinator supports negotiations, contract review and logistics so you can focus on the event itself.",
-    keywords: ["coordinator", "30", "large", "group", "big", "contract", "negotiat"],
+      "For events above 150 guests or rooms, a dedicated coordinator — or a full team, at your request — is assigned free of charge. Your event is followed end to end like a classic PCO: negotiations, contract review and logistics are all handled for you.",
+    keywords: ["coordinator", "150", "pco", "large", "group", "big", "contract", "negotiat"],
   },
   {
     id: "venues",
