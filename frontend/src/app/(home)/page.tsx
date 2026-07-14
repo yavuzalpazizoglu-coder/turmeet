@@ -391,20 +391,24 @@ export default async function HomePage() {
 
       {/*
        * ── SAYFA 5: OTEL CTA — "Neden bizimle çalışsın?" ──
-       * "Why Turmeet exists" sayfasıyla birebir aynı yapı (kullanıcı isteği):
-       * temiz koyu zemin, büyük başlık kuşağı, kırmızı/yeşil karşılaştırma
-       * kartları, 5 adımlı yatay şerit, kompakt avantaj kartları ve CTA.
+       * "Why Turmeet exists" ile aynı iskelet, fakat otel sayfası olduğu belli
+       * olsun diye ayrı kimlik: sıcak altın/amber vurgu rengi (otelcilik),
+       * köşeli ikon plakaları ve başlıkta bina rozeti (kullanıcı isteği).
        * Komisyon oranı gösterilmez (MD 1046 kuralı) — "lowest commission".
        */}
       <section id="list-your-venue" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-ink py-3">
-        <div className="absolute inset-0 bg-gradient-to-b from-ink via-[#1c1420] to-ink" />
-        <div className="animate-float-slow pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
-        <div className="animate-float-slower pointer-events-none absolute -left-20 bottom-10 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
+        {/* Sıcak koyu zemin — pembe yerine altın/amber ışık lekeleri */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink via-[#211a10] to-ink" />
+        <div className="animate-float-slow pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-amber-500/15 blur-3xl" />
+        <div className="animate-float-slower pointer-events-none absolute -left-20 bottom-10 h-80 w-80 rounded-full bg-orange-400/10 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
-          {/* ── KUŞAK 1: BAŞLIK — büyük etiket + cümle başlığı + tek satır rakam özeti ── */}
+          {/* ── KUŞAK 1: BAŞLIK — bina rozeti + amber etiket + cümle başlığı ── */}
           <Reveal className="mx-auto max-w-5xl text-center">
-            <p className="text-base font-bold uppercase tracking-widest text-brand-light sm:text-lg">
+            <p className="inline-flex items-center justify-center gap-2 text-base font-bold uppercase tracking-widest text-amber-300 sm:text-lg">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-[#241a05] shadow-md shadow-amber-500/30 ring-1 ring-amber-200/50">
+                <BuildingIcon size={15} />
+              </span>
               List your venue on Turmeet
             </p>
             <h2 className="mt-1.5 text-3xl font-bold leading-tight text-white sm:text-[34px]">
@@ -416,7 +420,7 @@ export default async function HomePage() {
               <span className="font-semibold text-white">transparent</span> and{" "}
               <span className="font-semibold text-white">pay only on success</span>.
             </p>
-            <p className="mt-1.5 text-[12px] font-medium uppercase tracking-wider text-white/50">
+            <p className="mt-1.5 text-[12px] font-medium uppercase tracking-wider text-amber-200/60">
               Lowest commission in the market · Zero upfront cost · Demand from 4 continents · You set your own prices
             </p>
           </Reveal>
@@ -449,15 +453,15 @@ export default async function HomePage() {
                   </ul>
                 </div>
               </Reveal>
-              {/* Turmeet — yeşil tonlu kart, yeşil tik maddeler */}
+              {/* Turmeet — altın/amber tonlu kart, otel kimliğine uygun */}
               <Reveal delay={200}>
-                <div className="relative h-full overflow-hidden rounded-card border border-emerald-500/50 bg-gradient-to-br from-emerald-900/50 via-emerald-900/20 to-transparent p-3 shadow-lg shadow-emerald-900/30">
+                <div className="relative h-full overflow-hidden rounded-card border border-amber-400/50 bg-gradient-to-br from-amber-900/50 via-amber-900/20 to-transparent p-3 shadow-lg shadow-amber-900/30">
                   {/* Sıfır ön maliyet vurgusu — kartın sağ üst köşesinde rozet */}
-                  <span className="absolute right-3 top-3 rounded-full bg-emerald-500 px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white shadow-md">
+                  <span className="absolute right-3 top-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-2.5 py-1 text-xs font-black uppercase tracking-wide text-[#241a05] shadow-md">
                     0 upfront
                   </span>
-                  <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-300">With Turmeet</p>
-                  <p className="mt-0.5 text-[11px] font-semibold text-emerald-200/90">No listing fee. No subscription.</p>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-amber-300">With Turmeet</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-amber-200/90">No listing fee. No subscription.</p>
                   <ul className="mt-2 space-y-1.5">
                     {[
                       "Qualified group requests from verified companies, agencies and PCOs — matched to your capacity",
@@ -465,7 +469,7 @@ export default async function HomePage() {
                       "Commission is invoiced only after the event is realized",
                     ].map((t) => (
                       <li key={t} className="flex items-start gap-2 text-[13px] font-medium leading-snug text-white">
-                        <CheckIcon size={14} className="mt-0.5 shrink-0 text-emerald-400" />
+                        <CheckIcon size={14} className="mt-0.5 shrink-0 text-amber-400" />
                         {t}
                       </li>
                     ))}
@@ -483,7 +487,7 @@ export default async function HomePage() {
           {/* ── KUŞAK 3: ORTAKLIK NASIL İŞLER — 5 adım tek yatay şerit ── */}
           <div className="mt-3 border-t border-white/10 pt-2.5">
             <Reveal delay={100}>
-              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">How partnership works</p>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-amber-300">How partnership works</p>
             </Reveal>
             <div className="mt-2.5 grid gap-4 sm:grid-cols-5">
               {[
@@ -495,7 +499,8 @@ export default async function HomePage() {
               ].map((s, i) => (
                 <Reveal key={s.n} delay={150 + i * 120} className="group relative text-center">
                   {i < 4 && <div className="absolute left-[60%] top-5 hidden h-px w-[80%] bg-white/15 sm:block" />}
-                  <div className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/40 ring-1 ring-white/25 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
+                  {/* Otel kimliği: yuvarlak pembe yerine köşeli altın plaka */}
+                  <div className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-amber-300 to-amber-500 text-[#241a05] shadow-lg shadow-amber-500/30 ring-1 ring-amber-200/50 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
                     {s.icon}
                   </div>
                   <h3 className="mt-1.5 text-[14px] font-bold text-white">
@@ -510,7 +515,7 @@ export default async function HomePage() {
           {/* ── KUŞAK 4: Ortak avantajları — 6 kompakt buzlu cam kart ── */}
           <div className="mt-2.5 border-t border-white/10 pt-2.5">
             <Reveal delay={100}>
-              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">Partner advantages</p>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-amber-300">Partner advantages</p>
             </Reveal>
             <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
               {[
@@ -522,8 +527,9 @@ export default async function HomePage() {
                 { icon: <StarIcon size={16} />, title: "Sponsorship & visibility", desc: "Sponsored placement above organic results, showcase tags and premium ranking backed by your MICE inspection score." },
               ].map((f, i) => (
                 <Reveal key={f.title} delay={i * 90}>
-                  <div className="group flex h-full items-start gap-2.5 rounded-card border border-white/15 bg-white/10 p-2 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/15 hover:shadow-xl hover:shadow-black/20">
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <div className="group flex h-full items-start gap-2.5 rounded-card border border-amber-200/15 bg-white/10 p-2 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300/50 hover:bg-white/15 hover:shadow-xl hover:shadow-amber-900/20">
+                    {/* Otel kimliği: beyaz-pembe yuvarlak yerine köşeli altın plaka */}
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-[#241a05] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                       {f.icon}
                     </span>
                     <div>
@@ -537,10 +543,14 @@ export default async function HomePage() {
           </div>
 
           <Reveal delay={200} className="mt-2.5 flex items-center justify-center gap-4">
-            <LinkButton href="/register/hotel">
+            {/* Otel kimliği: pembe yerine altın CTA */}
+            <Link
+              href="/register/hotel"
+              className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-6 py-2.5 text-sm font-bold text-[#241a05] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber-500/40"
+            >
               List Your Venue — Free
-            </LinkButton>
-            <Link href="/login" className="group inline-flex items-center gap-1 text-sm font-semibold text-white/85 hover:text-white hover:underline">
+            </Link>
+            <Link href="/login" className="group inline-flex items-center gap-1 text-sm font-semibold text-amber-100/85 hover:text-white hover:underline">
               Partner Login <ArrowRightIcon size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </Reveal>
