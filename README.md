@@ -14,6 +14,7 @@
 >
 > - 4 portal canlı: Public site, `/app` (müşteri), `/partner` (otel), `/admin` (D Event)
 > - Demo giriş: `/login` sayfasından rol seçerek panellere girilebilir
+> - Devralan ekip için ilk okuma: **[docs/DEVIR_BRIEF.md](docs/DEVIR_BRIEF.md)**
 > - Backend ekibi için başlangıç noktası: **[docs/BACKEND_INTEGRATION.md](docs/BACKEND_INTEGRATION.md)**
 > - UI dili: İngilizce (sistem dili) · Geliştirici dokümanları: Türkçe
 

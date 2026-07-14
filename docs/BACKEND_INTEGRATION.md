@@ -128,12 +128,15 @@ dönüşümü yapın (veya Eloquent `$casts` + resource'larda mapleyin).
 
 | Dosya | İçerik |
 |---|---|
-| `src/mocks/venues.ts` | 12 mekan + 6 destinasyon + platform istatistikleri |
+| `src/mocks/venues.ts` | 29 el yapımı vitrin mekanı + 6 destinasyon + platform istatistikleri |
+| `src/mocks/venues-extra.ts` | Gerçek envanterden üretilen 292 otel (Oteller_Tum_Liste Excel'i; ad, şehir/ilçe, oda/salon sayıları, kapasite gerçek) — toplam 321 mekan |
 | `src/mocks/quotes.ts` | 3 RFQ + 6 teklif (farklı durumlar) |
 | `src/mocks/contracts.ts` | 3 kontrat + 3 komisyon kaydı |
 | `src/mocks/misc.ts` | Mesajlar, kullanıcı, bekleyen kayıtlar, promosyonlar, koordinatörler |
 
 Bu dosyalar backend bağlandıktan sonra silinebilir (ya da test fixture'ı olarak tutulabilir).
+`venues-extra.ts` özellikle seed/migration verisi olarak birebir kullanılabilir —
+gerçek envanterin alan eşlemesi (`hotels` tablosu) için hazır örnektir.
 
 ## 7. Sayfa Haritası (Route Kataloğu)
 
@@ -202,8 +205,12 @@ Demo giriş: `/login` → rol seç → ilgili panele yönlenir (şifre kontrolü
 ## 10. Bilinen Eksikler / Sıradaki İşler
 
 - [ ] Gerçek auth (JWT) — login mock durumda
-- [ ] Görseller placeholder (picsum.photos) — gerçek otel fotoğrafları yüklenecek
-- [ ] i18n altyapısı (EN/TR/DE) — şu an UI İngilizce, `next-intl` önerilir
+- [ ] Yeni eklenen 292 otelin görselleri jenerik (8 stok fotoğraf dönüşümlü) — gerçek otel fotoğrafları CDN'den gelecek; 29 vitrin mekanının gerçek fotoğrafları mevcut
+- [ ] i18n altyapısı (public site için EN/TR/DE) — paneller EN/TR destekli (cookie tabanlı), public site İngilizce; tam çözüm için `next-intl` önerilir
 - [ ] Favoriler kalıcı değil (yalnızca local state)
 - [ ] Dosya yükleme (kontrat PDF, rooming list) backend'e bağlı
 - [ ] E-imza entegrasyonu (Post-MVP)
+- [ ] AI arama/sohbet ve çeviri API anahtarları prod ortamında tanımlanmalı (bkz. `docs/AI_ENTEGRASYONU.md`)
+- [ ] Otomatik test yok — kritik akışlar için Playwright e2e önerilir
+- [ ] Mobil QA turu ve erişilebilirlik (a11y) taraması yapılmadı
+- [ ] SEO: sitemap.xml / robots.txt / Open Graph görselleri eklenmedi
