@@ -393,22 +393,22 @@ export default async function HomePage() {
 
       {/*
        * ── SAYFA 5: OTEL CTA — "Neden bizimle çalışsın?" ──
-       * Otel kimliği: lacivert zemin + altın vurgular (premium otelcilik).
+       * Otel kimliği: marka pembesi (Turmeet rengi) + koyu zemin.
        * Yapı: başlık → envanter istatistikleri (CountUp) → ortaklık adımları
        * → avantaj kartları (fuar katılımı dahil) → dijital pazarlama ağı
        * çağrısı. Komisyon oranı gösterilmez (MD 1046 kuralı).
        */}
-      <section id="list-your-venue" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden py-3">
-        {/* Lacivert zemin — altın ve gök mavisi ışık lekeleri */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#081121] via-[#0d1c33] to-[#081121]" />
-        <div className="animate-float-slow pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-amber-400/15 blur-3xl" />
-        <div className="animate-float-slower pointer-events-none absolute -left-20 bottom-10 h-80 w-80 rounded-full bg-sky-500/10 blur-3xl" />
+      <section id="list-your-venue" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-ink py-3">
+        {/* Koyu zemin — marka pembesi ışık lekeleri */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink via-[#1c1420] to-ink" />
+        <div className="animate-float-slow pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
+        <div className="animate-float-slower pointer-events-none absolute -left-20 bottom-10 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
           {/* ── KUŞAK 1: BAŞLIK — otele doğrudan hitap ── */}
           <Reveal className="mx-auto max-w-5xl text-center">
-            <p className="inline-flex items-center justify-center gap-2 text-base font-bold uppercase tracking-widest text-amber-300 sm:text-lg">
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-[#241a05] shadow-md shadow-amber-500/30 ring-1 ring-amber-200/50">
+            <p className="inline-flex items-center justify-center gap-2 text-base font-bold uppercase tracking-widest text-brand-light sm:text-lg">
+              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-brand text-white shadow-md shadow-brand/40 ring-1 ring-white/25">
                 <BuildingIcon size={15} />
               </span>
               List your venue on Turmeet
@@ -433,8 +433,8 @@ export default async function HomePage() {
               { value: 4, suffix: "", label: "Continents of demand" },
             ].map((s, i) => (
               <Reveal key={s.label} delay={80 + i * 90}>
-                <div className="rounded-card border border-amber-200/20 bg-white/5 px-3 py-2.5 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300/50 hover:bg-white/10">
-                  <p className="bg-gradient-to-r from-amber-200 to-amber-400 bg-clip-text text-2xl font-black text-transparent">
+                <div className="rounded-card border border-white/15 bg-white/5 px-3 py-2.5 text-center backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-brand-light/60 hover:bg-white/10">
+                  <p className="bg-gradient-to-r from-white to-brand-light bg-clip-text text-2xl font-black text-transparent">
                     <CountUp value={s.value} />
                     {s.suffix}
                   </p>
@@ -445,9 +445,9 @@ export default async function HomePage() {
           </div>
 
           {/* ── KUŞAK 3: ORTAKLIK NASIL İŞLER — 5 adım tek yatay şerit ── */}
-          <div className="mt-3 border-t border-amber-200/10 pt-2.5">
+          <div className="mt-3 border-t border-white/10 pt-2.5">
             <Reveal delay={100}>
-              <p className="text-center text-sm font-bold uppercase tracking-widest text-amber-300">How partnership works</p>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">How partnership works</p>
             </Reveal>
             <div className="mt-2.5 grid gap-4 sm:grid-cols-5">
               {[
@@ -458,8 +458,9 @@ export default async function HomePage() {
                 { n: "5", icon: <CheckIcon size={18} />, title: "Win & host", desc: "Host the group — commission only after realization" },
               ].map((s, i) => (
                 <Reveal key={s.n} delay={150 + i * 120} className="group relative text-center">
-                  {i < 4 && <div className="absolute left-[60%] top-5 hidden h-px w-[80%] bg-amber-200/15 sm:block" />}
-                  <div className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-amber-300 to-amber-500 text-[#241a05] shadow-lg shadow-amber-500/30 ring-1 ring-amber-200/50 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
+                  {i < 4 && <div className="absolute left-[60%] top-5 hidden h-px w-[80%] bg-white/15 sm:block" />}
+                  {/* Otel kimliği: köşeli plaka, marka pembesi */}
+                  <div className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white shadow-lg shadow-brand/40 ring-1 ring-white/25 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
                     {s.icon}
                   </div>
                   <h3 className="mt-1.5 text-[14px] font-bold text-white">
@@ -472,9 +473,9 @@ export default async function HomePage() {
           </div>
 
           {/* ── KUŞAK 4: Ortak avantajları — fuar katılımı dahil 8 kompakt kart ── */}
-          <div className="mt-2.5 border-t border-amber-200/10 pt-2.5">
+          <div className="mt-2.5 border-t border-white/10 pt-2.5">
             <Reveal delay={100}>
-              <p className="text-center text-sm font-bold uppercase tracking-widest text-amber-300">Partner advantages</p>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">Partner advantages</p>
             </Reveal>
             <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
               {[
@@ -488,8 +489,8 @@ export default async function HomePage() {
                 { icon: <BarChartIcon size={16} />, title: "Market insights", desc: "Demand reports and performance analytics for your destination — see where your next group comes from." },
               ].map((f, i) => (
                 <Reveal key={f.title} delay={i * 70}>
-                  <div className="group flex h-full items-start gap-2.5 rounded-card border border-amber-200/15 bg-white/5 p-2 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-amber-300/50 hover:bg-white/10 hover:shadow-xl hover:shadow-black/20">
-                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-amber-300 to-amber-500 text-[#241a05] transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <div className="group flex h-full items-start gap-2.5 rounded-card border border-white/15 bg-white/5 p-2 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/10 hover:shadow-xl hover:shadow-black/20">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                       {f.icon}
                     </span>
                     <div>
@@ -504,7 +505,7 @@ export default async function HomePage() {
 
           {/* ── KUŞAK 5: DİJİTAL PAZARLAMA AĞI ÇAĞRISI + CTA ── */}
           <Reveal delay={150}>
-            <div className="mx-auto mt-2.5 flex max-w-5xl flex-col items-center gap-3 rounded-card border border-amber-300/30 bg-gradient-to-r from-amber-500/15 via-amber-400/10 to-sky-500/10 p-3 sm:flex-row sm:justify-between">
+            <div className="mx-auto mt-2.5 flex max-w-5xl flex-col items-center gap-3 rounded-card border border-brand/50 bg-gradient-to-r from-brand/25 via-brand/10 to-transparent p-3 shadow-lg shadow-brand/20 sm:flex-row sm:justify-between">
               <div className="text-center sm:text-left">
                 <p className="text-[15px] font-bold text-white">Join the Turmeet digital marketing network</p>
                 <p className="mt-0.5 text-xs leading-snug text-white/65">
@@ -515,11 +516,11 @@ export default async function HomePage() {
               <div className="flex shrink-0 items-center gap-3">
                 <Link
                   href="/register/hotel"
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-gradient-to-r from-amber-300 to-amber-500 px-5 py-2.5 text-sm font-bold text-[#241a05] shadow-lg shadow-amber-500/30 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-amber-500/40"
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-full bg-brand px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand/40 transition-all duration-300 hover:-translate-y-0.5 hover:bg-brand-dark hover:shadow-xl hover:shadow-brand/50"
                 >
                   List Your Venue — Free
                 </Link>
-                <Link href="/login" className="group inline-flex items-center gap-1 whitespace-nowrap text-sm font-semibold text-amber-100/85 hover:text-white hover:underline">
+                <Link href="/login" className="group inline-flex items-center gap-1 whitespace-nowrap text-sm font-semibold text-white/85 hover:text-white hover:underline">
                   Partner Login <ArrowRightIcon size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </div>
