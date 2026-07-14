@@ -400,176 +400,158 @@ export default async function HomePage() {
 
       {/*
        * ── SAYFA 5: OTEL CTA — "Neden bizimle çalışsın?" ──
-       * Kaynak: TURMEET_MASTER_Kurulum.md 1.5 (otele vaat), 2.2 (iş modeli),
-       * 3.2 /for-hotels (avantajlar + 3 adım), 2.5/6.7 (sponsorluk).
+       * "Why Turmeet exists" sayfasıyla birebir aynı yapı (kullanıcı isteği):
+       * temiz koyu zemin, büyük başlık kuşağı, kırmızı/yeşil karşılaştırma
+       * kartları, 5 adımlı yatay şerit, kompakt avantaj kartları ve CTA.
        * Komisyon oranı gösterilmez (MD 1046 kuralı) — "lowest commission".
        */}
-      <section className="relative flex min-h-[100dvh] snap-start items-center overflow-hidden bg-gradient-to-br from-brand via-brand-dark to-brand py-12 animate-gradient-pan">
-        {/* Dekoratif yüzen ışık lekeleri */}
-        <div className="animate-float-slow pointer-events-none absolute -right-24 top-12 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
-        <div className="animate-float-slower pointer-events-none absolute -left-20 bottom-8 h-72 w-72 rounded-full bg-white/5 blur-3xl" />
+      <section id="list-your-venue" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-ink py-3">
+        <div className="absolute inset-0 bg-gradient-to-b from-ink via-[#1c1420] to-ink" />
+        <div className="animate-float-slow pointer-events-none absolute -right-24 top-16 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
+        <div className="animate-float-slower pointer-events-none absolute -left-20 bottom-10 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
 
-        <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <BuildingIcon size={34} className="mx-auto text-white" />
-            <h2 className="mt-3 text-2xl font-bold text-white">List your venue on Turmeet</h2>
-            <p className="mt-2 text-sm leading-relaxed text-white/70">
-              Why should a hotel or congress center work with us? Guaranteed international group bookings at the
-              lowest commission in the market — zero upfront cost, pay only for realized events.
+        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
+          {/* ── KUŞAK 1: BAŞLIK — büyük etiket + cümle başlığı + tek satır rakam özeti ── */}
+          <Reveal className="mx-auto max-w-5xl text-center">
+            <p className="text-base font-bold uppercase tracking-widest text-brand-light sm:text-lg">
+              List your venue on Turmeet
             </p>
-
+            <h2 className="mt-1.5 text-3xl font-bold leading-tight text-white sm:text-[34px]">
+              Filling your meeting rooms used to depend on chance requests
+            </h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-white/75">
+              Turmeet brings international group demand to your venue —{" "}
+              <span className="font-semibold text-white">qualified</span>,{" "}
+              <span className="font-semibold text-white">transparent</span> and{" "}
+              <span className="font-semibold text-white">pay only on success</span>.
+            </p>
+            <p className="mt-1.5 text-[12px] font-medium uppercase tracking-wider text-white/50">
+              Lowest commission in the market · Zero upfront cost · Demand from 4 continents · You set your own prices
+            </p>
           </Reveal>
 
-          {/*
-           * Kayda özendirici görsel şerit — otelin kazanacağı sonuçları gösterir:
-           * dolu kongre salonu, uluslararası sahne, vitrine çıkan tesis.
-           * Her kartta gradyan üzerine fayda mesajı yazılıdır.
-           */}
-          <Reveal delay={100}>
-            <div className="mx-auto mt-8 grid max-w-4xl gap-4 sm:grid-cols-3">
-              {[
-                {
-                  src: "/images/venue-icc-hall.jpg",
-                  alt: "Packed event at Istanbul Congress Hall",
-                  title: "Fill your halls",
-                  desc: "Group bookings that occupy hundreds of rooms at once — Istanbul Congress Center",
-                },
-                {
-                  src: "/images/venue-icc-istanbul.jpg",
-                  alt: "Istanbul Congress Center entrance",
-                  title: "Host global events",
-                  desc: "Congresses and incentives from 4 continents — ICC Istanbul",
-                },
-                {
-                  src: "/images/venue-ciragan-palace.jpg",
-                  alt: "Çırağan Palace on the Bosphorus, Istanbul",
-                  title: "Get discovered",
-                  desc: "Your venue in front of verified corporate buyers — Çırağan Palace, Bosphorus",
-                },
-              ].map((p, i) => (
-                <div
-                  key={p.src}
-                  className={`group relative h-44 overflow-hidden rounded-2xl shadow-lg shadow-black/25 ring-1 ring-white/25 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:ring-white/60 ${
-                    i === 1 ? "sm:-mt-3 sm:h-[188px]" : ""
-                  }`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={p.src}
-                    alt={p.alt}
-                    loading="lazy"
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
-                  <div className="absolute inset-x-0 bottom-0 p-4 text-left">
-                    <p className="text-[15px] font-bold text-white">{p.title}</p>
-                    <p className="mt-0.5 text-xs leading-snug text-white/75">{p.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-
-          {/* Avantajlar — 6 kart */}
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {[
-              {
-                icon: <EuroIcon size={20} />,
-                title: "Lowest commission in the market",
-                desc: "No listing fee, no subscription, no upfront cost. You are invoiced only after the event is realized.",
-              },
-              {
-                icon: <PlaneIcon size={20} />,
-                title: "International group demand",
-                desc: "B2B organizers from Europe, the UK, North America and the Middle East — congresses, incentives and corporate meetings.",
-              },
-              {
-                icon: <TagIcon size={20} />,
-                title: "You stay in control",
-                desc: "You set your own live prices and use your own contract. The client pays you directly — Turmeet never holds the money.",
-              },
-              {
-                icon: <UsersIcon size={20} />,
-                title: "Qualified corporate leads",
-                desc: "Corporate-only platform: every quote request comes from a verified company, agency or PCO. No individual bookings.",
-              },
-              {
-                icon: <MonitorIcon size={20} />,
-                title: "Digital partner panel",
-                desc: "Quote requests, live pricing, contracts, messaging, reports and promotions — managed in one place at turmeet.com/partner.",
-              },
-              {
-                icon: <StarIcon size={20} />,
-                title: "Sponsorship & visibility",
-                desc: "Sponsored placement above organic results, showcase tags and premium ranking backed by your MICE inspection score.",
-              },
-            ].map((f, i) => (
-              <Reveal key={f.title} delay={i * 90}>
-                <div className="group flex h-full items-start gap-3 rounded-card border border-white/15 bg-white/10 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/15 hover:shadow-xl hover:shadow-black/10">
-                  <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
-                    {f.icon}
-                  </span>
-                  <div>
-                    <h3 className="text-[15px] font-bold text-white">{f.title}</h3>
-                    <p className="mt-0.5 text-xs leading-snug text-white/65">{f.desc}</p>
-                  </div>
+          {/* ── KUŞAK 2: OTEL HİKAYESİ — eski yöntem vs Turmeet karşılaştırması ── */}
+          <div className="mx-auto mt-3 max-w-5xl">
+            <Reveal delay={60}>
+              <p className="text-center text-sm font-semibold text-white/85">
+                Say an international congress needs <span className="font-bold text-white">200 rooms</span> in your
+                city.
+              </p>
+            </Reveal>
+            <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
+              {/* Eski yöntem — kırmızı tonlu kart, kırmızı çarpı maddeler */}
+              <Reveal delay={120}>
+                <div className="h-full rounded-card border border-red-500/40 bg-gradient-to-br from-red-950/50 via-red-900/20 to-transparent p-3">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-red-300">The old way</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-red-200/80">Listing fees and subscriptions — with no guarantee.</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {[
+                      "Wait for OTA or agency requests and give away high commissions",
+                      "Chase cold leads with your own sales team, one email at a time",
+                      "Pay for listings and ads without knowing if the event is real",
+                    ].map((t) => (
+                      <li key={t} className="flex items-start gap-2 text-[13px] leading-snug text-white/60">
+                        <XIcon size={14} className="mt-0.5 shrink-0 text-red-400" />
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </Reveal>
-            ))}
+              {/* Turmeet — yeşil tonlu kart, yeşil tik maddeler */}
+              <Reveal delay={200}>
+                <div className="relative h-full overflow-hidden rounded-card border border-emerald-500/50 bg-gradient-to-br from-emerald-900/50 via-emerald-900/20 to-transparent p-3 shadow-lg shadow-emerald-900/30">
+                  {/* Sıfır ön maliyet vurgusu — kartın sağ üst köşesinde rozet */}
+                  <span className="absolute right-3 top-3 rounded-full bg-emerald-500 px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white shadow-md">
+                    0 upfront
+                  </span>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-emerald-300">With Turmeet</p>
+                  <p className="mt-0.5 text-[11px] font-semibold text-emerald-200/90">No listing fee. No subscription.</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {[
+                      "Qualified group requests from verified companies, agencies and PCOs — matched to your capacity",
+                      "You set your own live prices and use your own contract — the client pays you directly",
+                      "Commission is invoiced only after the event is realized",
+                    ].map((t) => (
+                      <li key={t} className="flex items-start gap-2 text-[13px] font-medium leading-snug text-white">
+                        <CheckIcon size={14} className="mt-0.5 shrink-0 text-emerald-400" />
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            </div>
+            <Reveal delay={260}>
+              <p className="mt-2 text-center text-sm font-semibold text-white/85">
+                Your halls in front of verified corporate buyers from 4 continents.
+              </p>
+            </Reveal>
           </div>
 
-          {/* Nasıl başlanır — 3 adım (MD /for-hotels) */}
-          <Reveal delay={200} className="mt-8 flex flex-col items-center gap-5 sm:flex-row sm:justify-center">
-            {[
-              { n: "1", label: "Apply", desc: "Submit your venue application" },
-              { n: "2", label: "Create your profile", desc: "Photos, halls, room types, capacities" },
-              { n: "3", label: "Receive quote requests", desc: "Reply with live prices, win events" },
-            ].map((s, i) => (
-              <div key={s.n} className="group flex items-center gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/10 text-sm font-bold text-white ring-1 ring-white/20 transition-all duration-300 group-hover:bg-white group-hover:text-brand">
-                  {s.n}
-                </span>
-                <div>
-                  <p className="text-sm font-bold text-white">{s.label}</p>
-                  <p className="text-xs text-white/60">{s.desc}</p>
-                </div>
-                {i < 2 && <ArrowRightIcon size={16} className="ml-2 hidden text-white/40 sm:block" />}
-              </div>
-            ))}
-          </Reveal>
-
-          <Reveal delay={300} className="mt-8 flex items-center justify-center gap-4">
-            <LinkButton href="/register/hotel" variant="secondary" size="lg">
-              List Your Venue
-            </LinkButton>
-            <Link href="/login" className="text-sm font-semibold text-white/80 hover:text-white hover:underline">
-              Partner Login
-            </Link>
-          </Reveal>
-
-          {/*
-           * Güven & sertifika bandı — sayfa güvenilirliği için küçük yazılı
-           * rozetler. Kaynak: MD 3.2.1b footer güven bandı (TURSAB 7514, ICVB,
-           * Est. 2012) + platform güvenlik prensipleri (e-sign, KVKK/GDPR).
-           */}
-          <Reveal delay={400}>
-            <div className="mt-10 grid grid-cols-2 gap-x-6 gap-y-4 border-t border-white/15 pt-6 text-left sm:grid-cols-3 lg:grid-cols-5">
+          {/* ── KUŞAK 3: ORTAKLIK NASIL İŞLER — 5 adım tek yatay şerit ── */}
+          <div className="mt-3 border-t border-white/10 pt-2.5">
+            <Reveal delay={100}>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">How partnership works</p>
+            </Reveal>
+            <div className="mt-2.5 grid gap-4 sm:grid-cols-5">
               {[
-                { title: "TURSAB No. 7514", desc: "Licensed travel agency, Turkey" },
-                { title: "ICVB Member", desc: "Istanbul Convention & Visitors Bureau" },
-                { title: "ICCA / IAPCO Standards", desc: "Venues verified by on-site MICE inspection" },
-                { title: "GDPR & Data Protection", desc: "Your data is protected — B2B privacy, no public links" },
-                { title: "Est. 2012 · Istanbul", desc: "Operated by D Event Tourism Organization Services Inc." },
-              ].map((c) => (
-                <div key={c.title} className="flex items-start gap-2">
-                  <CheckIcon size={13} className="mt-0.5 shrink-0 text-white/80" />
-                  <div>
-                    <p className="text-[11px] font-bold uppercase tracking-wide text-white/90">{c.title}</p>
-                    <p className="mt-0.5 text-[10px] leading-snug text-white/55">{c.desc}</p>
+                { n: "1", icon: <FileTextIcon size={18} />, title: "Apply", desc: "Submit your venue application — our team verifies it with you" },
+                { n: "2", icon: <BuildingIcon size={18} />, title: "Create your profile", desc: "Photos, halls, room types and capacities" },
+                { n: "3", icon: <UsersIcon size={18} />, title: "Receive requests", desc: "Structured quote requests matched to your capacity" },
+                { n: "4", icon: <ClockIcon size={18} />, title: "Quote live prices", desc: "Reply with your group offer within your SLA" },
+                { n: "5", icon: <CheckIcon size={18} />, title: "Win & host", desc: "Host the group — commission only after realization" },
+              ].map((s, i) => (
+                <Reveal key={s.n} delay={150 + i * 120} className="group relative text-center">
+                  {i < 4 && <div className="absolute left-[60%] top-5 hidden h-px w-[80%] bg-white/15 sm:block" />}
+                  <div className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/40 ring-1 ring-white/25 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
+                    {s.icon}
                   </div>
-                </div>
+                  <h3 className="mt-1.5 text-[14px] font-bold text-white">
+                    {s.n}. {s.title}
+                  </h3>
+                  <p className="mt-0.5 text-[11px] leading-snug text-white/60">{s.desc}</p>
+                </Reveal>
               ))}
             </div>
+          </div>
+
+          {/* ── KUŞAK 4: Ortak avantajları — 6 kompakt buzlu cam kart ── */}
+          <div className="mt-2.5 border-t border-white/10 pt-2.5">
+            <Reveal delay={100}>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">Partner advantages</p>
+            </Reveal>
+            <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                { icon: <EuroIcon size={16} />, title: "Lowest commission in the market", desc: "No listing fee, no subscription, no upfront cost. You are invoiced only after the event is realized." },
+                { icon: <PlaneIcon size={16} />, title: "International group demand", desc: "B2B organizers from Europe, the UK, North America and the Middle East — congresses, incentives and corporate meetings." },
+                { icon: <TagIcon size={16} />, title: "You stay in control", desc: "You set your own live prices and use your own contract. The client pays you directly — Turmeet never holds the money." },
+                { icon: <UsersIcon size={16} />, title: "Qualified corporate leads", desc: "Corporate-only platform: every quote request comes from a verified company, agency or PCO. No individual bookings." },
+                { icon: <MonitorIcon size={16} />, title: "Digital partner panel", desc: "Quote requests, live pricing, contracts, messaging, reports and promotions — managed in one place at turmeet.com/partner." },
+                { icon: <StarIcon size={16} />, title: "Sponsorship & visibility", desc: "Sponsored placement above organic results, showcase tags and premium ranking backed by your MICE inspection score." },
+              ].map((f, i) => (
+                <Reveal key={f.title} delay={i * 90}>
+                  <div className="group flex h-full items-start gap-2.5 rounded-card border border-white/15 bg-white/10 p-2 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/15 hover:shadow-xl hover:shadow-black/20">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                      {f.icon}
+                    </span>
+                    <div>
+                      <h3 className="text-[13px] font-bold text-white">{f.title}</h3>
+                      <p className="mt-0.5 text-[10px] leading-snug text-white/65">{f.desc}</p>
+                    </div>
+                  </div>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+
+          <Reveal delay={200} className="mt-2.5 flex items-center justify-center gap-4">
+            <LinkButton href="/register/hotel">
+              List Your Venue — Free
+            </LinkButton>
+            <Link href="/login" className="group inline-flex items-center gap-1 text-sm font-semibold text-white/85 hover:text-white hover:underline">
+              Partner Login <ArrowRightIcon size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
           </Reveal>
         </div>
       </section>
