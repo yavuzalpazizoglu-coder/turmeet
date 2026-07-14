@@ -1,9 +1,11 @@
 /*
  * FAVORİLER — master doküman 4.8.
  * Backend: GET /api/v1/favorites (mock: popüler mekanlar gösterilir)
+ * Düzen: kompakt yatay satır kartları (FavoriteList) — ekranda çok
+ * daha fazla mekan görünür; büyük dikey kartlar arama sayfasına özel.
  */
 import { PageHeader, EmptyState, LinkButton } from "@/components/ui";
-import { VenueCard } from "@/components/venue/VenueCard";
+import { FavoriteList } from "@/components/venue/FavoriteList";
 import { getVenues } from "@/services";
 
 export const metadata = { title: "Favorites — Turmeet" };
@@ -14,7 +16,10 @@ export default async function FavoritesPage() {
 
   return (
     <>
-      <PageHeader title="Favorites" description="Venues you saved for future events." />
+      <PageHeader
+        title="Favorites"
+        description={`${venues.length} venues you saved for future events.`}
+      />
       {venues.length === 0 ? (
         <EmptyState
           title="No favorites yet"
@@ -22,11 +27,7 @@ export default async function FavoritesPage() {
           action={<LinkButton href="/app/search">Browse venues</LinkButton>}
         />
       ) : (
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-          {venues.map((v) => (
-            <VenueCard key={v.id} venue={v} />
-          ))}
-        </div>
+        <FavoriteList venues={venues} />
       )}
     </>
   );
