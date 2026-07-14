@@ -135,7 +135,7 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
               type="button"
               onClick={() => setSelected(v.id)}
               aria-pressed={active}
-              className={`group flex w-full items-center gap-3 rounded-card border bg-white p-2.5 text-left transition-all ${
+              className={`group flex w-full items-center gap-3 rounded-card border bg-white p-2.5 text-left shadow-sm transition-all ${
                 active ? "border-brand shadow-card ring-1 ring-brand" : "border-gray-200 hover:border-brand/40 hover:shadow-card"
               }`}
             >

@@ -56,21 +56,27 @@ export default async function VenuesPage({
         subtitle={`${venues.length} venues found · every property inspected on site · sponsored venues shown first`}
       />
 
-      <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
-        {/* Kompakt filtre çubuğu — panel araması ile ortak bileşen */}
-        <div className="-mt-10 relative z-20">
-          <DetailedVenueFilters current={params} basePath="/venues" />
-        </div>
+      {/*
+       * Profesyonel SERP zemini — beyaz kartların ayrıştığı açık nötr gri
+       * (Booking/Cvent dili). Panel araması da aynı bg-surface tonunu kullanır.
+       */}
+      <div className="bg-surface">
+        <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6">
+          {/* Kompakt filtre çubuğu — panel araması ile ortak bileşen */}
+          <div className="-mt-10 relative z-20">
+            <DetailedVenueFilters current={params} basePath="/venues" />
+          </div>
 
-        <div className="mt-4">
-          {venues.length === 0 ? (
-            <p className="rounded-card border border-dashed border-gray-300 p-12 text-center text-muted">
-              No venues match your filters. Try widening your search.
-            </p>
-          ) : (
-            /* 2 blok: solda otel kolonu, sağda harita */
-            <SearchResults venues={venues} />
-          )}
+          <div className="mt-4">
+            {venues.length === 0 ? (
+              <p className="rounded-card border border-dashed border-gray-300 bg-white p-12 text-center text-muted">
+                No venues match your filters. Try widening your search.
+              </p>
+            ) : (
+              /* 2 blok: solda otel kolonu, sağda harita */
+              <SearchResults venues={venues} />
+            )}
+          </div>
         </div>
       </div>
     </>
