@@ -17,6 +17,7 @@ import {
   UsersIcon,
   BuildingIcon,
   CheckIcon,
+  XIcon,
   ArrowRightIcon,
   GridIcon,
   FileTextIcon,
@@ -237,139 +238,101 @@ export default async function HomePage() {
        * Komisyon oranı bilinçli olarak gösterilmez (MD 3.2 /pricing kuralı).
        */}
       {/* Tam sayfa kuralı: içerik 900px yüksekliğe sığacak şekilde sıkılaştırıldı */}
-      <section id="why-turmeet" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-ink py-6">
+      <section id="why-turmeet" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden bg-ink py-3">
         {/*
-         * Koyu sinematik zemin — karartılmış gerçek kongre salonu fotoğrafı.
-         * Beyaz vitrin bölümünden sonra güçlü kontrast yaratır; hero ve
-         * For Hotels sayfasıyla aynı görsel dile bağlanır.
+         * Temiz koyu zemin — fotoğraf yok; hafif marka gradyanı + yüzen
+         * ışık lekeleri. İçerik (hikaye + akış + güven kartları) öne çıkar.
          */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/venue-icc-hall.jpg"
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover brightness-[0.55] saturate-[0.95]"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/35 to-black/55" />
-        {/* Dekoratif yüzen ışık lekeleri */}
+        <div className="absolute inset-0 bg-gradient-to-b from-ink via-[#1c1420] to-ink" />
         <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
         <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
 
-        <div className="relative mx-auto w-full max-w-6xl px-4 sm:px-6">
-          {/* Neden Turmeet var? */}
-          <Reveal className="mx-auto max-w-3xl text-center">
-            <p className="text-xs font-bold uppercase tracking-widest text-brand-light">Why Turmeet exists</p>
-            <h2 className="hero-text-shadow mt-2 text-2xl font-bold text-white">
+        <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
+          {/* ── KUŞAK 1: BAŞLIK — büyük etiket + cümle başlığı + tek satır rakam özeti ── */}
+          <Reveal className="mx-auto max-w-5xl text-center">
+            <p className="text-base font-bold uppercase tracking-widest text-brand-light sm:text-lg">
+              Why Turmeet exists
+            </p>
+            <h2 className="mt-1.5 text-3xl font-bold leading-tight text-white sm:text-[34px]">
               Getting group quotes from hotels used to take weeks of emails
             </h2>
-            <p className="hero-text-shadow mt-2 text-[13px] leading-relaxed text-white/75">
-              Turmeet is Turkey&apos;s first meeting &amp; event search engine. We digitalize the quote process for
-              congresses, corporate meetings, incentives and retreats — making it{" "}
-              <span className="font-semibold text-white">transparent</span> (live prices, no hidden costs),{" "}
-              <span className="font-semibold text-white">fast</span> (instant comparative offers) and{" "}
-              <span className="font-semibold text-white">impartial</span> (venues compete, you choose).
+            <p className="mt-1.5 text-sm leading-relaxed text-white/75">
+              Turmeet is Turkey&apos;s first meeting &amp; event search engine — quotes made{" "}
+              <span className="font-semibold text-white">transparent</span>,{" "}
+              <span className="font-semibold text-white">fast</span> and{" "}
+              <span className="font-semibold text-white">impartial</span>.
             </p>
-
-            {/*
-             * Türkiye'nin ikonik kongre mekanları — tek sıra, eşit boyutlu
-             * 6 gerçek fotoğraf + isim etiketi.
-             * Görseller: Wikimedia Commons (1400px'e küçültülmüş yerel kopya).
-             */}
-            <div className="mt-3 grid grid-cols-3 gap-3 sm:grid-cols-6">
-              {[
-                {
-                  src: "/images/venue-lutfi-kirdar.jpg",
-                  alt: "Istanbul Lütfi Kırdar Convention and Exhibition Centre",
-                  label: "Lütfi Kırdar ICEC · Istanbul",
-                },
-                {
-                  src: "/images/venue-halic-congress.jpg",
-                  alt: "Haliç Congress Center on the Golden Horn, Istanbul",
-                  label: "Haliç Congress Center",
-                },
-                {
-                  src: "/images/venue-icc-istanbul.jpg",
-                  alt: "Istanbul Congress Center entrance",
-                  label: "ICC · Istanbul",
-                },
-                {
-                  src: "/images/venue-ciragan-palace.jpg",
-                  alt: "Çırağan Palace Kempinski on the Bosphorus, Istanbul",
-                  label: "Çırağan Palace · Bosphorus",
-                },
-                {
-                  src: "/images/venue-regnum-carya.jpg",
-                  alt: "Regnum Carya resort and convention venue, Antalya",
-                  label: "Regnum Carya · Antalya",
-                },
-                {
-                  src: "/images/venue-swissotel-buyuk-efes.jpg",
-                  alt: "Swissôtel Büyük Efes, Izmir",
-                  label: "Swissôtel Büyük Efes · Izmir",
-                  // Kadraj aşağı kaydırıldı — üstteki güneş parlaması yerine bina görünür
-                  position: "object-[center_65%]",
-                },
-              ].map((p: { src: string; alt: string; label: string; position?: string }) => (
-                <figure
-                  key={p.src}
-                  className="group relative overflow-hidden rounded-xl shadow-lg shadow-black/40 ring-2 ring-white/30 transition-all duration-300 hover:scale-110 hover:ring-white/70"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={p.src}
-                    alt={p.alt}
-                    loading="lazy"
-                    className={`h-14 w-full object-cover sm:h-16 ${p.position ?? ""}`}
-                  />
-                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent px-1.5 pb-1 pt-4 text-center text-[8px] font-semibold leading-tight text-white sm:text-[9px]">
-                    {p.label}
-                  </figcaption>
-                </figure>
-              ))}
-            </div>
+            {/* Rakamlar tek satır metin olarak — kutu/sayaç yok */}
+            <p className="mt-1.5 text-[12px] font-medium uppercase tracking-wider text-white/50">
+              14+ years of MICE expertise · 329+ venues inspected on site · 34 cities · TURSAB licence no. 7514
+            </p>
           </Reveal>
 
           {/*
-           * KANIT ŞERİDİ — güveni somut rakam ve sertifikalarla kurar:
-           * sayaç animasyonlu deneyim/envanter rakamları + tek satırlık
-           * müşteri referansı. Kaynak: MD 1.10.1 istatistikler + 2.2 D Event.
+           * ── KUŞAK 2: MÜŞTERİ HİKAYESİ — sayfanın ana gövdesi ──
+           * Somut senaryo: 10 otelden grup teklifi. Solda eski yöntem
+           * (soluk, çarpı maddeler), sağda Turmeet (marka renkli, 48h vurgusu).
            */}
-          <Reveal delay={80}>
-            <div className="mx-auto mt-4 max-w-4xl rounded-card border border-white/15 bg-white/5 px-6 py-3 backdrop-blur-sm">
-              <div className="grid grid-cols-2 gap-x-6 gap-y-2 sm:grid-cols-4">
-                {[
-                  { value: <CountUp value={14} />, suffix: "+ yrs", label: "MICE expertise — Est. 2012" },
-                  { value: <CountUp value={329} />, suffix: "+", label: "Venues inspected on site" },
-                  { value: <CountUp value={34} />, suffix: "", label: "Cities across Turkey" },
-                  { value: "7514", suffix: "", label: "TURSAB agency license no." },
-                ].map((s) => (
-                  <div key={s.label} className="text-center">
-                    <p className="text-lg font-extrabold leading-tight text-white">
-                      {s.value}
-                      <span className="text-brand-light">{s.suffix}</span>
-                    </p>
-                    <p className="mt-0.5 text-[10px] font-medium uppercase tracking-wider text-white/60">{s.label}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-2 border-t border-white/10 pt-2 text-center">
-                <p className="text-[12px] italic leading-relaxed text-white/80">
-                  &ldquo;We received five comparable congress offers in 48 hours — a process that used to take us three
-                  weeks of emails.&rdquo;
-                  <span className="ml-2 text-[11px] font-semibold not-italic uppercase tracking-wide text-white/50">
-                    — Corporate event buyer · Frankfurt
-                  </span>
-                </p>
-              </div>
-            </div>
-          </Reveal>
-
-          {/* Nasıl çalışıyor? — 5 adımlı ortak akış (MD 2.4) */}
-          <div className="mt-5">
-            <Reveal delay={100}>
-              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand-light">How it works</p>
+          <div className="mx-auto mt-3 max-w-5xl">
+            <Reveal delay={60}>
+              <p className="text-center text-sm font-semibold text-white/85">
+                Say you need group offers from <span className="font-bold text-white">10 hotels</span> in Istanbul or
+                Antalya.
+              </p>
             </Reveal>
-            <div className="mt-3 grid gap-6 sm:grid-cols-5">
+            <div className="mt-2.5 grid gap-3 sm:grid-cols-2">
+              <Reveal delay={120}>
+                <div className="h-full rounded-card border border-white/10 bg-white/5 p-3">
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-white/40">The old way</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {[
+                      "Contact hotels one by one and chase replies for weeks",
+                      "Hand the job to a PCO / DMC and wait for offers to be collected",
+                      "Build your own hotel list, send emails, hope for answers",
+                    ].map((t) => (
+                      <li key={t} className="flex items-start gap-2 text-[13px] leading-snug text-white/55">
+                        <XIcon size={14} className="mt-0.5 shrink-0 text-white/35" />
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+              <Reveal delay={200}>
+                <div className="relative h-full overflow-hidden rounded-card border border-brand/50 bg-gradient-to-br from-brand/25 via-brand/10 to-transparent p-3 shadow-lg shadow-brand/20">
+                  {/* 48 saat vurgusu — kartın sağ üst köşesinde rozet */}
+                  <span className="absolute right-3 top-3 rounded-full bg-brand px-2.5 py-1 text-xs font-black uppercase tracking-wide text-white shadow-md">
+                    48h
+                  </span>
+                  <p className="text-[11px] font-bold uppercase tracking-widest text-brand-light">With Turmeet</p>
+                  <ul className="mt-2 space-y-1.5">
+                    {[
+                      "Comparative offers from every hotel you choose — within 48 hours, direct from the hotels",
+                      "Fast, reliable decisions based on real hotel budgets",
+                      "Extra services and local needs delivered digitally, on request",
+                    ].map((t) => (
+                      <li key={t} className="flex items-start gap-2 text-[13px] font-medium leading-snug text-white">
+                        <CheckIcon size={14} className="mt-0.5 shrink-0 text-brand-light" />
+                        {t}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            </div>
+            <Reveal delay={260}>
+              <p className="mt-2 text-center text-sm font-semibold text-white/85">
+                Planning a meeting in Turkey? We guide you with a fresh perspective.
+              </p>
+            </Reveal>
+          </div>
+
+          {/* ── KUŞAK 3: NASIL ÇALIŞIR — 5 adım tek yatay şerit (MD 2.4) ── */}
+          <div className="mt-3 border-t border-white/10 pt-2.5">
+            <Reveal delay={100}>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">How it works</p>
+            </Reveal>
+            <div className="mt-2.5 grid gap-4 sm:grid-cols-5">
               {[
                 { n: "1", icon: <SearchIcon size={18} />, title: "Search", desc: "City, dates, group size — filter 329+ venues by MICE criteria" },
                 { n: "2", icon: <GridIcon size={18} />, title: "Compare", desc: "Review rooms, halls and reference prices side by side" },
@@ -379,10 +342,10 @@ export default async function HomePage() {
               ].map((s, i) => (
                 <Reveal key={s.n} delay={150 + i * 120} className="group relative text-center">
                   {i < 4 && <div className="absolute left-[60%] top-5 hidden h-px w-[80%] bg-white/15 sm:block" />}
-                  <div className="relative mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/40 ring-1 ring-white/25 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
+                  <div className="relative mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-brand text-white shadow-lg shadow-brand/40 ring-1 ring-white/25 transition-transform duration-300 group-hover:-translate-y-1 group-hover:scale-110">
                     {s.icon}
                   </div>
-                  <h3 className="mt-2 text-[14px] font-bold text-white">
+                  <h3 className="mt-1.5 text-[14px] font-bold text-white">
                     {s.n}. {s.title}
                   </h3>
                   <p className="mt-0.5 text-[11px] leading-snug text-white/60">{s.desc}</p>
@@ -391,28 +354,28 @@ export default async function HomePage() {
             </div>
           </div>
 
-          {/* Güvenilirlik & avantajlar — iş modeli prensipleri (MD 2.2) */}
-          <div className="mt-5">
+          {/* ── KUŞAK 4: Güvenilirlik & avantajlar — iş modeli prensipleri (MD 2.2) ── */}
+          <div className="mt-2.5 border-t border-white/10 pt-2.5">
             <Reveal delay={100}>
-              <p className="text-center text-xs font-bold uppercase tracking-widest text-brand-light">Trust &amp; advantages</p>
+              <p className="text-center text-sm font-bold uppercase tracking-widest text-brand-light">Trust &amp; advantages</p>
             </Reveal>
-            <div className="mt-3 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-2.5 grid gap-2.5 sm:grid-cols-2 lg:grid-cols-3">
               {[
-                { icon: <EuroIcon size={20} />, title: "Free for organizers", desc: "Commission is paid by the venue after the event — never by you. The quoted price is the final price." },
-                { icon: <TagIcon size={20} />, title: "Venues set their own prices", desc: "Turmeet never marks up or interferes with pricing. Hotels quote live — fair competition, real rates." },
-                { icon: <FileTextIcon size={20} />, title: "You pay the venue directly", desc: "Turmeet reviews every detail of your contract against national regulations and international standards. Payments go directly to the venue you choose — never to Turmeet. Fully compliant and transparent." },
-                { icon: <CheckIcon size={20} />, title: "Verified venues", desc: "Every hotel passes the D Event MICE inspection — capacity, transit access and service quality are checked on site." },
-                { icon: <UsersIcon size={20} />, title: "Coordinator support", desc: "For events above 150 guests or rooms, a dedicated coordinator — or a full team, at your request — is assigned to you and follows your event end to end, just like a classic PCO." },
-                { icon: <BuildingIcon size={20} />, title: "Backed by D Event", desc: "Operated by D Event Turizm — Est. 2012, Istanbul. TURSAB licensed travel agency (No. 7514), zero fault tolerance." },
+                { icon: <EuroIcon size={16} />, title: "Free for organizers", desc: "Commission is paid by the venue after the event — never by you. The quoted price is the final price." },
+                { icon: <TagIcon size={16} />, title: "Venues set their own prices", desc: "Turmeet never marks up or interferes with pricing. Hotels quote live — fair competition, real rates." },
+                { icon: <FileTextIcon size={16} />, title: "You pay the venue directly", desc: "Turmeet reviews every detail of your contract against national regulations and international standards. Payments go directly to the venue you choose — never to Turmeet. Fully compliant and transparent." },
+                { icon: <CheckIcon size={16} />, title: "Verified venues", desc: "Every hotel passes the D Event MICE inspection — capacity, transit access and service quality are checked on site." },
+                { icon: <UsersIcon size={16} />, title: "Coordinator support", desc: "For events above 150 guests or rooms, a dedicated coordinator — or a full team, at your request — is assigned to you and follows your event end to end, just like a classic PCO." },
+                { icon: <BuildingIcon size={16} />, title: "Backed by D Event", desc: "Operated by D Event Turizm — Est. 2012, Istanbul. TURSAB licensed travel agency (No. 7514), zero fault tolerance." },
               ].map((f, i) => (
                 <Reveal key={f.title} delay={i * 90}>
-                  <div className="group flex h-full items-start gap-2.5 rounded-card border border-white/15 bg-white/10 p-2.5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/15 hover:shadow-xl hover:shadow-black/20">
-                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                  <div className="group flex h-full items-start gap-2.5 rounded-card border border-white/15 bg-white/10 p-2 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-white/40 hover:bg-white/15 hover:shadow-xl hover:shadow-black/20">
+                    <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-white text-brand transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                       {f.icon}
                     </span>
                     <div>
                       <h3 className="text-[13px] font-bold text-white">{f.title}</h3>
-                      <p className="mt-0.5 text-[10.5px] leading-snug text-white/65">{f.desc}</p>
+                      <p className="mt-0.5 text-[10px] leading-snug text-white/65">{f.desc}</p>
                     </div>
                   </div>
                 </Reveal>
@@ -420,7 +383,7 @@ export default async function HomePage() {
             </div>
           </div>
 
-          <Reveal delay={200} className="mt-4 flex items-center justify-center gap-4">
+          <Reveal delay={200} className="mt-2.5 flex items-center justify-center gap-4">
             <LinkButton href="/register">
               Get started — it&apos;s free
             </LinkButton>
