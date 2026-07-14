@@ -5,15 +5,17 @@
  * önizleme baloncuğu açılır; satır pembe çerçeveyle vurgulanır.
  * Haritadaki pine tıklamak da aynı oteli listede vurgular.
  *
- * Harita altyapısı: Leaflet + CARTO Voyager (public SERP haritası ile aynı
- * dil). Tek şehir aramasında merkez / metro / yoğun bölge katmanları da
- * çizilir (lib/city-map-data.ts).
+ * Harita altyapısı: Leaflet + CARTO Positron (açık, minimal) +
+ * leaflet.markercluster — yakın mekanlar büyük pembe dairede sayı olarak
+ * kümelenir. Tek şehir aramasında merkez / metro / yoğun bölge katmanları
+ * da çizilir (lib/city-map-data.ts).
  */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
 import type { Venue } from "@/types";
 import { CITY_MAP_LAYERS } from "@/lib/city-map-data";
 import { UsersIcon, GridIcon, ArrowRightIcon } from "@/components/ui/icons";
@@ -23,6 +25,7 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<import("leaflet").Map | null>(null);
   const markersRef = useRef<Record<string, import("leaflet").Marker>>({});
+  const clusterRef = useRef<import("leaflet").MarkerClusterGroup | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
 
   // Harita kurulumu — sonuç listesi değişince yeniden çizilir
@@ -31,6 +34,7 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
 
     (async () => {
       const L = (await import("leaflet")).default;
+      await import("leaflet.markercluster");
       if (cancelled || !containerRef.current || mapRef.current || venues.length === 0) return;
 
       const map = L.map(containerRef.current, {
@@ -51,17 +55,35 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
       }).addTo(map);
 
       markersRef.current = {};
-      /* Fiyatsız mekanlar için bina glifi — beyaz yuvarlak rozet içinde */
-      const buildingGlyph =
-        '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9.5 7h.01M9.5 11h.01M9.5 15h.01M14.5 7h.01M14.5 11h.01M14.5 15h.01"/></svg>';
-      const markers = venues.map((v) => {
-        const html =
-          v.referencePrice !== null
-            ? `<div class="tm-pin">€${v.referencePrice}</div>`
-            : `<div class="tm-pin tm-pin--icon">${buildingGlyph}</div>`;
-        const icon = L.divIcon({ className: "", html, iconSize: [0, 0] });
+      /*
+       * Kümeleme: yakın mekanlar büyük pembe dairede SAYI olarak gösterilir
+       * (fiyat yok — okunmuyor). Daireye tıklanınca harita yakınlaşır ve
+       * küme dağılır; tek mekanlar bina ikonlu yuvarlak rozetle çizilir.
+       */
+      const clusterGroup = L.markerClusterGroup({
+        maxClusterRadius: 70,
+        showCoverageOnHover: false,
+        spiderfyOnMaxZoom: true,
+        iconCreateFunction: (cluster) =>
+          L.divIcon({
+            className: "",
+            html: `<div class="tm-cluster">${cluster.getChildCount()}</div>`,
+            iconSize: [0, 0],
+          }),
+      });
+      clusterRef.current = clusterGroup;
 
-        const marker = L.marker([v.lat, v.lng], { icon }).addTo(map);
+      /* Tekil mekan işareti — bina glifi, beyaz yuvarlak rozet içinde */
+      const buildingGlyph =
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9.5 7h.01M9.5 11h.01M9.5 15h.01M14.5 7h.01M14.5 11h.01M14.5 15h.01"/></svg>';
+      const markers = venues.map((v) => {
+        const icon = L.divIcon({
+          className: "",
+          html: `<div class="tm-pin tm-pin--icon">${buildingGlyph}</div>`,
+          iconSize: [0, 0],
+        });
+
+        const marker = L.marker([v.lat, v.lng], { icon });
         marker.bindPopup(
           `<a href="/venues/${v.slug}" class="tm-pop">
              <img src="${v.imageUrl}" alt="" />
@@ -75,8 +97,10 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
         );
         marker.on("click", () => setSelected(v.id));
         markersRef.current[v.id] = marker;
+        clusterGroup.addLayer(marker);
         return marker;
       });
+      map.addLayer(clusterGroup);
 
       // Tek şehir aramasında şehir katmanları (merkez / metro / yoğun bölge)
       const cities = new Set(venues.map((v) => v.city));
@@ -121,11 +145,11 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
       mapRef.current?.remove();
       mapRef.current = null;
       markersRef.current = {};
+      clusterRef.current = null;
     };
   }, [venues]);
 
-  // Otel kutusuna tıklanınca: haritada o otele uç + baloncuğu aç.
-  // Seçili rozet pembeye döner ve z-index ile öne alınır (üst üste binme çözümü).
+  // Otel kutusuna tıklanınca: küme açılır, harita o otele uçar ve baloncuk açılır.
   useEffect(() => {
     for (const [id, m] of Object.entries(markersRef.current)) {
       const el = m.getElement()?.querySelector(".tm-pin");
@@ -135,9 +159,18 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
     if (!selected) return;
     const map = mapRef.current;
     const marker = markersRef.current[selected];
+    const cluster = clusterRef.current;
     if (!map || !marker) return;
-    map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 13), { duration: 0.8 });
-    marker.openPopup();
+    if (cluster) {
+      // Marker bir kümenin içindeyse önce kümeyi aç, sonra baloncuğu göster
+      cluster.zoomToShowLayer(marker, () => {
+        marker.openPopup();
+        marker.getElement()?.querySelector(".tm-pin")?.classList.add("tm-pin--active");
+      });
+    } else {
+      map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 13), { duration: 0.8 });
+      marker.openPopup();
+    }
   }, [selected]);
 
   return (
@@ -225,7 +258,10 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
         {/* Lejant */}
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-gray-200 px-4 py-2 text-[11px] text-muted">
           <span className="inline-flex items-center gap-1.5">
-            <span className="inline-block h-3.5 w-7 rounded-full bg-white shadow-sm ring-1 ring-gray-300" /> Venue
+            <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-brand text-[8px] font-bold text-white ring-1 ring-white">
+              5
+            </span>{" "}
+            Venue cluster — click to zoom
           </span>
           <span className="inline-flex items-center gap-1.5">
             <span className="inline-flex h-3.5 w-3.5 items-center justify-center rounded-full bg-[#1d4ed8] text-[8px] font-bold text-white">M</span>{" "}
@@ -242,17 +278,42 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
 
       {/* Pin ve popup stilleri (Leaflet DOM'una global sızması gerekiyor) */}
       <style jsx global>{`
-        /* Airbnb tarzı fiyat rozeti: beyaz chip + koyu yazı + yumuşak gölge */
+        /*
+         * Küme dairesi — büyük pembe daire içinde mekan SAYISI.
+         * Tıklanınca yakınlaşıp dağılır (leaflet.markercluster).
+         */
+        .tm-cluster {
+          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 46px;
+          height: 46px;
+          border-radius: 50%;
+          background: #cf2c73;
+          color: #fff;
+          font: 800 15px/1 var(--font-inter), sans-serif;
+          border: 3px solid #fff;
+          box-shadow: 0 4px 14px rgba(207, 44, 115, 0.45);
+          cursor: pointer;
+          transition: transform 0.15s;
+        }
+        .tm-cluster:hover {
+          transform: translate(-50%, -50%) scale(1.1);
+        }
+        /* Tekil mekan — bina ikonlu yuvarlak beyaz rozet */
         .tm-pin {
           transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
           background: #fff;
-          color: #1f1f1f;
-          font: 700 12px/1 var(--font-inter), sans-serif;
-          padding: 7px 11px;
-          border-radius: 999px;
-          white-space: nowrap;
+          color: #cf2c73;
           box-shadow:
-            0 2px 8px rgba(0, 0, 0, 0.18),
+            0 2px 8px rgba(0, 0, 0, 0.2),
             0 0 0 1px rgba(0, 0, 0, 0.06);
           cursor: pointer;
           transition:
@@ -262,7 +323,7 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
             box-shadow 0.15s;
         }
         .tm-pin:hover {
-          transform: translate(-50%, -50%) scale(1.1);
+          transform: translate(-50%, -50%) scale(1.12);
           background: #cf2c73;
           color: #fff;
           box-shadow: 0 4px 14px rgba(207, 44, 115, 0.45);
@@ -272,15 +333,6 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
           background: #cf2c73;
           color: #fff;
           box-shadow: 0 4px 14px rgba(207, 44, 115, 0.5);
-        }
-        /* Fiyatsız mekan — bina ikonlu yuvarlak rozet */
-        .tm-pin--icon {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 30px;
-          height: 30px;
-          padding: 0;
         }
         .tm-metro {
           transform: translate(-50%, -50%);
