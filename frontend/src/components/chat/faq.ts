@@ -42,7 +42,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: "venues",
     question: "How many venues are on Turmeet?",
     answer:
-      "329+ verified venues, 89,000+ rooms and 2,500+ meeting halls across 34 cities in Turkey — from Istanbul's congress hotels to Antalya's resorts and Cappadocia's boutique retreats. New properties join every week.",
+      "329+ verified venues, 89,600+ rooms and 2,580+ meeting halls across 34 cities in Turkey — from Istanbul's congress hotels to Antalya's resorts and Cappadocia's boutique retreats. New properties join every week.",
     keywords: ["venue", "hotel", "city", "cities", "istanbul", "antalya", "how many", "list"],
   },
   {

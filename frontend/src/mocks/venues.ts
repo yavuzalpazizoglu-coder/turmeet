@@ -1458,14 +1458,20 @@ const liveCityStats = (cities: string[]) => {
  * ICCA mekan kategorileri (city & conference hotel / resort congress
  * hotel / congress & exhibition center) tagline'larda da kullanılır.
  */
+/*
+ * Taban değerler gerçek envanterden alınmıştır:
+ * Oteller_Tum_Liste_2026-07-10 (329 otel, 89.695 oda, 2.582 salon, 34 şehir).
+ * base = Excel şehir toplamı − MOCK_VENUES'taki canlı kayıtlar, böylece
+ * base + live kartlarda gerçek envanter sayısını verir.
+ */
 const DESTINATION_BASE = [
   // ICCA 2023 Country & City Rankings: Istanbul 72 kongre ile dünya #21 / Avrupa #16
-  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22436 }, category: "congress", tagline: "Purpose-built congress centers & city hotels — ICCA world #21", img: "istanbul-dest" },
-  { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 59, rooms: 29341 }, category: "incentive", tagline: "Resort congress capital — incentives & residential congresses", img: "antalya-dest" },
-  { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 21, rooms: 3449 }, category: "congress", tagline: "Diplomatic congress hub — conference hotels & Congresium", img: "ankara-dest" },
-  { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 21, rooms: 4380 }, category: "congress", tagline: "Aegean congress & exhibition gateway", img: "izmir-dest" },
+  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22473 }, category: "congress", tagline: "Purpose-built congress centers & city hotels — ICCA world #21", img: "istanbul-dest" },
+  { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 57, rooms: 28151 }, category: "incentive", tagline: "Resort congress capital — incentives & residential congresses", img: "antalya-dest" },
+  { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 21, rooms: 3493 }, category: "congress", tagline: "Diplomatic congress hub — conference hotels & Congresium", img: "ankara-dest" },
+  { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 21, rooms: 4358 }, category: "congress", tagline: "Aegean congress & exhibition gateway", img: "izmir-dest" },
   { slug: "cappadocia", name: "Cappadocia", cities: ["Nevşehir"], base: { venues: 9, rooms: 1360 }, category: "cultural", tagline: "Boutique retreats for executive meetings & incentives", img: "cappadocia-dest" },
-  { slug: "bursa", name: "Bursa", cities: ["Bursa"], base: { venues: 9, rooms: 1252 }, category: "wellness", tagline: "Thermal & mountain resorts with conference facilities", img: "bursa-dest" },
+  { slug: "bursa", name: "Bursa", cities: ["Bursa"], base: { venues: 8, rooms: 1400 }, category: "wellness", tagline: "Thermal & mountain resorts with conference facilities", img: "bursa-dest" },
 ];
 
 export const MOCK_DESTINATIONS: Destination[] = DESTINATION_BASE.map((d) => {
@@ -1481,10 +1487,11 @@ export const MOCK_DESTINATIONS: Destination[] = DESTINATION_BASE.map((d) => {
   };
 });
 
-// Anasayfa güven istatistikleri (master doküman 1.10.1)
+// Anasayfa güven istatistikleri — gerçek envanter (Oteller_Tum_Liste_2026-07-10):
+// 329 otel, 89.695 oda, 2.582 toplantı salonu, 34 şehir
 export const PLATFORM_STATS = {
   venues: "329+",
-  rooms: "89,000+",
+  rooms: "89,600+",
   cities: "34",
-  meetingHalls: "2,500+",
+  meetingHalls: "2,580+",
 };

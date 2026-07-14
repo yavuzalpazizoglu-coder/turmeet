@@ -436,8 +436,8 @@ export default async function HomePage() {
           <div className="mx-auto mt-3 grid max-w-5xl grid-cols-2 gap-2.5 sm:grid-cols-5">
             {[
               { value: 329, suffix: "+", label: "Partner venues" },
-              { value: 89000, suffix: "+", label: "Rooms listed" },
-              { value: 2500, suffix: "+", label: "Meeting halls" },
+              { value: 89600, suffix: "+", label: "Rooms listed" },
+              { value: 2580, suffix: "+", label: "Meeting halls" },
               { value: 34, suffix: "", label: "Cities in Turkey" },
               { value: 4, suffix: "", label: "Continents of demand" },
             ].map((s, i) => (
