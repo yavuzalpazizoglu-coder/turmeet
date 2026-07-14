@@ -14,10 +14,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SearchIcon, MapPinIcon, CalendarIcon, UsersIcon, BuildingIcon } from "@/components/ui/icons";
-import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
+import { SearchIcon, MapPinIcon, CalendarIcon, UsersIcon, BuildingIcon, GridIcon } from "@/components/ui/icons";
+import { EVENT_TYPES, BUDGET_SEGMENTS, VENUE_TYPES } from "@/lib/mice-criteria";
 
-const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nevşehir", "Cappadocia"];
+const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Bodrum", "Adana", "Nevşehir"];
+
+/** Kullanıcının yazdığı bölge adları → envanterdeki şehir adı */
+const CITY_ALIASES: Record<string, string> = { cappadocia: "Nevşehir", kapadokya: "Nevşehir" };
 
 /** Arama kutusunun altında chip olarak gösterilen popüler şehirler */
 const POPULAR_CITIES = ["Istanbul", "Antalya", "Ankara", "Cappadocia", "Izmir"];
@@ -42,13 +45,133 @@ export interface VenueSuggestion {
   city: string;
 }
 
+/*
+ * AKILLI SORGU ÇÖZÜMLEME — serbest metin, arama sayfasının gerçek
+ * filtre param'larına çevrilir (?city=&type=&eventType=&capacity=&metro=).
+ * Örn. "Congress & exhibition center in Istanbul · 2,000 pax" →
+ * type=congress_center & city=Istanbul & capacity=2000.
+ * Böylece daktilo placeholder'daki örnek sorgular birebir çalışır.
+ */
+const TYPE_KEYWORDS: [RegExp, string][] = [
+  [/congress\s*&?\s*exhibition\s*(center|centre|hub)?|exhibition\s*(center|centre)|congress\s*(center|centre)/, "congress_center"],
+  [/city\s*&?\s*conference\s*hotel|conference\s*hotel|city\s*hotel/, "city_hotel"],
+  [/resort/, "resort"],
+  [/boutique|retreat/, "boutique"],
+  [/thermal|mountain/, "mountain_resort"],
+  [/airport\s*(conference\s*)?hotel/, "airport_hotel"],
+];
+
+const EVENT_KEYWORDS: [RegExp, string][] = [
+  [/incentive|reward/, "incentive"],
+  [/gala|dinner/, "gala"],
+  [/workshop|training/, "workshop"],
+  [/hybrid|online/, "hybrid"],
+  [/symposium|seminar/, "symposium"],
+  [/trade\s*fair|fair|exhibition/, "exhibition"],
+  [/congress|conference/, "congress"],
+  [/corporate|company\s*meeting/, "corporate_meeting"],
+];
+
+/** Kalan metinden atılan dolgu sözcükleri — geriye mekan adı kalır */
+const STOPWORDS = new Set(["in", "near", "at", "the", "a", "an", "for", "with", "and", "hotel", "hotels", "venue", "venues", "studio", "pax"]);
+
+function parseQuery(raw: string): URLSearchParams {
+  const params = new URLSearchParams();
+  let text = ` ${raw.toLowerCase()} `;
+
+  // 1. Şehir — tam ad veya takma ad (Cappadocia → Nevşehir)
+  for (const [alias, target] of Object.entries(CITY_ALIASES)) {
+    if (text.includes(alias)) {
+      params.set("city", target);
+      text = text.replace(alias, " ");
+      break;
+    }
+  }
+  if (!params.has("city")) {
+    for (const c of CITIES) {
+      if (text.includes(c.toLowerCase())) {
+        params.set("city", c);
+        text = text.replace(c.toLowerCase(), " ");
+        break;
+      }
+    }
+  }
+
+  // 2. ICCA mekan kategorisi
+  for (const [re, val] of TYPE_KEYWORDS) {
+    const m = text.match(re);
+    if (m) {
+      params.set("type", val);
+      text = text.replace(m[0], " ");
+      break;
+    }
+  }
+
+  // 3. Metro / hibrit stüdyo anahtar kelimeleri
+  if (/metro|tram/.test(text)) {
+    params.set("metro", "1");
+    text = text.replace(/near\s*metro|metro|tram/g, " ");
+  }
+  if (/hybrid\s*studio/.test(text)) {
+    params.set("hybrid", "1");
+    text = text.replace(/hybrid\s*studio/g, " ");
+  }
+
+  // 4. ICCA/IAPCO etkinlik tipi
+  for (const [re, val] of EVENT_KEYWORDS) {
+    const m = text.match(re);
+    if (m) {
+      params.set("eventType", val);
+      text = text.replace(m[0], " ");
+      break;
+    }
+  }
+
+  // 5. Katılımcı sayısı — "300 pax / 2,000 people" veya çıplak sayı
+  const cap = text.match(/(\d[\d,.]*)\s*(pax|people|person|guests?|attendees?)/) ?? text.match(/(\d{2,}[\d,.]*)/);
+  if (cap) {
+    const n = Number(cap[1].replace(/[,.]/g, ""));
+    if (n > 0) params.set("capacity", String(n));
+    text = text.replace(cap[0], " ");
+  }
+
+  // 6. Kalan anlamlı metin → mekan adı araması (q)
+  const leftover = text
+    .replace(/[·,&\-–—]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w && !STOPWORDS.has(w))
+    .join(" ")
+    .trim();
+  if (leftover.length >= 3) params.set("q", leftover);
+
+  return params;
+}
+
+/** Gün ekleme — check-in seçilince check-out otomatik önerilir */
+function addDays(date: string, days: number): string {
+  const d = new Date(date);
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
   const router = useRouter();
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [placeholder, setPlaceholder] = useState("");
+  const [checkin, setCheckin] = useState("");
+  const [checkout, setCheckout] = useState("");
   const boxRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  /** Tarih alanının herhangi bir yerine tıklanınca takvim açılır */
+  function openPicker(e: React.MouseEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>) {
+    try {
+      e.currentTarget.showPicker?.();
+    } catch {
+      /* showPicker kullanıcı etkileşimi dışında çağrılırsa sessizce geç */
+    }
+  }
 
   // Dışarı tıklanınca öneri menüsünü kapat
   useEffect(() => {
@@ -100,20 +223,31 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
   }, [q]);
 
   const query = q.trim().toLowerCase();
-  const cityMatches = query ? CITIES.filter((c) => c.toLowerCase().includes(query)).slice(0, 4) : [];
+  // Takma adlar da şehir önerisine girer (Cappadocia → Nevşehir envanteri)
+  const aliasMatches = query
+    ? Object.entries(CITY_ALIASES)
+        .filter(([alias]) => alias.includes(query) || query.includes(alias))
+        .map(([, target]) => target)
+    : [];
+  const cityMatches = query
+    ? [...new Set([...CITIES.filter((c) => c.toLowerCase().includes(query)), ...aliasMatches])].slice(0, 4)
+    : [];
   const venueMatches = query
     ? venues.filter((v) => v.name.toLowerCase().includes(query) || v.city.toLowerCase().includes(query)).slice(0, 5)
     : [];
-  const hasSuggestions = cityMatches.length > 0 || venueMatches.length > 0;
+  // ICCA mekan kategorisi ve toplantı tipi önerileri — "congress",
+  // "incentive" gibi tarifler yazınca tıklanabilir seçenek çıkar
+  const typeMatches = query ? VENUE_TYPES.filter((t) => t.label.toLowerCase().includes(query)).slice(0, 3) : [];
+  const eventMatches = query ? EVENT_TYPES.filter((e) => e.label.toLowerCase().includes(query)).slice(0, 3) : [];
+  const hasSuggestions = cityMatches.length > 0 || venueMatches.length > 0 || typeMatches.length > 0 || eventMatches.length > 0;
 
   function submit(formData: FormData) {
-    const params = new URLSearchParams();
-    // Şehir listesinde birebir eşleşme varsa city filtresi olarak gönder
+    // Serbest metin akıllı çözümlenir: şehir / kategori / toplantı tipi /
+    // pax / metro gerçek filtre param'larına dönüşür (arama sayfası dili)
     const qVal = String(formData.get("q") ?? "").trim();
-    const exactCity = CITIES.find((c) => c.toLowerCase() === qVal.toLowerCase());
-    if (exactCity) params.set("city", exactCity);
-    else if (qVal) params.set("q", qVal);
+    const params = qVal ? parseQuery(qVal) : new URLSearchParams();
 
+    // Formdaki açık seçimler serbest metinden türeyenleri ezer
     for (const key of ["checkin", "checkout", "capacity", "eventType", "budget"]) {
       const val = formData.get(key);
       if (val) params.set(key, String(val));
@@ -161,6 +295,32 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
                   <span className="ml-auto text-xs text-muted">City</span>
                 </button>
               ))}
+              {/* ICCA mekan kategorileri — tarif yazınca kategoriye arama */}
+              {typeMatches.map((t) => (
+                <button
+                  key={t.value}
+                  type="button"
+                  onClick={() => router.push(`/venues?type=${encodeURIComponent(t.value)}`)}
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-brand-light"
+                >
+                  <GridIcon size={15} className="shrink-0 text-brand" />
+                  <span className="font-medium">{t.label}</span>
+                  <span className="ml-auto text-xs text-muted">Venue category</span>
+                </button>
+              ))}
+              {/* ICCA/IAPCO toplantı tipleri — "incentive" gibi tarifler */}
+              {eventMatches.map((e) => (
+                <button
+                  key={e.value}
+                  type="button"
+                  onClick={() => router.push(`/venues?eventType=${encodeURIComponent(e.value)}`)}
+                  className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-ink transition-colors hover:bg-brand-light"
+                >
+                  <CalendarIcon size={15} className="shrink-0 text-brand" />
+                  <span className="font-medium">{e.label}</span>
+                  <span className="ml-auto text-xs text-muted">Meeting type</span>
+                </button>
+              ))}
               {venueMatches.map((v) => (
                 <button
                   key={v.slug}
@@ -177,21 +337,36 @@ export default function HeroSearch({ venues }: { venues: VenueSuggestion[] }) {
           )}
         </div>
 
-        {/* Tarihler — gerçek tarih seçici */}
+        {/* Tarihler — alana tıklanınca takvim açılır; check-in seçilince
+            check-out otomatik +2 gece önerilir (elle değiştirilebilir) */}
         <div className="flex flex-1 items-center gap-2 border-b border-gray-200 px-5 py-3.5 sm:border-r">
           <CalendarIcon size={18} className="shrink-0 text-muted" />
           <input
             name="checkin"
             type="date"
             aria-label="Check-in date"
-            className="w-full bg-transparent text-[13px] text-ink outline-none [color-scheme:light]"
+            value={checkin}
+            min={new Date().toISOString().slice(0, 10)}
+            onClick={openPicker}
+            onFocus={openPicker}
+            onChange={(e) => {
+              const v = e.target.value;
+              setCheckin(v);
+              if (v && (!checkout || checkout <= v)) setCheckout(addDays(v, 2));
+            }}
+            className="w-full cursor-pointer bg-transparent text-[13px] text-ink outline-none [color-scheme:light]"
           />
           <span className="text-muted">–</span>
           <input
             name="checkout"
             type="date"
             aria-label="Check-out date"
-            className="w-full bg-transparent text-[13px] text-ink outline-none [color-scheme:light]"
+            value={checkout}
+            min={checkin || undefined}
+            onClick={openPicker}
+            onFocus={openPicker}
+            onChange={(e) => setCheckout(e.target.value)}
+            className="w-full cursor-pointer bg-transparent text-[13px] text-ink outline-none [color-scheme:light]"
           />
         </div>
 
