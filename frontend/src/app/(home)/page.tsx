@@ -248,9 +248,9 @@ export default async function HomePage() {
           src="/images/venue-icc-hall.jpg"
           alt=""
           aria-hidden
-          className="absolute inset-0 h-full w-full object-cover brightness-[0.3] saturate-[0.9]"
+          className="absolute inset-0 h-full w-full object-cover brightness-[0.55] saturate-[0.95]"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/45 to-black/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/35 to-black/55" />
         {/* Dekoratif yüzen ışık lekeleri */}
         <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/20 blur-3xl" />
         <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-white/10 blur-3xl" />
