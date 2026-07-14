@@ -242,12 +242,12 @@ export default async function HomePage() {
       {/* Tam sayfa kuralı: içerik 900px yüksekliğe sığacak şekilde sıkılaştırıldı */}
       <section id="why-turmeet" className="relative flex min-h-[100dvh] snap-start flex-col justify-center overflow-hidden py-3">
         {/*
-         * AÇIK tema — sitenin iç sayfalarıyla aynı dil: beyazdan yumuşak
-         * marka pembesine geçen gradyan + soluk pembe ışık lekeleri.
+         * AÇIK tema — bir ton koyulaştırılmış pastel pembe gradyan:
+         * beyaz kartlar zeminden ayrışsın diye zemin artık saf beyaz değil.
          */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-brand-light/40 to-white" />
-        <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/10 blur-3xl" />
-        <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-brand/5 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#f9e7f0] via-[#f3d6e4] to-[#f6dde9]" />
+        <div className="animate-float-slow pointer-events-none absolute -left-24 top-16 h-72 w-72 rounded-full bg-brand/15 blur-3xl" />
+        <div className="animate-float-slower pointer-events-none absolute -right-20 bottom-10 h-80 w-80 rounded-full bg-brand/10 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-7xl px-4 sm:px-6">
           {/* ── KUŞAK 1: BAŞLIK — büyük etiket + cümle başlığı ── */}
