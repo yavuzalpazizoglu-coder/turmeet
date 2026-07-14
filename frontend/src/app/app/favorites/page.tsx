@@ -1,18 +1,26 @@
 /*
  * FAVORİLER — master doküman 4.8.
- * Backend: GET /api/v1/favorites (mock: popüler mekanlar gösterilir)
- * Düzen: kompakt yatay satır kartları (FavoriteList) — ekranda çok
- * daha fazla mekan görünür; büyük dikey kartlar arama sayfasına özel.
+ * Backend: GET /api/v1/favorites (mock: sponsorlu mekanlar gösterilir)
+ * Düzen: FavoritesBoard — üstte arama motoru, segmentler (All / Quote
+ * received), favori bölgeler şeridi ve kompakt satır kartları.
  */
-import { PageHeader, EmptyState, LinkButton } from "@/components/ui";
-import { FavoriteList } from "@/components/venue/FavoriteList";
-import { getVenues } from "@/services";
+import { PageHeader } from "@/components/ui";
+import { FavoritesBoard } from "@/components/venue/FavoritesBoard";
+import { getVenues, getQuoteRequests } from "@/services";
 
 export const metadata = { title: "Favorites — Turmeet" };
 
 export default async function FavoritesPage() {
   // MOCK: favori olarak sponsorlu + popüler mekanları göster
-  const venues = (await getVenues()).filter((v) => v.isSponsored);
+  const venues = (await getVenues()).filter((v) => v.isSponsored || v.isPopular);
+
+  // Teklif alınan mekanlar — "Quote received" segmenti bu kümeden beslenir
+  const requests = await getQuoteRequests();
+  const quotedIds = [
+    ...new Set(
+      requests.flatMap((r) => r.quotes.filter((qt) => qt.status === "received").map((qt) => qt.venueId)),
+    ),
+  ];
 
   return (
     <>
@@ -20,15 +28,7 @@ export default async function FavoritesPage() {
         title="Favorites"
         description={`${venues.length} venues you saved for future events.`}
       />
-      {venues.length === 0 ? (
-        <EmptyState
-          title="No favorites yet"
-          description="Tap the heart icon on any venue to save it here."
-          action={<LinkButton href="/app/search">Browse venues</LinkButton>}
-        />
-      ) : (
-        <FavoriteList venues={venues} />
-      )}
+      <FavoritesBoard venues={venues} quotedIds={quotedIds} />
     </>
   );
 }
