@@ -5,6 +5,7 @@
  * NOT: UI dili İngilizce olduğu için içerik metinleri İngilizce tutulur.
  */
 import type { Venue, Destination, VenueMiceProfile, VenueShowcaseTag } from "@/types";
+import { EXTRA_VENUES } from "./venues-extra";
 
 /*
  * Görseller yerel: frontend/public/images/ (Türkiye şehirleri + otel/salon).
@@ -1435,12 +1436,17 @@ const BASE_VENUES: Omit<Venue, keyof VenueMiceProfile | "showcaseTags">[] = [
   },
 ];
 
-/** Temel mekan verisi + MICE inspection profili + vitrin etiketleri birleşimi */
-export const MOCK_VENUES: Venue[] = BASE_VENUES.map((v) => ({
-  ...v,
-  ...MICE_PROFILES[v.id],
-  showcaseTags: SHOWCASE_TAGS[v.id] ?? [],
-}));
+/** Temel mekan verisi + MICE inspection profili + vitrin etiketleri birleşimi.
+ *  El yapımı vitrin mekanları (v1-29) + Excel envanterinden üretilen
+ *  292 gerçek otel (venues-extra.ts) — toplam 321 mekan. */
+export const MOCK_VENUES: Venue[] = [
+  ...BASE_VENUES.map((v) => ({
+    ...v,
+    ...MICE_PROFILES[v.id],
+    showcaseTags: SHOWCASE_TAGS[v.id] ?? [],
+  })),
+  ...EXTRA_VENUES,
+];
 
 /*
  * Destinasyon istatistikleri OTOMATİK hesaplanır: taban katalog değeri
@@ -1463,19 +1469,18 @@ const liveCityStats = (cities: string[]) => {
  * hotel / congress & exhibition center) tagline'larda da kullanılır.
  */
 /*
- * Taban değerler gerçek envanterden alınmıştır:
- * Oteller_Tum_Liste_2026-07-10 (329 otel, 89.695 oda, 2.582 salon, 34 şehir).
- * base = Excel şehir toplamı − MOCK_VENUES'taki canlı kayıtlar, böylece
- * base + live kartlarda gerçek envanter sayısını verir.
+ * Gerçek envanter (Oteller_Tum_Liste_2026-07-10) artık MOCK_VENUES içinde
+ * canlı kayıt olarak yer aldığından taban değerler 0'dır — kart sayıları
+ * doğrudan canlı mekan sayısı/oda toplamından hesaplanır.
  */
 const DESTINATION_BASE = [
   // ICCA 2023 Country & City Rankings: Istanbul 72 kongre ile dünya #21 / Avrupa #16
-  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 103, rooms: 22473 }, category: "congress", tagline: "Purpose-built congress centers & city hotels — ICCA world #21", img: "istanbul-dest" },
-  { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 57, rooms: 28151 }, category: "incentive", tagline: "Resort congress capital — incentives & residential congresses", img: "antalya-dest" },
-  { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 21, rooms: 3493 }, category: "congress", tagline: "Diplomatic congress hub — conference hotels & Congresium", img: "ankara-dest" },
-  { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 21, rooms: 4358 }, category: "congress", tagline: "Aegean congress & exhibition gateway", img: "izmir-dest" },
-  { slug: "cappadocia", name: "Cappadocia", cities: ["Nevşehir"], base: { venues: 9, rooms: 1360 }, category: "cultural", tagline: "Boutique retreats for executive meetings & incentives", img: "cappadocia-dest" },
-  { slug: "bursa", name: "Bursa", cities: ["Bursa"], base: { venues: 8, rooms: 1400 }, category: "wellness", tagline: "Thermal & mountain resorts with conference facilities", img: "bursa-dest" },
+  { slug: "istanbul", name: "Istanbul", cities: ["Istanbul"], base: { venues: 0, rooms: 0 }, category: "congress", tagline: "Purpose-built congress centers & city hotels — ICCA world #21", img: "istanbul-dest" },
+  { slug: "antalya", name: "Antalya", cities: ["Antalya"], base: { venues: 0, rooms: 0 }, category: "incentive", tagline: "Resort congress capital — incentives & residential congresses", img: "antalya-dest" },
+  { slug: "ankara", name: "Ankara", cities: ["Ankara"], base: { venues: 0, rooms: 0 }, category: "congress", tagline: "Diplomatic congress hub — conference hotels & Congresium", img: "ankara-dest" },
+  { slug: "izmir", name: "Izmir", cities: ["Izmir"], base: { venues: 0, rooms: 0 }, category: "congress", tagline: "Aegean congress & exhibition gateway", img: "izmir-dest" },
+  { slug: "cappadocia", name: "Cappadocia", cities: ["Nevşehir"], base: { venues: 0, rooms: 0 }, category: "cultural", tagline: "Boutique retreats for executive meetings & incentives", img: "cappadocia-dest" },
+  { slug: "bursa", name: "Bursa", cities: ["Bursa"], base: { venues: 0, rooms: 0 }, category: "wellness", tagline: "Thermal & mountain resorts with conference facilities", img: "bursa-dest" },
 ];
 
 export const MOCK_DESTINATIONS: Destination[] = DESTINATION_BASE.map((d) => {

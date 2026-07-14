@@ -16,8 +16,17 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SearchIcon, ChevronDownIcon } from "@/components/ui/icons";
 import { EVENT_TYPES, BUDGET_SEGMENTS, VENUE_TYPES } from "@/lib/mice-criteria";
+import { MOCK_VENUES } from "@/mocks/venues";
 
-const CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Adana", "Nevşehir"];
+/* Şehir listesi envanterden türetilir — önce büyük pazarlar, sonra alfabetik.
+ * Backend'de GET /api/v1/cities endpoint'i aynı listeyi dönecek. */
+const MAJOR_CITIES = ["Istanbul", "Antalya", "Ankara", "Izmir", "Bursa", "Nevşehir"];
+const CITIES = [
+  ...MAJOR_CITIES,
+  ...[...new Set(MOCK_VENUES.map((v) => v.city))]
+    .filter((c) => !MAJOR_CITIES.includes(c))
+    .sort((a, b) => a.localeCompare(b, "tr")),
+];
 /* Mekan tipi etiketleri — merkezi ICCA sözlüğünden (lib/mice-criteria) */
 const TYPES = VENUE_TYPES;
 
