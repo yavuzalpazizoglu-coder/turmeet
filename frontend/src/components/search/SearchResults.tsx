@@ -39,10 +39,14 @@ export function SearchResults({ venues }: { venues: Venue[] }) {
       });
       mapRef.current = map;
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        maxZoom: 19,
+      /*
+       * Turizm atlası görünümü — Esri National Geographic altlığı:
+       * renkli kabartma, deniz tonları ve okunaklı yer adları.
+       * (maxZoom 16; şehir içi yakınlaşmada da yeterli detay verir.)
+       */
+      L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/NatGeo_World_Map/MapServer/tile/{z}/{y}/{x}", {
+        attribution: "Tiles &copy; Esri &mdash; National Geographic, Esri, DeLorme, NAVTEQ",
+        maxZoom: 16,
       }).addTo(map);
 
       markersRef.current = {};
