@@ -71,8 +71,12 @@ const LOCAL_IMAGES: Record<string, string> = {
   "bursa-dest": "dest-bursa",
 };
 
-const img = (seed: string, ..._size: number[]) =>
-  `/images/${LOCAL_IMAGES[seed] ?? "hotel-1"}.jpg`;
+/* İkinci+ argümanlar (genişlik/yükseklik) yerel dosyalarda kullanılmaz;
+   eski CDN çağrılarıyla imza uyumluluğu için kabul edilir. */
+const img = (seed: string, ...rest: number[]) => {
+  void rest;
+  return `/images/${LOCAL_IMAGES[seed] ?? "hotel-1"}.jpg`;
+};
 
 const standardRooms = (prefix: string) => [
   {

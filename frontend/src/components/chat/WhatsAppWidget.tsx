@@ -135,22 +135,26 @@ export default function WhatsAppWidget() {
   const [panel, setPanel] = useState<null | "ai" | "wa">(null);
   const [seen, setSeen] = useState(false);
 
+  /*
+   * Sohbet geçmişi lazy initializer ile sessionStorage'dan okunur.
+   * Panel ilk render'da kapalı olduğundan (panel === null) mesajlar DOM'a
+   * yazılmaz — SSR/hydration uyuşmazlığı oluşmaz.
+   */
   // ── WhatsApp sohbeti ──
-  const [waMessages, setWaMessages] = useState<ChatMessage[]>([]);
+  const [waMessages, setWaMessages] = useState<ChatMessage[]>(() =>
+    typeof window === "undefined" ? [] : loadChat(WA_STORAGE_KEY, WELCOME_MESSAGE),
+  );
   const [waInput, setWaInput] = useState("");
   const [waTyping, setWaTyping] = useState(false);
 
   // ── AI sohbeti ──
-  const [aiMessages, setAiMessages] = useState<ChatMessage[]>([]);
+  const [aiMessages, setAiMessages] = useState<ChatMessage[]>(() =>
+    typeof window === "undefined" ? [] : loadChat(AI_STORAGE_KEY, AI_WELCOME),
+  );
   const [aiInput, setAiInput] = useState("");
   const [aiTyping, setAiTyping] = useState(false);
 
   const bodyRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    setWaMessages(loadChat(WA_STORAGE_KEY, WELCOME_MESSAGE));
-    setAiMessages(loadChat(AI_STORAGE_KEY, AI_WELCOME));
-  }, []);
 
   useEffect(() => saveChat(WA_STORAGE_KEY, waMessages), [waMessages]);
   useEffect(() => saveChat(AI_STORAGE_KEY, aiMessages), [aiMessages]);

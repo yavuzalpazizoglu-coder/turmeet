@@ -8,7 +8,7 @@
  */
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useRouter } from "next/navigation";
 import { PANEL_LANG_COOKIE, type PanelLang } from "./panel-i18n";
 
@@ -20,17 +20,19 @@ function readCookieLang(): PanelLang {
   return match?.[1] === "tr" ? "tr" : "en";
 }
 
+function subscribeLang(onChange: () => void) {
+  window.addEventListener(LANG_EVENT, onChange);
+  return () => window.removeEventListener(LANG_EVENT, onChange);
+}
+
+/* Cookie yazımı bileşen dışında — React Compiler global mutasyonuna izin verir */
+function writeLangCookie(next: PanelLang) {
+  document.cookie = `${PANEL_LANG_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
+  window.dispatchEvent(new Event(LANG_EVENT));
+}
+
 export function usePanelLang(): PanelLang {
-  const [lang, setLang] = useState<PanelLang>("en");
-
-  useEffect(() => {
-    setLang(readCookieLang());
-    const onChange = () => setLang(readCookieLang());
-    window.addEventListener(LANG_EVENT, onChange);
-    return () => window.removeEventListener(LANG_EVENT, onChange);
-  }, []);
-
-  return lang;
+  return useSyncExternalStore(subscribeLang, readCookieLang, () => "en");
 }
 
 export function LangSwitch({ current }: { current: PanelLang }) {
@@ -38,8 +40,7 @@ export function LangSwitch({ current }: { current: PanelLang }) {
 
   function change(next: PanelLang) {
     if (next === current) return;
-    document.cookie = `${PANEL_LANG_COOKIE}=${next}; path=/; max-age=31536000; samesite=lax`;
-    window.dispatchEvent(new Event(LANG_EVENT));
+    writeLangCookie(next);
     router.refresh();
   }
 

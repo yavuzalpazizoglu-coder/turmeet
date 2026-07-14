@@ -320,7 +320,7 @@ function NewQuoteForm() {
               {sending ? "Sending..." : `Send request to ${selected.length} venue${selected.length === 1 ? "" : "s"}`}
             </Button>
             <p className="mt-3 text-center text-xs text-muted">
-              Free of charge — venues typically respond within 24 hours.
+              Free of charge — venues typically respond within 24–48 hours.
             </p>
           </Card>
         </aside>

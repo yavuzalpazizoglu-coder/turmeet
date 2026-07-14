@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, type ReactNode } from "react";
-import { MenuIcon, XIcon, BellIcon } from "@/components/ui/icons";
+import { MenuIcon, BellIcon } from "@/components/ui/icons";
 import { LangSwitch } from "@/lib/panel-i18n-client";
 import type { PanelLang } from "@/lib/panel-i18n";
 

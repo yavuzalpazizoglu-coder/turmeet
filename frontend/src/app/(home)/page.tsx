@@ -34,7 +34,6 @@ import {
 import { CountUp } from "@/components/ui/CountUp";
 import { getVenues, getDestinations } from "@/services";
 import { PLATFORM_STATS } from "@/mocks/venues";
-import { EVENT_TYPES, BUDGET_SEGMENTS } from "@/lib/mice-criteria";
 import { Reveal } from "@/components/ui/Reveal";
 
 export default async function HomePage() {
